@@ -1,5 +1,5 @@
-import Header from "../../../../components/mycontainer/Header";
-import SearchBar from "../../../../components/mycontainer/SearchBar";
+import Header from "@components/my/Header";
+import SearchBar from "@components/my/SearchBar";
 
 const ContainerPage = () => {
   return (

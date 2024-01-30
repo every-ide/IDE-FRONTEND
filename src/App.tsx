@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Router from "./components/Router";
 import { ToastContainer } from "react-toastify";
-import Loader from "./components/ui/Loader";
+import Router from "@components/Router";
+import Loader from "@components/ui/Loader";
 
 function App() {
   const [init, setInit] = useState<boolean>(false);
