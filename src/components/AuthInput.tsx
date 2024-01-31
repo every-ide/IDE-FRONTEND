@@ -16,7 +16,7 @@ const AuthInput = ({
   errors,
 }: IAuthInput) => {
   return (
-    <div className="flex flex-col h-[110px]">
+    <div className="flex flex-col h-[100px]">
       <label className="mb-2 text-md">{label}</label>
       <input
         type={type}

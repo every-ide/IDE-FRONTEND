@@ -1,6 +1,8 @@
 import React from "react";
 import AuthInput from "./AuthInput";
 import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
+import { AiFillGithub } from "react-icons/ai";
 
 type TSignInForm = {
   email: string;
@@ -12,10 +14,11 @@ const SignInForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TSignInForm>({ mode: "onBlur" });
+  } = useForm<TSignInForm>({ mode: "onChange" });
 
   const signInAction = async () => {
     // 로그인 request
+    console.log("login action");
   };
 
   return (
@@ -45,6 +48,10 @@ const SignInForm = () => {
               placeholder="패스워드 입력"
               registerOptions={register("password", {
                 required: "비밀번호를 입력해주세요",
+                minLength: {
+                  value: 8,
+                  message: "비밀번호는 8자리 이상 입력해주세요",
+                },
               })}
               errors={errors}
             />
@@ -58,15 +65,17 @@ const SignInForm = () => {
         </form>
         <button
           onClick={() => {}}
-          className="w-full h-[52px] bg-lightdark hover:border-[0.5px] hover:border-accentBlue hover:shadow-md hover:shadow-accentBlue rounded-xl"
+          className="w-full h-[52px] flex flex-row justify-center items-center gap-2 bg-lightdark hover:border-[0.5px] hover:border-accentBlue hover:shadow-md hover:shadow-accentBlue rounded-xl"
         >
-          구글로 로그인
+          <FcGoogle size={20} />
+          Google 계정으로 로그인
         </button>
         <button
           onClick={() => {}}
-          className="w-full h-[52px] bg-lightdark hover:border-[0.5px] hover:border-accentBlue hover:shadow-md hover:shadow-accentBlue rounded-xl"
+          className="w-full h-[52px] flex flex-row justify-center items-center gap-2 bg-lightdark hover:border-[0.5px] hover:border-accentBlue hover:shadow-md hover:shadow-accentBlue rounded-xl"
         >
-          깃허브로 로그인
+          <AiFillGithub size={24} />
+          Github 계정으로 로그인
         </button>
       </div>
     </div>
