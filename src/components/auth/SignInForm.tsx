@@ -2,10 +2,10 @@ import AuthInput from "./AuthInput";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillGithub } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAuthStore from "@src/store/AuthProvier";
-import { axiosApi } from "@src/api/axios";
+import { axiosPublic } from "@src/api/axios";
 
 const LOGIN_URL = "/login";
 
@@ -16,8 +16,12 @@ type TSignInForm = {
 
 const SignInForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const setIsUserValid = useAuthStore((state) => state.setIsUserValid);
   const setUserId = useAuthStore((state) => state.setUserId);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   const {
     register,
@@ -33,7 +37,7 @@ const SignInForm = () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // login request (axios)
-      const res = await axiosApi.post(
+      const res = await axiosPublic.post(
         LOGIN_URL,
         JSON.stringify({ email, password })
       );
@@ -45,12 +49,10 @@ const SignInForm = () => {
       // login 성공 : auth 전역 상태 설정
       setIsUserValid(true);
       setUserId(userId);
+      setAccessToken(accessToken);
 
-      // localstorage에 accessToken 저장
-      localStorage.setItem("accessToken", accessToken);
-
-      // Navigate to personal page
-      navigate("/my/dashboard/containers");
+      // 유저의 마지막 path로 Navigate (없을 시 '/')
+      navigate(from, { replace: true });
 
       // Reset Form values
       reset();

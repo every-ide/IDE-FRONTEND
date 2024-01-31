@@ -1,10 +1,9 @@
-import React from "react";
 import { useForm } from "react-hook-form";
 import AuthInput from "./AuthInput";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillGithub } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
-import { axiosApi } from "@src/api/axios";
+import { axiosPublic } from "@src/api/axios";
 import { toast } from "react-toastify";
 
 const SIGNUP_URL = "/signup";
@@ -32,7 +31,7 @@ const SignUpForm = () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // login request (axios)
-      const res = await axiosApi.post(
+      const res = await axiosPublic.post(
         SIGNUP_URL,
         JSON.stringify({ email, name, password })
       );
