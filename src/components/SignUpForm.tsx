@@ -15,10 +15,12 @@ const SignUpForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    reset,
+    getValues,
   } = useForm<TSignUpForm>({ mode: "onChange" });
 
-  const signUpAction = async () => {
+  const signUpAction = async (data: TSignUpForm) => {
     // 로그인 request
     console.log("signup action");
   };
