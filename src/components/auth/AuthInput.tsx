@@ -23,10 +23,10 @@ const AuthInput = ({
         name={name}
         {...registerOptions}
         placeholder={placeholder}
-        className={`h-[44px] rounded-lg px-3 text-black`}
+        className={`h-[44px] rounded-lg px-3 text-black focus:shadow-accent focus:shadow-md focus:outline-0`}
       />
       {errors[name] && (
-        <p className="w-full text-right mt-2 text-accentBlue font-semibold">
+        <p className="w-full text-right mt-2 text-sm text-accent font-semibold">
           {errors[name].message}
         </p>
       )}

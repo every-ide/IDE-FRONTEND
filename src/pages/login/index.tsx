@@ -1,8 +1,8 @@
-import SignInForm from "../components/SignInForm";
+import SignInForm from "@src/components/auth/SignInForm";
 
-const SigninPage = () => {
+const LoginPage = () => {
   return (
-    <div className="flex flex-row w-full h-screen">
+    <div className="flex flex-row w-full h-screen bg-mdark">
       <div className="w-[50%] h-full flex flex-col justify-center items-center">
         logo, service 소개
       </div>
@@ -13,4 +13,4 @@ const SigninPage = () => {
   );
 };
 
-export default SigninPage;
+export default LoginPage;

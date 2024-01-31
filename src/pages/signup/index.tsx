@@ -1,8 +1,8 @@
-import SignUpForm from "../components/SignUpForm";
+import SignUpForm from "@src/components/auth/SignUpForm";
 
-const SignupPage = () => {
+const SignUpPage = () => {
   return (
-    <div className="flex flex-row w-full h-screen">
+    <div className="flex flex-row w-full h-screen bg-mdark">
       <div className="w-[50%] h-full flex flex-col justify-center items-center">
         logo, service 소개
       </div>
@@ -13,4 +13,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default SignUpPage;

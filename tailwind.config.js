@@ -4,9 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#1c1c1c",
-        lightdark: "#242424",
-        accentBlue: "#05ACEE",
+        mdark: "#1C1C1C",
+        ldark: "#242424",
+        accent: "#05ACEE",
         error: "#C13515",
       },
     },
