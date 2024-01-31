@@ -3,6 +3,7 @@ import AuthInput from "./AuthInput";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillGithub } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 type TSignInForm = {
   email: string;
@@ -77,6 +78,11 @@ const SignInForm = () => {
           <AiFillGithub size={24} />
           Github 계정으로 로그인
         </button>
+        <Link to="/signup">
+          <div className="text-center text-neutral-500 hover:underline">
+            회원이 아니신가요?
+          </div>
+        </Link>
       </div>
     </div>
   );
