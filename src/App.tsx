@@ -6,10 +6,8 @@ import { CookiesProvider } from "react-cookie";
 function App() {
   return (
     <>
-      <CookiesProvider defaultSetOptions={{ path: "/" }}>
-        <ToastContainer />
-        <Router />
-      </CookiesProvider>
+      <ToastContainer />
+      <Router />
     </>
   );
 }

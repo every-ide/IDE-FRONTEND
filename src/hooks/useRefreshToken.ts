@@ -8,29 +8,14 @@ const useRefreshToken = () => {
   const navigate = useNavigate();
 
   const refresh = async () => {
-    try {
-      // Token Refresh 요청
-      const response = await axiosPublic.get("/refresh", {
-        withCredentials: true,
-      });
-      console.log(response.headers.newaccesstoken);
+    const response = await axiosPublic.get("/refresh", {
+      withCredentials: true,
+    });
 
-      setAccessToken(response.headers.newaccesstoken);
-      return response.headers.newaccesstoken;
-    } catch (err: any) {
-      console.error(err);
-      // 로그아웃!
-      if (err.response.statusCode === 403) {
-        navigate("/login");
-        toast.error("로그인이 만료되었습니다.", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: "dark",
-        });
-      }
-    }
+    // 403
+    console.log("refresh에 대한 응답", response.data.NewAccessToken);
+    setAccessToken(response.data.NewAccessToken);
+    return response.data.NewAccessToken;
   };
   return refresh;
 };

@@ -1,29 +1,31 @@
 import { http, HttpResponse } from "msw";
 
 export const handlers = [
-  // login request handler
   http.post("/login", () => {
     return HttpResponse.json(
       {
-        userId: "testuser",
-        accessToken: "testaccesstoken",
+        accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+        userId: 32,
       },
       {
-        status: 200,
-        // headers: {
-        //   "set-cookie": "refreshToken=1234567890",
-        // },
+        headers: {
+          "Set-Cookie": "refreshToken=12345--67890",
+        },
       }
     );
   }),
-
   http.get("/refresh", () => {
+    console.log("refresh 실행");
+    // console.log("???", req.cookies);
+    // return new HttpResponse(null, { status: 401 });
     return HttpResponse.json(
-      {},
+      {
+        NewAccessToken: "refreshedToken!!!",
+      },
       {
         status: 200,
         headers: {
-          NewAccessToken: "refreshedToken!!!",
+          // NewAccessToken: "refreshedToken!!!",
         },
       }
     );

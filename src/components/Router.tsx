@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import LoginPage from "@pages/login";
 import SignUpPage from "@pages/signup";
 import WorkspacePage from "@pages/workspace";
@@ -12,13 +12,11 @@ import CheckAuth from "./auth/CheckAuth";
 export default function Router() {
   return (
     <Routes>
+      <Route path="/" element={<CheckAuth />}>
+        <Route index path="login" element={<LoginPage />} />
+        <Route path="signup" element={<SignUpPage />} />
+      </Route>
       <Route element={<PersistLogin />}>
-        <Route path="/" element={<CheckAuth />}>
-          <Route index path="login" element={<LoginPage />} />
-          <Route path="signup" element={<SignUpPage />} />
-          <Route path="*" element={<Navigate to={"login"} />} />
-        </Route>
-
         <Route element={<RequireAuth />}>
           <Route path="/my/dashboard/containers" element={<ContainerPage />} />
           <Route
@@ -30,10 +28,6 @@ export default function Router() {
             element={<SharedContainerPage />}
           />
           <Route path="/workspace/:workid" element={<WorkspacePage />} />
-          <Route
-            path="*"
-            element={<Navigate replace to="/my/dashboard/containers" />}
-          />
         </Route>
       </Route>
     </Routes>
