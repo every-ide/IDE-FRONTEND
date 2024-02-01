@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5173";
+const BASE_URL = "http://localhost:8080";
 
 // axios instance WITHOUT accessToken
 export const axiosPublic = axios.create({

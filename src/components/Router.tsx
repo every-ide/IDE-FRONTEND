@@ -8,17 +8,22 @@ import MyContainerPage from "@pages/my/dashboard/containers/MyContainers";
 import PersistLogin from "./auth/PersistLogin";
 import RequireAuth from "./auth/RequireAuth";
 import CheckAuth from "./auth/CheckAuth";
+import useAuthStore from "@src/store/AuthProvier";
+import LinkPage from "./LinkPage";
 
 export default function Router() {
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const userId = useAuthStore((state) => state.userId);
+  const isUserValid = useAuthStore((state) => state.isUserValid);
+
   return (
     <Routes>
+      <Route path="/" element={<CheckAuth />}>
+        <Route index path="login" element={<LoginPage />} />
+        <Route path="signup" element={<SignUpPage />} />
+        <Route path="linkpage" element={<LinkPage />} />
+      </Route>
       <Route element={<PersistLogin />}>
-        <Route path="/" element={<CheckAuth />}>
-          <Route index path="login" element={<LoginPage />} />
-          <Route path="signup" element={<SignUpPage />} />
-          <Route path="*" element={<Navigate to={"login"} />} />
-        </Route>
-
         <Route element={<RequireAuth />}>
           <Route path="/my/dashboard/containers" element={<ContainerPage />} />
           <Route
@@ -30,10 +35,6 @@ export default function Router() {
             element={<SharedContainerPage />}
           />
           <Route path="/workspace/:workid" element={<WorkspacePage />} />
-          <Route
-            path="*"
-            element={<Navigate replace to="/my/dashboard/containers" />}
-          />
         </Route>
       </Route>
     </Routes>
