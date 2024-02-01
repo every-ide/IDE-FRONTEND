@@ -12,13 +12,13 @@ import CheckAuth from "./auth/CheckAuth";
 export default function Router() {
   return (
     <Routes>
-      <Route path="/" element={<CheckAuth />}>
-        <Route index path="login" element={<LoginPage />} />
-        <Route path="signup" element={<SignUpPage />} />
-        <Route path="*" element={<Navigate to={"login"} />} />
-      </Route>
-
       <Route element={<PersistLogin />}>
+        <Route path="/" element={<CheckAuth />}>
+          <Route index path="login" element={<LoginPage />} />
+          <Route path="signup" element={<SignUpPage />} />
+          <Route path="*" element={<Navigate to={"login"} />} />
+        </Route>
+
         <Route element={<RequireAuth />}>
           <Route path="/my/dashboard/containers" element={<ContainerPage />} />
           <Route

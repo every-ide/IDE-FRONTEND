@@ -8,8 +8,9 @@ const useRefreshToken = () => {
     const response = await axiosPublic.get("/refresh", {
       withCredentials: true,
     });
-    setAccessToken(response.headers.NewAccessToken);
-    return response.headers.accessToken;
+
+    setAccessToken(response.headers.newaccesstoken);
+    return response.headers.newaccesstoken;
   };
   return refresh;
 };
