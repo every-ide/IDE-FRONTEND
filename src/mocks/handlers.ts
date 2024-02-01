@@ -1,31 +1,33 @@
 import { http, HttpResponse } from "msw";
 
 export const handlers = [
-  // login request handler
   http.post("/login", () => {
     return HttpResponse.json(
       {
-        userId: "testuser",
-        accessToken: "testaccesstoken",
+        accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+        userId: 32,
+      },
+      {
+        headers: {
+          "Set-Cookie": "refreshToken=12345--67890",
+        },
+      },
+    );
+  }),
+  http.get("/refresh", () => {
+    console.log("refresh 실행");
+    // console.log("???", req.cookies);
+    // return new HttpResponse(null, { status: 401 });
+    return HttpResponse.json(
+      {
+        NewAccessToken: "refreshedToken!!!",
       },
       {
         status: 200,
         headers: {
-          "set-cookie": "refreshToken=1234567890",
+          // NewAccessToken: "refreshedToken!!!",
         },
-      }
-    );
-  }),
-
-  http.get("/refresh", () => {
-    return HttpResponse.json(
-      {},
-      {
-        status: 200,
-        headers: {
-          NewAccessToken: "refreshedToken!!!",
-        },
-      }
+      },
     );
   }),
 
@@ -54,7 +56,7 @@ export const handlers = [
         headers: {
           "Set-Cookie": "connect.sid=msw-cookie;HttpOnly;Path=/",
         },
-      }
+      },
     );
   }),
   http.post("/auth/refresh", () => {
@@ -65,7 +67,7 @@ export const handlers = [
         headers: {
           NewAccessToken: "Bearer refreshed ---token ,.,..",
         },
-      }
+      },
     );
   }),
   http.post("/users", async ({ request }) => {

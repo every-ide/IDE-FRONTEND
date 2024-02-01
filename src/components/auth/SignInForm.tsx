@@ -39,7 +39,7 @@ const SignInForm = () => {
       // login request (axios)
       const res = await axiosPublic.post(
         LOGIN_URL,
-        JSON.stringify({ email, password })
+        JSON.stringify({ email, password }),
       );
 
       // Response data
@@ -50,7 +50,6 @@ const SignInForm = () => {
       setIsUserValid(true);
       setUserId(userId);
       setAccessToken(accessToken);
-      console.log("access token", accessToken);
 
       // 유저의 마지막 path로 Navigate (없을 시 '/')
       navigate(from, { replace: true });
