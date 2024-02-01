@@ -52,7 +52,7 @@ const SignInForm = () => {
       setAccessToken(accessToken);
 
       // 유저의 마지막 path로 Navigate (없을 시 '/')
-      navigate(from, { replace: true });
+      navigate("/my/dashboard/containers", { replace: true });
 
       // Reset Form values
       reset();

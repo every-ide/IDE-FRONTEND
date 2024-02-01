@@ -30,6 +30,11 @@ export const handlers = [
       }
     );
   }),
+  http.get("/logout", () => {
+    return HttpResponse.json(null, {
+      status: 200,
+    });
+  }),
 
   // 테스트
   http.get("/api/users", ({ request, params }) => {

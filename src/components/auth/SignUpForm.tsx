@@ -53,7 +53,9 @@ const SignUpForm = () => {
     } catch (error) {
       // 에러
       if (error instanceof Error) {
-        toast.error(error.message, {
+        console.error(error.message);
+
+        toast.error("문제가 발생했습니다.다시 시도해주세요.", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -135,7 +137,7 @@ const SignUpForm = () => {
           <AiFillGithub size={24} />
           Github 계정으로 계속
         </button>
-        <Link to="/signin">
+        <Link to="/login">
           <p className="text-center text-neutral-500 hover:underline">
             로그인하기
           </p>
