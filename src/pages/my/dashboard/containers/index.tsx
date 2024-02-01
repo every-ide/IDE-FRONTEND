@@ -7,6 +7,12 @@ const ContainerPage = () => {
       <Header />
       <SearchBar />
       <h1>all containers</h1>
+      <button
+        onClick={() => {}}
+        className="bg-mdark p-3 rounded-lg border-[2px] border-accent"
+      >
+        logout
+      </button>
     </div>
   );
 };

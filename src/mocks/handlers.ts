@@ -10,9 +10,9 @@ export const handlers = [
       },
       {
         status: 200,
-        headers: {
-          "set-cookie": "refreshToken=1234567890",
-        },
+        // headers: {
+        //   "set-cookie": "refreshToken=1234567890",
+        // },
       }
     );
   }),
