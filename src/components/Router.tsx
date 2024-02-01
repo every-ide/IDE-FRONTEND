@@ -5,16 +5,21 @@ import WorkspacePage from "@pages/workspace";
 import ContainerPage from "@pages/my/dashboard/containers";
 import SharedContainerPage from "@pages/my/dashboard/containers/SharedContainers";
 import MyContainerPage from "@pages/my/dashboard/containers/MyContainers";
+import PersistLogin from "./auth/PersistLogin";
+import RequireAuth from "./auth/RequireAuth";
+import CheckAuth from "./auth/CheckAuth";
 
-interface RouterProps {
-  isAuthenticated: boolean;
-}
-
-export default function Router({ isAuthenticated }: RouterProps) {
+export default function Router() {
   return (
     <Routes>
-      {isAuthenticated ? (
-        <>
+      <Route element={<PersistLogin />}>
+        <Route path="/" element={<CheckAuth />}>
+          <Route index path="login" element={<LoginPage />} />
+          <Route path="signup" element={<SignUpPage />} />
+          <Route path="*" element={<Navigate to={"login"} />} />
+        </Route>
+
+        <Route element={<RequireAuth />}>
           <Route path="/my/dashboard/containers" element={<ContainerPage />} />
           <Route
             path="/my/dashboard/containers/own"
@@ -29,14 +34,8 @@ export default function Router({ isAuthenticated }: RouterProps) {
             path="*"
             element={<Navigate replace to="/my/dashboard/containers" />}
           />
-        </>
-      ) : (
-        <>
-          <Route path="login" element={<LoginPage />} />
-          <Route path="signup" element={<SignUpPage />} />
-          <Route path="*" element={<Navigate to={"login"} />} />
-        </>
-      )}
+        </Route>
+      </Route>
     </Routes>
   );
 }

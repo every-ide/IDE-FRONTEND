@@ -1,6 +1,34 @@
 import { http, HttpResponse } from "msw";
 
 export const handlers = [
+  // login request handler
+  http.post("/login", () => {
+    return HttpResponse.json(
+      {
+        userId: "testuser",
+        accessToken: "testaccesstoken",
+      },
+      {
+        status: 200,
+        headers: {
+          "set-cookie": "refreshToken=1234567890",
+        },
+      }
+    );
+  }),
+
+  http.get("/refresh", () => {
+    return HttpResponse.json(
+      {},
+      {
+        status: 200,
+        headers: {
+          NewAccessToken: "refreshedToken!!!",
+        },
+      }
+    );
+  }),
+
   // 테스트
   http.get("/api/users", ({ request, params }) => {
     console.log("request", request);
@@ -26,7 +54,7 @@ export const handlers = [
         headers: {
           "Set-Cookie": "connect.sid=msw-cookie;HttpOnly;Path=/",
         },
-      },
+      }
     );
   }),
   http.post("/auth/refresh", () => {
@@ -37,7 +65,7 @@ export const handlers = [
         headers: {
           NewAccessToken: "Bearer refreshed ---token ,.,..",
         },
-      },
+      }
     );
   }),
   http.post("/users", async ({ request }) => {
