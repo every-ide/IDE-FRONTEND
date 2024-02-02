@@ -9,6 +9,7 @@ import PersistLogin from "./auth/PersistLogin";
 import RequireAuth from "./auth/RequireAuth";
 import CheckAuth from "./auth/CheckAuth";
 import NotFoundPage from "./ui/NotFound";
+import PersonalInfoForm from "@components/ui/PersonalInfoForm.tsx";
 
 export default function Router() {
   return (
@@ -28,6 +29,7 @@ export default function Router() {
           </Route>
 
           <Route path="/workspace/:workid" element={<WorkspacePage />} />
+          <Route path="/my/info" element={<PersonalInfoForm />} />
         </Route>
       </Route>
       {/* catch all */}
