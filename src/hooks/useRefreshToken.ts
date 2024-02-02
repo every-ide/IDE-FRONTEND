@@ -9,8 +9,8 @@ const useRefreshToken = () => {
       withCredentials: true,
     });
 
-    // 403
     console.log("refresh에 대한 응답", response.data.NewAccessToken);
+
     setAccessToken(response.data.NewAccessToken);
     return response.data.NewAccessToken;
   };

@@ -11,7 +11,7 @@ export const handlers = [
         headers: {
           "Set-Cookie": "refreshToken=12345--67890",
         },
-      },
+      }
     );
   }),
   http.get("/refresh", () => {
@@ -27,8 +27,13 @@ export const handlers = [
         headers: {
           // NewAccessToken: "refreshedToken!!!",
         },
-      },
+      }
     );
+  }),
+  http.get("/logout", () => {
+    return HttpResponse.json(null, {
+      status: 200,
+    });
   }),
 
   // 테스트
@@ -56,7 +61,7 @@ export const handlers = [
         headers: {
           "Set-Cookie": "connect.sid=msw-cookie;HttpOnly;Path=/",
         },
-      },
+      }
     );
   }),
   http.post("/auth/refresh", () => {
@@ -67,7 +72,7 @@ export const handlers = [
         headers: {
           NewAccessToken: "Bearer refreshed ---token ,.,..",
         },
-      },
+      }
     );
   }),
   http.post("/users", async ({ request }) => {
