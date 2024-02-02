@@ -1,6 +1,6 @@
-import Header from "@components/my/Header";
-import SearchBar from "@components/my/SearchBar";
-import useLogout from "@src/hooks/useLogout";
+import Header from '@components/my/Header';
+import SearchBar from '@components/my/SearchBar';
+import useLogout from '@src/hooks/useLogout';
 
 const ContainerPage = () => {
   const logout = useLogout();
@@ -14,7 +14,7 @@ const ContainerPage = () => {
       {/* test용 임시 로그아웃 버튼 */}
       <button
         onClick={logout}
-        className="bg-mdark p-3 rounded-lg border-[2px] border-accent"
+        className="rounded-lg border-[2px] border-accent bg-mdark p-3"
       >
         logout
       </button>
