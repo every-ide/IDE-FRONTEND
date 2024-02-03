@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const handlers = [
-  http.post('/login', () => {
+  http.post('/auth', () => {
     return HttpResponse.json(
       {
         accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
@@ -14,7 +14,7 @@ export const handlers = [
       },
     );
   }),
-  http.get('/refresh', () => {
+  http.get('/hello', () => {
     console.log('refresh 실행');
     // console.log("???", req.cookies);
     // return new HttpResponse(null, { status: 401 });
@@ -30,7 +30,7 @@ export const handlers = [
       },
     );
   }),
-  http.get('/logout', () => {
+  http.post('/logout', () => {
     return HttpResponse.json(null, {
       status: 200,
     });
