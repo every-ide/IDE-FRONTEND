@@ -90,7 +90,7 @@ const PersonalInfoForm: React.FC = () => {
         });
         console.log(response.data); // 성공 응답 처리
         // 추가적인 성공 처리 로직 (예: 사용자에게 알림, 폼 초기화 등)
-      } catch (error) {
+      } catch (error: any) {
         console.error(error);
         // 에러 처리 로직 (예: 사용자에게 에러 메시지 표시)
         if (error.response) {
