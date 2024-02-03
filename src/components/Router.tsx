@@ -9,6 +9,7 @@ import MyContainerPage from '@pages/my/dashboard/containers/MyContainers';
 import RequireAuth from './auth/RequireAuth';
 import CheckAuth from './auth/CheckAuth';
 import NotFoundPage from './ui/NotFound';
+import PersonalInfoForm from '@components/ui/PersonalInfoForm.tsx';
 import TogetherPage from '@src/pages/together';
 
 export default function Router() {
@@ -29,8 +30,9 @@ export default function Router() {
         </Route>
 
         <Route path="/workspace/:workid" element={<WorkspacePage />} />
-        <Route path="/together" element={<TogetherPage />} />
+        <Route path="/my/info" element={<PersonalInfoForm />} />
       </Route>
+      <Route path="/together" element={<TogetherPage />} />
       {/* </Route> */}
       {/* catch all */}
       <Route path="*" element={<NotFoundPage />} />

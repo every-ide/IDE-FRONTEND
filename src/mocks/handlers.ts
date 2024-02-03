@@ -99,4 +99,16 @@ export const handlers = [
       created_at: '2024-01-12T02:48:55.040Z',
     });
   }),
+  http.patch('/user/updateprofile', async ({ request }) => {
+    // 요청 본문(JSON 형식으로 가정)을 파싱합니다.
+    const requestBody = await request.json();
+
+    console.log('user정보 수정', requestBody);
+    console.log(request);
+
+    // 요청에서 받은 데이터를 그대로 응답 본문에 포함시켜 반환합니다.
+    return HttpResponse.json({
+      request,
+    });
+  }),
 ];
