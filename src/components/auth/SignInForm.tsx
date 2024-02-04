@@ -1,11 +1,11 @@
 import AuthInput from './AuthInput';
 import { useForm } from 'react-hook-form';
-import { FcGoogle } from 'react-icons/fc';
-import { AiFillGithub } from 'react-icons/ai';
+
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useAuthStore from '@src/store/AuthProvier';
 import { axiosPublic } from '@src/api/axios';
+import Oauth from './Oauth';
 
 const LOGIN_URL = '/auth';
 
@@ -16,12 +16,7 @@ type TSignInForm = {
 
 const SignInForm = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
-
-  const setIsUserValid = useAuthStore((state) => state.setIsUserValid);
   const setUserId = useAuthStore((state) => state.setUserId);
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   const {
     register,
@@ -129,20 +124,7 @@ const SignInForm = () => {
             {isSubmitting ? '로그인 중...' : '이메일로 로그인'}
           </button>
         </form>
-        <button
-          onClick={() => {}}
-          className="flex h-[52px] w-full flex-row items-center justify-center gap-2 rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent hover:shadow-md hover:shadow-accent"
-        >
-          <FcGoogle size={20} />
-          Google 계정으로 로그인
-        </button>
-        <button
-          onClick={() => {}}
-          className="flex h-[52px] w-full flex-row items-center justify-center gap-2 rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent hover:shadow-md hover:shadow-accent"
-        >
-          <AiFillGithub size={24} />
-          Github 계정으로 로그인
-        </button>
+        <Oauth />
         <Link to="/signup">
           <div className="text-center text-neutral-500 hover:underline">
             회원이 아니신가요?

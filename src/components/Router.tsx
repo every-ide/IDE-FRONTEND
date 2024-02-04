@@ -5,10 +5,10 @@ import WorkspacePage from '@pages/workspace';
 import ContainerPage from '@pages/my/dashboard/containers';
 import SharedContainerPage from '@pages/my/dashboard/containers/SharedContainers';
 import MyContainerPage from '@pages/my/dashboard/containers/MyContainers';
-import PersistLogin from './auth/PersistLogin';
 import RequireAuth from './auth/RequireAuth';
 import CheckAuth from './auth/CheckAuth';
 import NotFoundPage from './ui/NotFound';
+import Oauth2RedirectHandler from '@src/pages/login/oauthRedirect';
 
 export default function Router() {
   return (
@@ -17,6 +17,7 @@ export default function Router() {
       <Route path="/" element={<CheckAuth />}>
         <Route index path="login" element={<LoginPage />} />
         <Route path="signup" element={<SignUpPage />} />
+        <Route path="oauth/redirect" element={<Oauth2RedirectHandler />} />
       </Route>
       {/* Private Routes */}
       {/* <Route element={<PersistLogin />}> */}
