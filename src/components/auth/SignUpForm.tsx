@@ -55,12 +55,12 @@ const SignUpForm = () => {
       if (error instanceof Error) {
         console.error(error.message);
 
-        toast.error("문제가 발생했습니다.다시 시도해주세요.", {
-          position: "top-right",
+        toast.error('문제가 발생했습니다.다시 시도해주세요.', {
+          position: 'top-right',
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
-          theme: "dark",
+          theme: 'dark',
         });
       }
     }
@@ -68,7 +68,7 @@ const SignUpForm = () => {
 
   return (
     <div className="flex h-[75%] w-[55%] flex-col">
-      <div className="pb-5 text-center text-3xl font-bold">🚀 Sign Up</div>
+      <div className="pb-5 text-center text-3xl font-black">🚀 Sign Up</div>
       <div className="flex flex-col gap-5">
         <form onSubmit={handleSubmit(signUpAction)}>
           <div className="mb-5 flex flex-col">
@@ -109,7 +109,7 @@ const SignUpForm = () => {
                 required: '비밀번호를 입력해주세요',
                 minLength: {
                   value: 8,
-                  message: "비밀번호는 8자리 이상 입력해주세요",
+                  message: '비밀번호는 8자리 이상 입력해주세요',
                 },
               })}
               errors={errors}
@@ -118,21 +118,21 @@ const SignUpForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="h-[52px] w-full rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent hover:shadow-md hover:shadow-accent disabled:border-none disabled:text-neutral-500 disabled:shadow-none"
+            className="h-[52px] w-full rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent/65 hover:shadow-md hover:shadow-accent active:scale-95 disabled:border-none disabled:text-neutral-500 disabled:shadow-none"
           >
             {isSubmitting ? '회원가입 중...' : '이메일로 가입하기'}
           </button>
         </form>
         <button
           onClick={() => {}}
-          className="flex h-[52px] w-full flex-row items-center justify-center gap-2 rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent hover:shadow-md hover:shadow-accent"
+          className="flex h-[52px] w-full flex-row items-center justify-center gap-2 rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent/65 hover:shadow-md hover:shadow-accent active:scale-95"
         >
           <FcGoogle size={20} />
           Google 계정으로 계속
         </button>
         <button
           onClick={() => {}}
-          className="flex h-[52px] w-full flex-row items-center justify-center gap-2 rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent hover:shadow-md hover:shadow-accent"
+          className="flex h-[52px] w-full flex-row items-center justify-center gap-2 rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent/65 hover:shadow-md hover:shadow-accent active:scale-95"
         >
           <AiFillGithub size={24} />
           Github 계정으로 계속
