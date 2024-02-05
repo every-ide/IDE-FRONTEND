@@ -41,7 +41,7 @@ const SignInForm = () => {
         LOGIN_URL,
         JSON.stringify({ email, password }),
       );
-
+      console.log('res', res);
       // Response data
       const accessToken = res?.data?.accessToken;
       const userId = res?.data?.userId;
@@ -66,6 +66,7 @@ const SignInForm = () => {
       });
     } catch (error: any) {
       // 로그인 에러
+      console.log('error :>> ', error);
       if (!error?.response) {
         toast.error('No Server Response', {
           position: 'top-right',
@@ -74,7 +75,7 @@ const SignInForm = () => {
           closeOnClick: true,
           theme: 'dark',
         });
-      } else if (error.response?.status === 400) {
+      } else if (error.response?.status === 401) {
         toast.error('일치하는 유저 정보가 없습니다.', {
           position: 'top-right',
           autoClose: 3000,
