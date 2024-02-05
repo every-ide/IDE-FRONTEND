@@ -18,7 +18,7 @@ const AuthInput = ({
   isReadOnly = false,
 }: IAuthInput) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex h-[100px] flex-col">
       <label className="mb-2 text-sm">{label}</label>
       <input
         type={type}
