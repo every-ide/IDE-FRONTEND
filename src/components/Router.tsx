@@ -15,22 +15,19 @@ export default function Router() {
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<CheckAuth />}>
-        <Route index path="login" element={<LoginPage />} />
+        <Route path="login" element={<LoginPage />} />
         <Route path="signup" element={<SignUpPage />} />
-        <Route path="oauth/redirect" element={<Oauth2RedirectHandler />} />
+        <Route path="oauth2/redirect" element={<Oauth2RedirectHandler />} />
       </Route>
       {/* Private Routes */}
-      {/* <Route element={<PersistLogin />}> */}
       <Route element={<RequireAuth />}>
         <Route path="/my/dashboard/containers">
           <Route index element={<ContainerPage />} />
           <Route path="own" element={<MyContainerPage />} />
           <Route path="shared" element={<SharedContainerPage />} />
         </Route>
-
         <Route path="/workspace/:workid" element={<WorkspacePage />} />
       </Route>
-      {/* </Route> */}
       {/* catch all */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

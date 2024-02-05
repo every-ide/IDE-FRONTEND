@@ -1,7 +1,6 @@
 import AuthInput from './AuthInput';
 import { useForm } from 'react-hook-form';
-
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useAuthStore from '@src/store/AuthProvier';
 import { axiosPublic } from '@src/api/axios';
@@ -26,25 +25,16 @@ const SignInForm = () => {
   } = useForm<TSignInForm>({ mode: 'onChange' });
 
   const signInAction = async ({ email, password }: TSignInForm) => {
-    // 로그인 request
     try {
-      // Test용!!!! (추후 삭제)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // login request (axios)
       const res = await axiosPublic.post(
         LOGIN_URL,
         JSON.stringify({ email, password }),
       );
 
-      // Response data
       const accessToken = res?.data?.accessToken;
       const userId = res?.data?.userId;
 
-      // login 성공 : auth 전역 상태 설정
-      // setIsUserValid(true);
       setUserId(userId);
-      // setAccessToken(accessToken);
       localStorage.setItem('accessToken', accessToken);
 
       // 유저의 마지막 path로 Navigate (없을 시 '/')
