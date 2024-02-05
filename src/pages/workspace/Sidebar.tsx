@@ -7,8 +7,8 @@ const Sidebar = () => {
   const [projectOpen, setProjectOpen] = useState(true);
 
   return (
-    <div className="flex h-full overflow-y-auto bg-ldark">
-      <aside className="w-10 border-r-2 border-mdark">
+    <div className="flex">
+      <aside className="w-10 overflow-y-auto border-r-2 border-mdark">
         <ul className="space-y-2">
           <li className="cursor-pointer p-1 hover:bg-gray-600 ">
             <IoBagSharp className="size-6 w-full " />
@@ -18,7 +18,7 @@ const Sidebar = () => {
           </li>
         </ul>
       </aside>
-      <aside className="w-72">
+      <aside className="flex w-72 flex-col overflow-hidden pt-2">
         <Arborist />
       </aside>
     </div>

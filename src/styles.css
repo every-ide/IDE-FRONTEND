@@ -88,7 +88,7 @@ button {
   height: 30px;
   background: #2d2c2c;
   border: none;
-  margin: 1rem 0;
+  margin: 0;
 }
 
 .search-input:focus {
