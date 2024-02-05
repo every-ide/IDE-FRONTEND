@@ -1,5 +1,5 @@
-import SignUpForm from '@src/components/auth/SignUpForm';
-import backgroundImage from '@src/assets/images/universe.jpg';
+import SignUpForm from '@/src/components/auth/SignUpForm';
+import backgroundImage from '@/src/assets/images/universe.jpg';
 
 const SignUpPage = () => {
   return (
