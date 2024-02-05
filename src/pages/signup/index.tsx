@@ -1,13 +1,15 @@
-import SignUpForm from "@src/components/auth/SignUpForm";
+import SignUpForm from '@src/components/auth/SignUpForm';
 
 const SignUpPage = () => {
   return (
-    <div className="flex flex-row w-full h-screen bg-mdark">
-      <div className="w-[50%] h-full flex flex-col justify-center items-center">
-        logo, service 소개
-      </div>
-      <div className="w-[50%] h-full flex flex-col justify-center items-center">
-        <SignUpForm />
+    <div className="bg-[url('/public/images/universe.jpg')] bg-cover">
+      <div className="flex h-screen w-full flex-row bg-mdark/60">
+        <div className="flex h-full w-[50%] flex-col items-center justify-center">
+          logo, service 소개
+        </div>
+        <div className="flex h-full w-[50%] flex-col items-center justify-center">
+          <SignUpForm />
+        </div>
       </div>
     </div>
   );
