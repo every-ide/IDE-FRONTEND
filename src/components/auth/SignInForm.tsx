@@ -1,7 +1,7 @@
 import AuthInput from './AuthInput';
 import { useForm } from 'react-hook-form';
 
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useAuthStore from '@src/store/AuthProvier';
 import { axiosPublic } from '@src/api/axios';
@@ -28,9 +28,6 @@ const SignInForm = () => {
   const signInAction = async ({ email, password }: TSignInForm) => {
     // 로그인 request
     try {
-      // Test용!!!! (추후 삭제)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
       // login request (axios)
       const res = await axiosPublic.post(
         LOGIN_URL,
