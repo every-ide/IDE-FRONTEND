@@ -1,7 +1,8 @@
 import useLogout from '@src/hooks/useLogout';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
+import Avartar from '@src/assets/images/placeholder.jpg';
 
 const UserMenu = () => {
   const logout = useLogout();
@@ -11,7 +12,7 @@ const UserMenu = () => {
     <>
       <div className="inline-flex items-center justify-center gap-3 px-2">
         <div className="size-[40px] overflow-hidden rounded-lg">
-          <img src="/public/images/placeholder.jpg" />
+          <img src={Avartar} alt="avatar" />
         </div>
         <button
           onClick={() => setIsOpen((state) => !state)}
