@@ -1,10 +1,9 @@
 import { useForm } from 'react-hook-form';
 import AuthInput from './AuthInput';
-import { FcGoogle } from 'react-icons/fc';
-import { AiFillGithub } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosPublic } from '@src/api/axios';
 import { toast } from 'react-toastify';
+import Oauth from './Oauth';
 
 const SIGNUP_URL = '/signup';
 
@@ -123,20 +122,7 @@ const SignUpForm = () => {
             {isSubmitting ? '회원가입 중...' : '이메일로 가입하기'}
           </button>
         </form>
-        <button
-          onClick={() => {}}
-          className="flex h-[52px] w-full flex-row items-center justify-center gap-2 rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent hover:shadow-md hover:shadow-accent"
-        >
-          <FcGoogle size={20} />
-          Google 계정으로 계속
-        </button>
-        <button
-          onClick={() => {}}
-          className="flex h-[52px] w-full flex-row items-center justify-center gap-2 rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent hover:shadow-md hover:shadow-accent"
-        >
-          <AiFillGithub size={24} />
-          Github 계정으로 계속
-        </button>
+        <Oauth />
         <Link to="/login">
           <p className="text-center text-neutral-500 hover:underline">
             로그인하기
