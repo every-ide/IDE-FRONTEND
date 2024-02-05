@@ -4,7 +4,7 @@ import cors from 'cors';
 import { handlers } from './handlers';
 
 const app = express();
-const port = 8080;
+const port = 8000;
 
 app.use(
   cors({
