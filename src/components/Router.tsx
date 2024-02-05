@@ -11,10 +11,6 @@ import NotFoundPage from './ui/NotFound';
 import PersonalInfoForm from '@components/ui/PersonalInfoForm.tsx';
 import TogetherPage from '@src/pages/together';
 import Oauth2RedirectHandler from '@src/pages/login/oauthRedirect';
-import RequireAuth from './auth/RequireAuth';
-import CheckAuth from './auth/CheckAuth';
-import NotFoundPage from './ui/NotFound';
-
 
 export default function Router() {
   return (

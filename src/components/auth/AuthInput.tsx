@@ -16,8 +16,6 @@ const AuthInput = ({
   errors,
 }: IAuthInput) => {
   return (
-    <div className="flex flex-col">
-      <label className="mb-2 text-sm">{label}</label>
     <div className="flex h-[100px] flex-col">
       <label className="mb-2 text-sm">{label}</label>
       <input
