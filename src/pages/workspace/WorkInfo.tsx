@@ -1,5 +1,13 @@
+import { Button } from '@/components/ui/button';
+
 const WorkInfo = () => {
-  return <div>work info</div>;
+  return (
+    <div>
+      <Button variant="secondary" size="sm">
+        Click me
+      </Button>
+    </div>
+  );
 };
 
 export default WorkInfo;
