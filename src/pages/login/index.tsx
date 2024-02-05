@@ -1,5 +1,5 @@
-import SignInForm from '@src/components/auth/SignInForm';
-import backgroundImage from '@src/assets/images/universe.jpg';
+import SignInForm from '@/src/components/auth/SignInForm';
+import backgroundImage from '@/src/assets/images/universe.jpg';
 
 const LoginPage = () => {
   return (
