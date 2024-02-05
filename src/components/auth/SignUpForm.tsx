@@ -44,7 +44,7 @@ const SignUpForm = () => {
         reset();
         toast('every-ide의 회원이 되신 것을 환영합니다! 👏👏👏', {
           position: 'top-right',
-          autoClose: 3000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           theme: 'dark',
@@ -57,7 +57,7 @@ const SignUpForm = () => {
 
         toast.error('문제가 발생했습니다.다시 시도해주세요.', {
           position: 'top-right',
-          autoClose: 3000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           theme: 'dark',
