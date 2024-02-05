@@ -8,7 +8,13 @@ import MyContainerPage from '@pages/my/dashboard/containers/MyContainers';
 import RequireAuth from './auth/RequireAuth';
 import CheckAuth from './auth/CheckAuth';
 import NotFoundPage from './ui/NotFound';
+import PersonalInfoForm from '@components/ui/PersonalInfoForm.tsx';
+import TogetherPage from '@src/pages/together';
 import Oauth2RedirectHandler from '@src/pages/login/oauthRedirect';
+import RequireAuth from './auth/RequireAuth';
+import CheckAuth from './auth/CheckAuth';
+import NotFoundPage from './ui/NotFound';
+
 
 export default function Router() {
   return (
@@ -27,7 +33,9 @@ export default function Router() {
           <Route path="shared" element={<SharedContainerPage />} />
         </Route>
         <Route path="/workspace/:workid" element={<WorkspacePage />} />
+        <Route path="/my/info" element={<PersonalInfoForm />} />
       </Route>
+      <Route path="/together" element={<TogetherPage />} />
       {/* catch all */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

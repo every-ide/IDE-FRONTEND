@@ -67,7 +67,7 @@ const SignUpForm = () => {
 
   return (
     <div className="flex h-[75%] w-[55%] flex-col">
-      <div className="pb-5 text-center text-3xl font-bold">🚀 Sign Up</div>
+      <div className="pb-5 text-center text-3xl font-black">🚀 Sign Up</div>
       <div className="flex flex-col gap-5">
         <form onSubmit={handleSubmit(signUpAction)}>
           <div className="mb-5 flex flex-col">
@@ -117,12 +117,13 @@ const SignUpForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="h-[52px] w-full rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent hover:shadow-md hover:shadow-accent disabled:border-none disabled:text-neutral-500 disabled:shadow-none"
+            className="h-[52px] w-full rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent/65 hover:shadow-md hover:shadow-accent active:scale-95 disabled:border-none disabled:text-neutral-500 disabled:shadow-none"
           >
             {isSubmitting ? '회원가입 중...' : '이메일로 가입하기'}
           </button>
         </form>
         <Oauth />
+
         <Link to="/login">
           <p className="text-center text-neutral-500 hover:underline">
             로그인하기

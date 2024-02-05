@@ -73,7 +73,7 @@ const SignInForm = () => {
 
   return (
     <div className="flex h-[70%] w-[55%] flex-col">
-      <div className="pb-9 text-center text-3xl font-bold">🪐 Sign In</div>
+      <div className="pb-9 text-center text-3xl font-black">🪐 Sign In</div>
       <div className="flex flex-col gap-5">
         <form onSubmit={handleSubmit(signInAction)}>
           <div className="mb-7 flex flex-col gap-1">
@@ -109,7 +109,7 @@ const SignInForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="h-[52px] w-full rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent hover:shadow-md hover:shadow-accent disabled:border-none disabled:text-neutral-500 disabled:shadow-none"
+            className="h-[52px] w-full rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent/65 hover:shadow-md hover:shadow-accent active:scale-95 disabled:border-none disabled:text-neutral-500 disabled:shadow-none"
           >
             {isSubmitting ? '로그인 중...' : '이메일로 로그인'}
           </button>
