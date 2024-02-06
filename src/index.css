@@ -180,9 +180,16 @@ ol {
   font-weight: bold;
 }
 
-/* Xterm(터미널) custom css */
-
 /* scroll bar config */
+.no-scrollbar ::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
@@ -203,3 +210,5 @@ ol {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* Xterm(터미널) custom css */

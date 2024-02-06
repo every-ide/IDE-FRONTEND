@@ -53,7 +53,7 @@ const CodeEditorWindow = ({ fileId }: ICodeEditorWindowProps) => {
 
   return (
     <div
-      className="no-scrollbar h-[60vh] w-full overflow-y-scroll"
+      className="no-scrollbar size-full overflow-y-scroll"
       ref={editorRef}
     ></div>
   );
