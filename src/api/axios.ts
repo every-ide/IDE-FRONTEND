@@ -1,12 +1,12 @@
-import axios from "axios";
+import axios from 'axios';
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // axios instance WITHOUT accessToken
 export const axiosPublic = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -16,7 +16,7 @@ export const axiosPublic = axios.create({
 export const axiosAuth = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
   withCredentials: true,
 });
