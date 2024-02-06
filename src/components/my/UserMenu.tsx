@@ -1,8 +1,8 @@
-import useLogout from '@src/hooks/useLogout';
+import useLogout from '@/src/hooks/useLogout';
 import { useState } from 'react';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import Avartar from '@src/assets/images/placeholder.jpg';
+import Avartar from '@/src/assets/images/placeholder.jpg';
 
 const UserMenu = () => {
   const logout = useLogout();
