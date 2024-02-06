@@ -17,7 +17,7 @@ const useLogout = () => {
         navigate('/login');
         toast('👾 안전하게 로그아웃되었습니다 👾', {
           position: 'top-right',
-          autoClose: 3000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           theme: 'dark',

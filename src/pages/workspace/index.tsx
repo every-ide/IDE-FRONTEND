@@ -36,7 +36,7 @@ const WorkspacePage = () => {
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <div className="relative flex flex-1 flex-col">
+        <div className="no-scrollbar relative flex flex-1 flex-col ">
           <Editor />
           {isOpenWorkInfo && <WorkInfo toggleTerminal={toggleTerminal} />}
         </div>
