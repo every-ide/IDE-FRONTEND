@@ -11,15 +11,32 @@ const Arborist: FC<ArboristProps> = () => {
   const [term, setTerm] = useState<string>('');
   const treeRef = useRef<TreeApi<any> | null>(null);
 
+  const logTreeData = () => {
+    // 트리 데이터를 가져와서 콘솔에 출력하는 함수
+    const data = treeRef.current; // getData 메소드는 예시일 뿐, 실제 API 확인 필요
+    const Tree = treeRef.current?.getTree();
+    console.log('Current tree data:', Tree);
+    console.log('Current tree data:', data);
+  };
+
   const createFileFolder = (
     <>
       <button
-        onClick={() => treeRef.current?.createInternal()}
+        onClick={() => {
+          treeRef.current?.createInternal();
+          logTreeData();
+        }}
         title="New Folder..."
       >
         <TbFolderPlus />
       </button>
-      <button onClick={() => treeRef.current?.createLeaf()} title="New File...">
+      <button
+        onClick={() => {
+          treeRef.current?.createLeaf();
+          logTreeData();
+        }}
+        title="New File..."
+      >
         <AiOutlineFileAdd />
       </button>
     </>

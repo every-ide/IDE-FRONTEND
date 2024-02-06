@@ -1,87 +1,3 @@
-// import React, { FC } from 'react';
-// import { NodeApi, TreeApi } from 'react-arborist';
-// import { AiFillFolder, AiFillFile } from 'react-icons/ai';
-// import { MdArrowRight, MdArrowDropDown, MdEdit } from 'react-icons/md';
-// import { RxCross2 } from 'react-icons/rx';
-
-// interface MyNodeData {
-//   id: string;
-//   name: string;
-//   icon?: React.ElementType;
-//   iconColor?: string;
-//   children?: MyNodeData[];
-// }
-
-// interface NodeProps {
-//   node: NodeApi<MyNodeData>;
-//   style: React.CSSProperties;
-//   dragHandle: React.Ref<HTMLDivElement>;
-//   tree: TreeApi<MyNodeData>;
-// }
-
-// const Node: FC<NodeProps> = ({ node, style, dragHandle, tree }) => {
-//   const CustomIcon = node.data.icon;
-//   const iconColor = node.data.iconColor;
-
-//   return (
-//     <div
-//       className={`node-container ${node.state.isSelected ? 'isSelected' : ''}`}
-//       style={style}
-//       ref={dragHandle}
-//     >
-//       <div className="node-content" onClick={() => node.isInternal && node.toggle()}>
-//         {node.isLeaf ? (
-//           <>
-//             <span className="arrow"></span>
-//             <span className="file-folder-icon">
-//               {CustomIcon ? <CustomIcon color={iconColor || '#6bc7f6'} /> : <AiFillFile color="#6bc7f6" />}
-//             </span>
-//           </>
-//         ) : (
-//           <>
-//             <span className="arrow">
-//               {node.isOpen ? <MdArrowDropDown /> : <MdArrowRight />}
-//             </span>
-//             <span className="file-folder-icon">
-//               {CustomIcon ? <CustomIcon color={iconColor || '#f6cf60'} /> : <AiFillFolder color="#f6cf60" />}
-//             </span>
-//           </>
-//         )}
-//         <span className="node-text">
-//           {node.isEditing ? (
-//             <input
-//               type="text"
-//               defaultValue={node.data.name}
-//               onFocus={(e) => e.currentTarget.select()}
-//               onBlur={() => node.reset()}
-//               onKeyDown={(e) => {
-//                 if (e.key === 'Escape') node.reset();
-//                 if (e.key === 'Enter') node.submit(e.currentTarget.value);
-//               }}
-//               autoFocus
-//             />
-//           ) : (
-//             <span>{node.data.name}</span>
-//           )}
-//         </span>
-//       </div>
-
-//       <div className="file-actions">
-//         <div className="folderFileActions">
-//           <button onClick={() => node.edit()} title="Rename...">
-//             <MdEdit />
-//           </button>
-//           <button onClick={() => tree.delete(node.id)} title="Delete">
-//             <RxCross2 />
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Node;
-
 import React, { FC } from 'react';
 import { NodeApi, TreeApi } from 'react-arborist';
 import { AiFillFolder, AiFillFile } from 'react-icons/ai';
@@ -164,11 +80,15 @@ const Node: FC<NodeProps> = ({ node, style, dragHandle, tree }) => {
     ) : (
       <MdArrowRight />
     )
-  ) : null;
+  ) : (
+    <span className="pl-3"> </span>
+  );
+
+  const nodeStyle = node.isLeaf ? 'file-node' : 'folder-node';
 
   return (
     <div
-      className={`node-container ${node.state.isSelected ? 'isSelected' : ''}`}
+      className={`node-container ${nodeStyle} ${node.state.isSelected ? 'isSelected' : ''}`}
       style={style}
       ref={dragHandle}
     >
