@@ -8,6 +8,9 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 
 interface ICodeEditorWindowProps {
   fileId: string;
+  content: string;
+  language: string;
+  selected: boolean;
 }
 
 const create = (v: EditorView) => {
@@ -22,14 +25,19 @@ const updateListenerExtension = EditorView.updateListener.of(
   },
 );
 
-const CodeEditorWindow = ({ fileId }: ICodeEditorWindowProps) => {
+const CodeEditorWindow = ({
+  fileId,
+  content,
+  language,
+  selected,
+}: ICodeEditorWindowProps) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const initialText = 'console.log("hello world");';
 
   useEffect(() => {
     const state = EditorState.create({
-      doc: initialText,
+      doc: content,
       extensions: [
         basicSetup,
         vscodeDark,
