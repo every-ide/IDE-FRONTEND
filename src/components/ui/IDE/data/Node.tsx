@@ -86,16 +86,25 @@ const Node: FC<NodeProps> = ({ node, style, dragHandle, tree }) => {
 
   const nodeStyle = node.isLeaf ? 'file-node' : 'folder-node';
 
+  const handleNodeClick = () => {
+    console.log('Node:', node); // 현재 노드 객체 출력 (디버깅용
+    console.log('Node ID:', node.data.id); // 현재 노드의 ID 출력
+    console.log('Node Name:', node.data.name); // 현재 노드의 이름 출력
+    console.log('Node Data:', node.data); // 현재 노드의 데이터 출력
+    console.log(node.parent?.data); // 부모 노드의 데이터 출력 (부모 ID가 있는 경우)
+    // console.log(node.)
+    if (node.isInternal) {
+      node.toggle(); // 내부 노드인 경우, 열기/닫기 토글
+    }
+  };
+
   return (
     <div
       className={`node-container ${nodeStyle} ${node.state.isSelected ? 'isSelected' : ''}`}
       style={style}
       ref={dragHandle}
     >
-      <div
-        className="node-content"
-        onClick={() => node.isInternal && node.toggle()}
-      >
+      <div className="node-content" onClick={() => handleNodeClick()}>
         <span className="arrow-icon">{FolderArrowIcon}</span>
         <span className="file-folder-icon">{IconComponent}</span>
         <span className="node-text">

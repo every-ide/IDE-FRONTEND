@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import AuthInput from '@/components/auth/AuthInput'; // Adjust import as necessary
 import { toast } from 'react-toastify';
-import useAxiosPrivate from '@src/hooks/useAxiosPrivate';
+import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import Header from '../my/Header';
 
 const PersonalInfoForm = () => {
@@ -28,7 +28,7 @@ const PersonalInfoForm = () => {
     // Fetch user information when the component mounts
     const fetchUserInfo = async () => {
       try {
-        const response = await axiosPrivate.get('/user/updatepassword'); // Assuming this endpoint returns user info
+        const response = await axiosPrivate.get('/user/info'); // Assuming this endpoint returns user info
         // Assuming the response contains the email to pre-fill
         const { email, name } = response.data;
 
@@ -56,7 +56,7 @@ const PersonalInfoForm = () => {
     }
 
     try {
-      const response = await axiosPrivate.patch('/user/updatepassword', {
+      const response = await axiosPrivate.patch('/user/info', {
         email,
         oldPassword, // Include oldPassword in the request
         newPassword,

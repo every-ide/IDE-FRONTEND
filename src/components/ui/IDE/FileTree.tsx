@@ -14,9 +14,12 @@ const Arborist: FC<ArboristProps> = () => {
   const logTreeData = () => {
     // 트리 데이터를 가져와서 콘솔에 출력하는 함수
     const data = treeRef.current; // getData 메소드는 예시일 뿐, 실제 API 확인 필요
-    const Tree = treeRef.current?.getTree();
-    console.log('Current tree data:', Tree);
     console.log('Current tree data:', data);
+    // console.log('Current tree data:', data?.);
+    // console.log('Current tree data:', data?.);
+    // console.log('Current tree data:', data?.);
+    // console.log('Current tree data:', data?.);
+    // console.log('Current tree data:', data?.);
   };
 
   const createFileFolder = (
