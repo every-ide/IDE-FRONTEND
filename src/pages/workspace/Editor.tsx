@@ -1,4 +1,4 @@
-import CodeEditorWindow from '@src/components/codeEditor/CodeEditorWindow';
+import CodeEditorWindow from '@/components/codeEditor/CodeEditorWindow';
 
 const Editor = () => {
   return (
