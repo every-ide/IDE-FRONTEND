@@ -2,8 +2,8 @@ import AuthInput from './AuthInput';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import useAuthStore from '@src/store/AuthProvier';
-import { axiosPublic } from '@src/api/axios';
+import useAuthStore from '@/src/store/AuthProvier';
+import { axiosPublic } from '@/src/api/axios';
 import Oauth from './Oauth';
 
 const LOGIN_URL = '/auth';
@@ -44,7 +44,7 @@ const SignInForm = () => {
       reset();
       toast('로그인 성공! 👏👏👏', {
         position: 'top-right',
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         theme: 'dark',
@@ -55,7 +55,7 @@ const SignInForm = () => {
       if (!error?.response) {
         toast.error('No Server Response', {
           position: 'top-right',
-          autoClose: 3000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           theme: 'dark',
@@ -63,7 +63,15 @@ const SignInForm = () => {
       } else if (error.response?.status === 401) {
         toast.error('일치하는 유저 정보가 없습니다.', {
           position: 'top-right',
-          autoClose: 3000,
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          theme: 'dark',
+        });
+      } else {
+        toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
+          position: 'top-right',
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           theme: 'dark',

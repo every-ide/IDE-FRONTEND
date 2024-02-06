@@ -1,16 +1,16 @@
 import { Route, Routes } from 'react-router-dom';
-import LoginPage from '@pages/login';
-import SignUpPage from '@pages/signup';
-import WorkspacePage from '@pages/workspace';
-import ContainerPage from '@pages/my/dashboard/containers';
-import SharedContainerPage from '@pages/my/dashboard/containers/SharedContainers';
-import MyContainerPage from '@pages/my/dashboard/containers/MyContainers';
+import LoginPage from '@/pages/login';
+import SignUpPage from '@/pages/signup';
+import WorkspacePage from '@/pages/workspace';
+import ContainerPage from '@/pages/my/dashboard/containers';
+import SharedContainerPage from '@/pages/my/dashboard/containers/SharedContainers';
+import MyContainerPage from '@/pages/my/dashboard/containers/MyContainers';
 import RequireAuth from './auth/RequireAuth';
 import CheckAuth from './auth/CheckAuth';
 import NotFoundPage from './ui/NotFound';
-import PersonalInfoForm from '@components/ui/PersonalInfoForm.tsx';
-import TogetherPage from '@src/pages/together';
-import Oauth2RedirectHandler from '@src/pages/login/oauthRedirect';
+import PersonalInfoForm from '@/components/ui/PersonalInfoForm.tsx';
+import TogetherPage from '@/src/pages/together';
+import Oauth2RedirectHandler from '@/src/pages/login/oauthRedirect';
 
 export default function Router() {
   return (
