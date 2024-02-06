@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import NotFoundImg from '@src/assets/images/404.png';
+import NotFoundImg from '@/src/assets/images/404.png';
 
 const NotFoundPage = () => {
   return (

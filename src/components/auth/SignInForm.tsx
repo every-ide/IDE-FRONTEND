@@ -2,8 +2,8 @@ import AuthInput from './AuthInput';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import useAuthStore from '@src/store/AuthProvier';
-import { axiosPublic } from '@src/api/axios';
+import useAuthStore from '@/src/store/AuthProvier';
+import { axiosPublic } from '@/src/api/axios';
 import Oauth from './Oauth';
 
 const LOGIN_URL = '/auth';

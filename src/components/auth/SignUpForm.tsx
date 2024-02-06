@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import AuthInput from './AuthInput';
 import { Link, useNavigate } from 'react-router-dom';
-import { axiosPublic } from '@src/api/axios';
+import { axiosPublic } from '@/src/api/axios';
 import { toast } from 'react-toastify';
 import Oauth from './Oauth';
 

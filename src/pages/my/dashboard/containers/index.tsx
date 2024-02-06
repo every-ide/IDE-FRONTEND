@@ -1,4 +1,4 @@
-import DashboardLayout from '@src/components/my/DashboardLayout';
+import DashboardLayout from '@/src/components/my/DashboardLayout';
 
 const ContainerPage = () => {
   return <DashboardLayout>Container zone</DashboardLayout>;
