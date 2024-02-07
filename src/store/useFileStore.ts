@@ -6,6 +6,7 @@ interface IFile {
   content: string;
   language: string;
   isOpen: boolean;
+  needSave: boolean;
 }
 
 interface IFileStore {
@@ -29,6 +30,7 @@ const useFileStore = create<IFileStore>((set) => ({
       content: 'console.log("hello world!");',
       language: 'javascript',
       isOpen: true,
+      needSave: false,
     },
     {
       id: '2',
@@ -36,6 +38,7 @@ const useFileStore = create<IFileStore>((set) => ({
       content: 'console.log("hello world22222!");',
       language: 'javascript',
       isOpen: false,
+      needSave: false,
     },
   ],
   selectedFileId: '1',
@@ -58,6 +61,7 @@ const useFileStore = create<IFileStore>((set) => ({
         content,
         language,
         isOpen: true,
+        needSave: false,
       };
 
       return {

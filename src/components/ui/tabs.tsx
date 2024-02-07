@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 
-import { VariantProps, cn, cva } from '@/src/utils/style';
+import { cn, cva, type VariantProps } from '@/src/utils/style';
 
 const tabVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap bg-ldark px-3 py-1.5 text-xs font-medium text-white  disabled:pointer-events-none disabled:opacity-50 ',

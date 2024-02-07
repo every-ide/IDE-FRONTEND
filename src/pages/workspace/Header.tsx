@@ -9,6 +9,8 @@ import {
 } from '@/components/ui/tooltip';
 
 const Header = () => {
+  const handleSave = () => {};
+
   return (
     <header className="inline-flex h-8 justify-end border-b-2 border-mdark bg-ldark px-2">
       <TooltipProvider>
@@ -31,9 +33,7 @@ const Header = () => {
         <Tooltip>
           <TooltipTrigger>
             <Button
-              onClick={() => {
-                // Run code action goes here
-              }}
+              onClick={handleSave}
               variant="ghost"
               className="text-accent"
               size="icon"

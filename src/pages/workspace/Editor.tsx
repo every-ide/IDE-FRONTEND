@@ -29,8 +29,9 @@ const Editor = () => {
         </TabsList>
 
         {files?.map((file) => (
-          <TabsContent key={file.id} value={file.id}>
+          <TabsContent value={file.id}>
             <CodeEditorWindow
+              key={file.id}
               fileId={file.id}
               content={file.content}
               language={file.language}
