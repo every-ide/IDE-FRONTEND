@@ -11,6 +11,14 @@ interface IFile {
 interface IFileStore {
   files: IFile[];
   selectedFileId: string | null;
+  selectFile: (id: string) => void;
+  openFile: (
+    id: string,
+    name: string,
+    content: string,
+    language: string,
+  ) => void;
+  closeFile: (id: string) => void;
 }
 
 const useFileStore = create<IFileStore>((set) => ({
@@ -31,6 +39,41 @@ const useFileStore = create<IFileStore>((set) => ({
     },
   ],
   selectedFileId: '1',
+  selectFile: (id) => set({ selectedFileId: id }),
+  openFile: (id, name, content, language) => {
+    set((state) => {
+      // 이미 열려있는 파일인 경우
+      const existingFile = state.files.find((file) => file.id === id);
+
+      if (existingFile) {
+        return {
+          ...state,
+          selectedFileId: id,
+        };
+      }
+
+      const newOpenFile = {
+        id,
+        name,
+        content,
+        language,
+        isOpen: true,
+      };
+
+      return {
+        files: [...state.files, newOpenFile],
+        selectedFileId: id,
+      };
+    });
+  },
+  closeFile: (id) =>
+    set((state) => {
+      return {
+        files: state.files.filter((file) => file.id !== id),
+        selectedFileId:
+          state.selectedFileId === id ? null : state.selectedFileId,
+      };
+    }),
 }));
 
 export default useFileStore;
