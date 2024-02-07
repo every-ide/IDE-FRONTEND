@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Navigation from './Navigation';
@@ -8,17 +8,34 @@ import WorkInfo from './WorkInfo';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { WebSocketService } from '@/src/services/webSocketService';
-
-interface ReceivedTerminalType {
-  success: boolean;
-  path: string;
-  content: string;
-}
+import { Client } from '@stomp/stompjs';
+import useWebSocketStore from '@/src/store/useWebSocketStore';
 
 const WorkspacePage = () => {
-  // const accessToken = localStorage.getItem('accessToken');
-  // const { workid: projectId } = useParams();
+  const connect = useWebSocketStore((state) => state.connect);
+  const webSocketService = useWebSocketStore((state) => state.webSocketService);
+  const { workid: projectId } = useParams<{ workid: string }>();
+  const accessToken = localStorage.getItem('accessToken'); // accessToken은 실제 로그인 구현에 따라 다를 수 있음
   const [isOpenWorkInfo, setIsOpenWorkInfo] = useState<boolean>(true);
+
+  // useEffect(() => {
+  //   if (!projectId || !accessToken) {
+  //     console.error('Project ID or Access Token is missing');
+  //     return;
+  //   }
+
+  //   if (!webSocketService) {
+  //     const webSocketOptions = {
+  //       token: accessToken,
+  //       projectId: projectId,
+  //     };
+  //     connect(webSocketOptions);
+  //   }
+
+  //   return () => {
+  //     useWebSocketStore.getState().disconnect();
+  //   };
+  // }, [connect]);
 
   useEffect(() => {
     const toggleWorkInfo = (event: KeyboardEvent) => {
@@ -37,38 +54,6 @@ const WorkspacePage = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const webSocketClient = new WebSocketService({
-      token: 'token-1',
-      projectId: 'project-1',
-    });
-
-    webSocketClient.subscribeToTerminal(
-      `/user/queue/room/project-1/terminal`,
-      (ReceivedTerminal) => {
-        const { success, path, content } = JSON.parse(
-          ReceivedTerminal.body,
-        ) as ReceivedTerminalType;
-        console.log('received from server-> success', success);
-        console.log('received from server-> path', path);
-        console.log('received from server-> content', content);
-        // if (success && content) {
-
-        // }
-        // if (xtermRef.current) {
-        //   xtermRef.current.write(path + ': ');
-        // }
-        // setCurrentPath(path);
-      },
-    );
-    webSocketClient.activate();
-
-    return () => {
-      console.log('해당 페이지 unMount');
-      webSocketClient.deactivate();
-    };
-  }, []);
-
   const toggleTerminal = () => {
     setIsOpenWorkInfo((prevState) => !prevState);
   };
@@ -80,7 +65,7 @@ const WorkspacePage = () => {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <div className="no-scrollbar relative flex flex-1 flex-col ">
-          <Editor />
+          {/* <Editor /> */}
           {isOpenWorkInfo && <WorkInfo toggleTerminal={toggleTerminal} />}
         </div>
       </div>

@@ -22,6 +22,8 @@ export default defineConfig({
       },
     ],
   },
-
+  define: {
+    global: {},
+  },
   plugins: [react(), tsconfigPaths()],
 });

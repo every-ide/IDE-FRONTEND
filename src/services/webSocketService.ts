@@ -14,6 +14,7 @@ export class WebSocketService {
     const { token, projectId } = options;
     this.client = new Client({
       webSocketFactory: () => new SockJS(`${this.baseUrl}/ws`),
+      // Q: 실제로 headers 어떤 용도로 쓰지? 인증? 유저구분?
       connectHeaders: {
         Authorization: token,
         ProjectId: projectId,
@@ -51,5 +52,11 @@ export class WebSocketService {
     callback: (message: IMessage) => void,
   ): StompSubscription {
     return this.client.subscribe(queue, callback);
+  }
+
+  publish(destination: string, body: any) {
+    if (this.client && this.client.active) {
+      this.client.publish({ destination, body: JSON.stringify(body) });
+    }
   }
 }
