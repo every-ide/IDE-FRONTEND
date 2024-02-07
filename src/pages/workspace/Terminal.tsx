@@ -22,7 +22,7 @@ const Terminal = () => {
         if (currentCommand === '') {
           xtermRef.current?.write('\r\n' + currentPath + ': ');
         } else {
-          return;
+          console.log('함수실행!');
         }
       } else if (data === '\x7f' || data === '\b') {
         if (currentCommand.length > 0) {

@@ -6,8 +6,18 @@ import Footer from './Footer';
 import Editor from './Editor';
 import WorkInfo from './WorkInfo';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { WebSocketService } from '@/src/services/webSocketService';
+
+interface ReceivedTerminalType {
+  success: boolean;
+  path: string;
+  content: string;
+}
 
 const WorkspacePage = () => {
+  // const accessToken = localStorage.getItem('accessToken');
+  // const { workid: projectId } = useParams();
   const [isOpenWorkInfo, setIsOpenWorkInfo] = useState<boolean>(true);
 
   useEffect(() => {
@@ -26,6 +36,39 @@ const WorkspacePage = () => {
       window.removeEventListener('keydown', toggleWorkInfo);
     };
   }, []);
+
+  useEffect(() => {
+    const webSocketClient = new WebSocketService({
+      token: 'token-1',
+      projectId: 'project-1',
+    });
+
+    webSocketClient.subscribeToTerminal(
+      `/user/queue/room/project-1/terminal`,
+      (ReceivedTerminal) => {
+        const { success, path, content } = JSON.parse(
+          ReceivedTerminal.body,
+        ) as ReceivedTerminalType;
+        console.log('received from server-> success', success);
+        console.log('received from server-> path', path);
+        console.log('received from server-> content', content);
+        // if (success && content) {
+
+        // }
+        // if (xtermRef.current) {
+        //   xtermRef.current.write(path + ': ');
+        // }
+        // setCurrentPath(path);
+      },
+    );
+    webSocketClient.activate();
+
+    return () => {
+      console.log('해당 페이지 unMount');
+      webSocketClient.deactivate();
+    };
+  }, []);
+
   const toggleTerminal = () => {
     setIsOpenWorkInfo((prevState) => !prevState);
   };
