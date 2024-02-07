@@ -51,6 +51,7 @@ const SignInForm = () => {
       });
     } catch (error: any) {
       // 로그인 에러
+      console.log('error :>> ', error);
       if (!error?.response) {
         toast.error('No Server Response', {
           position: 'top-right',
