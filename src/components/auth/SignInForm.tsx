@@ -1,5 +1,6 @@
 import AuthInput from './AuthInput';
 import { useForm } from 'react-hook-form';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useAuthStore from '@/src/store/AuthProvier';
@@ -26,6 +27,7 @@ const SignInForm = () => {
 
   const signInAction = async ({ email, password }: TSignInForm) => {
     try {
+
       const res = await axiosPublic.post(
         LOGIN_URL,
         JSON.stringify({ email, password }),
