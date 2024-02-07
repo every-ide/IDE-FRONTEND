@@ -10,15 +10,16 @@ async function enableMocking() {
 
   const { worker } = await import('./mocks/browser.ts');
   return worker.start();
-
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
-root.render(
-  <Router>
-    <App />
-  </Router>,
-);
-
+enableMocking().then(() => {
+  root.render(
+    <Router>
+      <App />
+    </Router>,
+  );
+});
