@@ -26,6 +26,14 @@ const ContainerBox = ({
   createdAt,
   lastUpdatedAt,
 }: IContainerBoxProps) => {
+  const navigateToUrlInNewTab = (containerId) => {
+    window.open(
+      `http://localhost:5173/workspace/${containerId}`,
+      '_blank',
+      'noopener,noreferrer',
+    );
+  };
+
   return (
     <Card variant="container">
       <CardHeader className="pb-4">
@@ -49,12 +57,7 @@ const ContainerBox = ({
         <p>last update:</p>
       </CardContent>
       <CardFooter className="justify-end">
-        <Button
-          onClick={() => {
-            // handle open container goes here
-          }}
-          size="sm"
-        >
+        <Button onClick={() => navigateToUrlInNewTab(containerId)} size="sm">
           컨테이너 열기
         </Button>
       </CardFooter>
