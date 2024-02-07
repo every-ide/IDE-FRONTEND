@@ -5,6 +5,7 @@ interface IAuthInput {
   registerOptions: any;
   placeholder: string;
   errors: any;
+  isReadOnly?: boolean;
 }
 
 const AuthInput = ({
@@ -14,19 +15,21 @@ const AuthInput = ({
   registerOptions,
   placeholder,
   errors,
+  isReadOnly = false,
 }: IAuthInput) => {
   return (
-    <div className="flex flex-col h-[100px]">
-      <label className="mb-2 text-md">{label}</label>
+    <div className="flex flex-col">
+      <label className="mb-2 text-sm">{label}</label>
       <input
         type={type}
         name={name}
+        readOnly={isReadOnly}
         {...registerOptions}
         placeholder={placeholder}
-        className={`h-[44px] rounded-lg px-3 text-black focus:shadow-accent focus:shadow-md focus:outline-0`}
+        className={`h-[44px] rounded-lg px-3 text-black focus:shadow-md focus:shadow-accent focus:outline-0 ${!errors[name] ? 'mb-[28px]' : 'mb-0'}`}
       />
       {errors[name] && (
-        <p className="w-full text-right mt-2 text-sm text-accent font-semibold">
+        <p className="mt-2 w-full text-right text-sm font-semibold text-accent">
           {errors[name].message}
         </p>
       )}

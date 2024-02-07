@@ -11,11 +11,10 @@ const Oauth2RedirectHandler: FC = () => {
     };
     const accessToken = getTokenFromUrl();
     if (accessToken) {
-      console.log('JWT Token:', accessToken);
       localStorage.setItem('accessToken', accessToken);
-      // navigate('/');
+      navigate('/');
     } else {
-      // navigate('/login');
+      navigate('/login');
     }
   }, [navigate, location]);
   return <div>로그인 처리중...</div>;

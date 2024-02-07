@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import useAuthStore from '@src/store/AuthProvier';
-import { axiosPublic } from '@src/api/axios';
+import useAuthStore from '@/src/store/AuthProvier';
+import { axiosPublic } from '@/src/api/axios';
 import Oauth from './Oauth';
 
 const LOGIN_URL = '/auth';
@@ -26,22 +26,17 @@ const SignInForm = () => {
   } = useForm<TSignInForm>({ mode: 'onChange' });
 
   const signInAction = async ({ email, password }: TSignInForm) => {
-    // 로그인 request
     try {
-      // login request (axios)
+
       const res = await axiosPublic.post(
         LOGIN_URL,
         JSON.stringify({ email, password }),
       );
 
-      // Response data
       const accessToken = res?.data?.accessToken;
       const userId = res?.data?.userId;
 
-      // login 성공 : auth 전역 상태 설정
-      // setIsUserValid(true);
       setUserId(userId);
-      // setAccessToken(accessToken);
       localStorage.setItem('accessToken', accessToken);
 
       // 유저의 마지막 path로 Navigate (없을 시 '/')
@@ -51,25 +46,34 @@ const SignInForm = () => {
       reset();
       toast('로그인 성공! 👏👏👏', {
         position: 'top-right',
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         theme: 'dark',
       });
     } catch (error: any) {
       // 로그인 에러
+      console.log('error :>> ', error);
       if (!error?.response) {
         toast.error('No Server Response', {
           position: 'top-right',
-          autoClose: 3000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           theme: 'dark',
         });
-      } else if (error.response?.status === 400) {
+      } else if (error.response?.status === 401) {
         toast.error('일치하는 유저 정보가 없습니다.', {
           position: 'top-right',
-          autoClose: 3000,
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          theme: 'dark',
+        });
+      } else {
+        toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
+          position: 'top-right',
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           theme: 'dark',
@@ -80,7 +84,7 @@ const SignInForm = () => {
 
   return (
     <div className="flex h-[70%] w-[55%] flex-col">
-      <div className="pb-9 text-center text-3xl font-bold">🪐 Sign In</div>
+      <div className="pb-9 text-center text-3xl font-black">🪐 Sign In</div>
       <div className="flex flex-col gap-5">
         <form onSubmit={handleSubmit(signInAction)}>
           <div className="mb-7 flex flex-col gap-1">
@@ -116,7 +120,7 @@ const SignInForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="h-[52px] w-full rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent hover:shadow-md hover:shadow-accent disabled:border-none disabled:text-neutral-500 disabled:shadow-none"
+            className="h-[52px] w-full rounded-xl bg-ldark hover:border-[0.5px] hover:border-accent/65 hover:shadow-md hover:shadow-accent active:scale-95 disabled:border-none disabled:text-neutral-500 disabled:shadow-none"
           >
             {isSubmitting ? '로그인 중...' : '이메일로 로그인'}
           </button>

@@ -20,12 +20,12 @@ export const handlers = [
     // return new HttpResponse(null, { status: 401 });
     return HttpResponse.json(
       {
-        NewAccessToken: 'refreshedToken!!!',
+        // NewAccessToken: 'refreshedToken!!!',
       },
       {
         status: 200,
         headers: {
-          // NewAccessToken: "refreshedToken!!!",
+          NewAccessToken: 'refreshedToken!!!',
         },
       },
     );
@@ -97,6 +97,18 @@ export const handlers = [
       email: 'user@example.com',
       favoriteList: [12, 22, 2, 4, 7, 8, 24, 17],
       created_at: '2024-01-12T02:48:55.040Z',
+    });
+  }),
+  http.patch('/user/updateprofile', async ({ request }) => {
+    // 요청 본문(JSON 형식으로 가정)을 파싱합니다.
+    const requestBody = await request.json();
+
+    console.log('user정보 수정', requestBody);
+    console.log(request);
+
+    // 요청에서 받은 데이터를 그대로 응답 본문에 포함시켜 반환합니다.
+    return HttpResponse.json({
+      request,
     });
   }),
 ];
