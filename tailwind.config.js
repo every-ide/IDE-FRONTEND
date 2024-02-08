@@ -22,6 +22,7 @@ export const theme = {
       ldark: '#242424',
       accent: '#05ACEE',
       error: '#C13515',
+      accentPurple: '#9269C3',
     },
     keyframes: {
       'accordion-down': {
