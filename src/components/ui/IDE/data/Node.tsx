@@ -4,7 +4,7 @@ import { AiFillFolder, AiFillFile } from 'react-icons/ai';
 import { MdArrowRight, MdArrowDropDown, MdEdit } from 'react-icons/md';
 import { RxCross2 } from 'react-icons/rx';
 // 필요한 아이콘들을 import
-import { DiJavascript1, DiReact, DiPython, DiCplusplus } from 'react-icons/di';
+import { DiJavascript1, DiReact, DiPython } from 'react-icons/di';
 import {
   SiCss3,
   SiHtml5,
@@ -87,11 +87,9 @@ const Node: FC<NodeProps> = ({ node, style, dragHandle, tree }) => {
   const nodeStyle = node.isLeaf ? 'file-node' : 'folder-node';
 
   const handleNodeClick = () => {
-    console.log('Node:', node); // 현재 노드 객체 출력 (디버깅용
     console.log('Node ID:', node.data.id); // 현재 노드의 ID 출력
-    console.log('Node Name:', node.data.name); // 현재 노드의 이름 출력
     console.log('Node Data:', node.data); // 현재 노드의 데이터 출력
-    console.log(node.parent?.data); // 부모 노드의 데이터 출력 (부모 ID가 있는 경우)
+    console.log('부모노드', node.parent?.data); // 부모 노드의 데이터 출력 (부모 ID가 있는 경우)
     // console.log(node.)
     if (node.isInternal) {
       node.toggle(); // 내부 노드인 경우, 열기/닫기 토글
@@ -105,7 +103,7 @@ const Node: FC<NodeProps> = ({ node, style, dragHandle, tree }) => {
       ref={dragHandle}
     >
       <div className="node-content" onClick={() => handleNodeClick()}>
-        <span className="arrow-icon">{FolderArrowIcon}</span>
+        <span>{FolderArrowIcon}</span>
         <span className="file-folder-icon">{IconComponent}</span>
         <span className="node-text">
           {node.isEditing ? (

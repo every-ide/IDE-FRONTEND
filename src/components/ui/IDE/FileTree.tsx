@@ -1,9 +1,10 @@
-import { useRef, useState, FC } from 'react';
+import { useRef, useState, FC, useEffect } from 'react';
 import { Tree, TreeApi } from 'react-arborist';
-import { data } from './data/data';
 import Node from './data/Node';
 import { TbFolderPlus } from 'react-icons/tb';
 import { AiOutlineFileAdd } from 'react-icons/ai';
+import { useTreeStore } from '@/src/store/useFileTreeStore';
+import { addNodeToTree } from '@/src/utils/fileTree/fileTreeUtils';
 // import { v4 as uuidv4 } from 'uuid';
 
 interface ArboristProps {}
@@ -13,39 +14,14 @@ const Arborist: FC<ArboristProps> = () => {
   const treeRef = useRef<TreeApi<any> | null>(null);
 
   const logTreeData = () => {
-    // 트리 데이터를 가져와서 콘솔에 출력하는 함수
     const data = treeRef.current; // getData 메소드는 예시일 뿐, 실제 API 확인 필요
-    const Tree = treeRef;
-    console.log('Current tree data:', Tree);
     console.log('Current tree data:', data);
-    console.log('Current tree data:', data?.idToIndex);
-    // console.log('Current tree data:', data?.);
-    // console.log('Current tree data:', data?.);
-    // console.log('Current tree data:', data?.);
-    // console.log('Current tree data:', data?.);
-    // console.log('Current tree data:', data?.);
+    console.log('Current tree data:', data?.props.data);
   };
 
-  // const generateCustomId = (name) => {
-  //   // 예: 이름과 현재 시간을 기반으로 ID 생성
-  //   return `custom-${name}-${Date.now()}`;
-  // };
-
-  // //파일 또는 폴더 생성 클릭 시 동작
-  // const onCreate: CreateHandler<FileNodeType> = ({ type, parentId }) => {
-  //   const newNode: FileNodeType = {
-  //     id: uuidv4(),
-  //     name: '',
-  //     type: type === 'internal' ? 'DIRECTORY' : 'FILE',
-  //     ...(type === 'internal' && { children: [] }),
-  //     isDirty: false,
-  //     isOpened: true,
-  //     filePath: findNodePathByName(''),
-  //     parentId: parentId === null ? 'root' : parentId,
-  //   };
-  //   addNode(newNode, parentId);
-  //   return newNode;
-  // };
+  const onCreate = (node: any) => {
+    addNodeToTree;
+  };
 
   const createFileFolder = (
     <>
@@ -89,7 +65,7 @@ const Arborist: FC<ArboristProps> = () => {
         <div className="min-h-[2000px]">
           <Tree
             ref={treeRef}
-            initialData={data}
+            initialData={useTreeStore.getState().nodes}
             width={260}
             height={1000}
             indent={24}
