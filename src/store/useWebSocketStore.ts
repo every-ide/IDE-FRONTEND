@@ -12,12 +12,12 @@ const useWebSocketStore = create<WebSocketState>((set) => ({
   webSocketService: null,
   connect: (options) => {
     const webSocketService = new WebSocketService(options);
-    webSocketService.activate();
+    console.log('connect zustand', webSocketService);
     set({ webSocketService });
   },
   disconnect: () => {
     set((state) => {
-      state.webSocketService?.deactivate();
+      state.webSocketService?.disconnect();
       return { webSocketService: null };
     });
   },

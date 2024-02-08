@@ -7,35 +7,77 @@ import Editor from './Editor';
 import WorkInfo from './WorkInfo';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { WebSocketService } from '@/src/services/webSocketService';
-import { Client } from '@stomp/stompjs';
 import useWebSocketStore from '@/src/store/useWebSocketStore';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 const WorkspacePage = () => {
+  const { workid: projectId } = useParams<{ workid: string }>();
+  const accessToken = localStorage.getItem('accessToken');
+  const [isOpenWorkInfo, setIsOpenWorkInfo] = useState<boolean>(true);
+  const clientRef = useRef<Client | null>(null);
   const connect = useWebSocketStore((state) => state.connect);
   const webSocketService = useWebSocketStore((state) => state.webSocketService);
-  const { workid: projectId } = useParams<{ workid: string }>();
-  const accessToken = localStorage.getItem('accessToken'); // accessToken은 실제 로그인 구현에 따라 다를 수 있음
-  const [isOpenWorkInfo, setIsOpenWorkInfo] = useState<boolean>(true);
 
+  useEffect(() => {
+    if (!projectId || !accessToken) {
+      console.error('Project ID or Access Token is missing');
+      return;
+    }
+
+    if (!webSocketService) {
+      const webSocketOptions = {
+        token: accessToken,
+        projectId: projectId,
+      };
+      connect(webSocketOptions);
+    }
+
+    return () => {
+      useWebSocketStore.getState().disconnect();
+    };
+  }, [connect]);
   // useEffect(() => {
   //   if (!projectId || !accessToken) {
   //     console.error('Project ID or Access Token is missing');
   //     return;
   //   }
 
-  //   if (!webSocketService) {
-  //     const webSocketOptions = {
-  //       token: accessToken,
-  //       projectId: projectId,
-  //     };
-  //     connect(webSocketOptions);
-  //   }
+  //   // Client 인스턴스 생성 및 설정
+  //   const client = new Client({
+  //     webSocketFactory: () => new SockJS('http://localhost:8000/ws'),
+  //     connectHeaders: {
+  //       // 인증 토큰 등 필요한 헤더 정보
+  //     },
+  //     debug: (str) => {
+  //       console.log(str);
+  //     },
+  //     reconnectDelay: 5000,
+  //     heartbeatIncoming: 4000,
+  //     heartbeatOutgoing: 4000,
+  //   });
 
-  //   return () => {
-  //     useWebSocketStore.getState().disconnect();
+  //   client.onConnect = (frame) => {
+  //     console.log('Connected: ' + frame);
+  //     // 연결 성공 시 로직, 예: 구독 설정
   //   };
-  // }, [connect]);
+
+  //   client.onStompError = (frame) => {
+  //     console.log('Broker reported error: ' + frame.headers['message']);
+  //     console.log('Additional details: ' + frame.body);
+  //   };
+
+  //   client.onWebSocketError = (evt) => {
+  //     console.error('WebSocket connection error: ', evt);
+  //   };
+
+  //   client.activate();
+  //   clientRef.current = client;
+  //   return () => {
+  //     // 컴포넌트 언마운트 시 연결 해제
+  //     client.deactivate();
+  //   };
+  // }, [projectId, accessToken]);
 
   useEffect(() => {
     const toggleWorkInfo = (event: KeyboardEvent) => {
@@ -66,7 +108,7 @@ const WorkspacePage = () => {
         <Sidebar />
         <div className="no-scrollbar relative flex flex-1 flex-col ">
           {/* <Editor /> */}
-          {isOpenWorkInfo && <WorkInfo toggleTerminal={toggleTerminal} />}
+          {/* {isOpenWorkInfo && <WorkInfo toggleTerminal={toggleTerminal} />} */}
         </div>
       </div>
       <Footer toggleTerminal={toggleTerminal} isOpenWorkInfo={isOpenWorkInfo} />

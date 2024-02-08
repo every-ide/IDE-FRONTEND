@@ -24,44 +24,40 @@ export class WebSocketService {
         Authorization: token,
         ProjectId: projectId,
       },
+      debug: function (str) {
+        console.log('str', str);
+      },
+      onConnect: () => {
+        console.log('성공!!!');
+      },
+      onStompError: () => {
+        console.log('실패 ㅠㅠ');
+      },
     });
-
-    this.client.onConnect = () => {
-      console.log('Connected');
-      // 초기 구독설정 가능
-    };
-
-    this.client.onStompError = (frame) => {
-      console.error('Broker reported error:', frame.headers['message']);
-      console.error('Additional details:', frame.body);
-    };
-  }
-
-  activate() {
     this.client.activate();
   }
 
-  deactivate() {
-    this.client.deactivate();
+  disconnect() {
+    this.client?.deactivate();
   }
 
   // subscribe example
-  subscribeToTopic(topic: string, callback: (message: IMessage) => void) {
-    this.client.subscribe(topic, (message) => {
-      callback(message);
-    });
-  }
+  // subscribeToTopic(topic: string, callback: (message: IMessage) => void) {
+  //   this.client.subscribe(topic, (message) => {
+  //     callback(message);
+  //   });
+  // }
 
-  subscribeToTerminal(
-    queue: string,
-    callback: (message: IMessage) => void,
-  ): StompSubscription {
-    return this.client.subscribe(queue, callback);
-  }
+  // subscribeToTerminal(
+  //   queue: string,
+  //   callback: (message: IMessage) => void,
+  // ): StompSubscription {
+  //   return this.client.subscribe(queue, callback);
+  // }
 
-  publish(destination: string, body: PublishTermial) {
-    if (this.client && this.client.active) {
-      this.client.publish({ destination, body: JSON.stringify(body) });
-    }
-  }
+  // publish(destination: string, body: PublishTermial) {
+  //   if (this.client && this.client.active) {
+  //     this.client.publish({ destination, body: JSON.stringify(body) });
+  //   }
+  // }
 }
