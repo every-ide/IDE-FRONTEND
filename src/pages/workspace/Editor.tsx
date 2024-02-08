@@ -9,7 +9,7 @@ import useFileStore from '@/src/store/useFileStore';
 import { FaXmark } from 'react-icons/fa6';
 
 const Editor = () => {
-  const { files, selectedFileId } = useFileStore();
+  const { files, selectedFileId, closeFile } = useFileStore();
 
   return (
     <main className="h-[calc(100vh-96px)] flex-1 overflow-y-auto bg-mdark">
@@ -19,7 +19,7 @@ const Editor = () => {
             <TabsTrigger variant="editor" key={file.id} value={file.id}>
               {file.name}
               <button
-                onClick={() => {}}
+                onClick={() => closeFile(file.id)}
                 className={`text-[#888] hover:text-white `}
               >
                 <FaXmark />

@@ -4,19 +4,21 @@ import { useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
   const { pathname } = useLocation();
-  console.log(pathname);
 
   return (
     <div
       className="
         flex
-        w-[20%]
+        w-[45%]
         flex-col
         gap-5
         border-r-[2px]
         border-ldark
         p-5
         pt-7
+        md:w-[40%]
+        lg:w-[30%]
+        xl:w-[20%]
     "
     >
       <SideMenuItem
