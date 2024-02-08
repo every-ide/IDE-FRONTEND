@@ -8,7 +8,7 @@ const NavigationBar: React.FC = () => {
   };
 
   return (
-    <nav className="sticky top-20 border-b-0 border-gray-50 bg-black pb-1 pt-3">
+    <nav className="bg-dark sticky top-20 border-b-0 border-gray-50 pb-1 pt-3">
       <div className="flex items-center justify-between px-6">
         <div className="flex items-center">
           <a

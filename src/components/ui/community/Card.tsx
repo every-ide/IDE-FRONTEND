@@ -26,7 +26,7 @@ const Card: React.FC<CardProps> = ({
   likes,
 }) => {
   return (
-    <div className="w-full max-w-sm overflow-hidden border-2 pb-7 shadow-md dark:bg-mdark">
+    <div className="w-full max-w-sm overflow-hidden border-2 pb-7 shadow-md dark:bg-ldark">
       <img
         src={banner}
         alt="Event Banner"
