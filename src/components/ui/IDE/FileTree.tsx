@@ -4,6 +4,7 @@ import { data } from './data/data';
 import Node from './data/Node';
 import { TbFolderPlus } from 'react-icons/tb';
 import { AiOutlineFileAdd } from 'react-icons/ai';
+// import { v4 as uuidv4 } from 'uuid';
 
 interface ArboristProps {}
 
@@ -14,13 +15,37 @@ const Arborist: FC<ArboristProps> = () => {
   const logTreeData = () => {
     // 트리 데이터를 가져와서 콘솔에 출력하는 함수
     const data = treeRef.current; // getData 메소드는 예시일 뿐, 실제 API 확인 필요
+    const Tree = treeRef;
+    console.log('Current tree data:', Tree);
     console.log('Current tree data:', data);
+    console.log('Current tree data:', data?.idToIndex);
     // console.log('Current tree data:', data?.);
     // console.log('Current tree data:', data?.);
     // console.log('Current tree data:', data?.);
     // console.log('Current tree data:', data?.);
     // console.log('Current tree data:', data?.);
   };
+
+  // const generateCustomId = (name) => {
+  //   // 예: 이름과 현재 시간을 기반으로 ID 생성
+  //   return `custom-${name}-${Date.now()}`;
+  // };
+
+  // //파일 또는 폴더 생성 클릭 시 동작
+  // const onCreate: CreateHandler<FileNodeType> = ({ type, parentId }) => {
+  //   const newNode: FileNodeType = {
+  //     id: uuidv4(),
+  //     name: '',
+  //     type: type === 'internal' ? 'DIRECTORY' : 'FILE',
+  //     ...(type === 'internal' && { children: [] }),
+  //     isDirty: false,
+  //     isOpened: true,
+  //     filePath: findNodePathByName(''),
+  //     parentId: parentId === null ? 'root' : parentId,
+  //   };
+  //   addNode(newNode, parentId);
+  //   return newNode;
+  // };
 
   const createFileFolder = (
     <>
