@@ -70,9 +70,9 @@ const PersonalInfoForm = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen w-full bg-mdark">
       <Header></Header>
-      <div className="mx-auto max-w-md">
+      <div className="max mx-auto max-w-md pt-5">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <AuthInput
             label="Name"

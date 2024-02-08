@@ -1,8 +1,15 @@
 import { IoPlanetOutline } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import UserMenu from './UserMenu';
 
 const Header = () => {
+  const location = useLocation();
+
+  // Check if the current path includes '/together'
+  const linkPath = location.pathname.includes('/together')
+    ? '/together'
+    : '/my/dashboard/containers';
+
   return (
     <header
       className="
@@ -18,7 +25,7 @@ const Header = () => {
     >
       {/* 임시 로고 */}
       <div className="inline-flex items-center px-4 text-2xl font-black">
-        <Link to={'/my/dashboard/containers'}>EVERYIDE</Link>
+        <Link to={linkPath}>EVERYIDE</Link>
       </div>
       {/* 우측 메뉴 */}
       <div className="flex flex-row gap-6">
