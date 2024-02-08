@@ -1,29 +1,39 @@
 import useWebSocketStore from '@/src/store/useWebSocketStore';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Terminal as Xterm } from 'xterm';
 import { StompSubscription } from '@stomp/stompjs';
+import { useParams } from 'react-router-dom';
+import type { PublishTermial } from '@/src/services/webSocketService';
 import 'xterm/css/xterm.css';
 const Terminal = () => {
+  const { workid: projectId } = useParams<{ workid: string }>();
   const [currentPath, setCurrentPath] = useState<string>('/');
   const currentCommandRef = useRef<string>('');
   const xtermRef = useRef<Xterm | null>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const webSocketService = useWebSocketStore((state) => state.webSocketService);
 
-  const sendCommand = () => {
-    if (webSocketService) {
-      webSocketService.publish('/app/room/123456/terminal', {
-        data: 'some data',
-      });
-    }
-  };
+  const sendCommand = useCallback(
+    (body: PublishTermial) => {
+      if (webSocketService && projectId) {
+        webSocketService.publish(`/app/room/${projectId}/terminal`, body);
+      }
+    },
+    [webSocketService, projectId],
+  );
   useEffect(() => {
     let subscription: StompSubscription | null = null;
-    if (webSocketService) {
+    if (webSocketService && projectId) {
       subscription = webSocketService.subscribeToTerminal(
-        '/user/queue/room/123456/terminal',
+        `/user/queue/room/${projectId}/terminal`,
         (message) => {
           console.log('터미널 구독 message', message);
+          const { success, content, path } = JSON.parse(message.body);
+          if (success && content) {
+            xtermRef.current?.write(content + '\r\n' + '\r\n');
+          }
+          xtermRef.current?.write(path + ': ');
+          setCurrentPath(path);
         },
       );
     }
@@ -32,7 +42,7 @@ const Terminal = () => {
         subscription.unsubscribe();
       }
     };
-  }, [webSocketService]);
+  }, [webSocketService, projectId]);
 
   useEffect(() => {
     // 터미널 인스턴스 생성
@@ -61,8 +71,12 @@ const Terminal = () => {
       if (currentCommand === '') {
         xtermRef.current?.write('\r\n' + currentPath + ': ');
       } else {
-        console.log('Executing command:', currentCommand);
-        xtermRef.current?.write('\r\n' + currentPath + ': ');
+        const body = {
+          path: currentPath,
+          command: currentCommandRef.current,
+        };
+        sendCommand(body);
+        xtermRef.current?.write('\r\n');
         currentCommandRef.current = '';
       }
     };
@@ -82,7 +96,7 @@ const Terminal = () => {
     return () => {
       terminalInputHandler.dispose();
     };
-  }, [currentPath]);
+  }, [currentPath, sendCommand]);
 
   return <div ref={terminalRef} className="pl-1 pt-1" />;
 };

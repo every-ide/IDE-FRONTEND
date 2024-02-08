@@ -1,9 +1,14 @@
 import SockJS from 'sockjs-client';
 import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
 
-interface WebSocketConnectOptions {
+export interface WebSocketConnectOptions {
   token: string;
   projectId: string;
+}
+
+export interface PublishTermial {
+  path: string;
+  command: string;
 }
 
 export class WebSocketService {
@@ -54,7 +59,7 @@ export class WebSocketService {
     return this.client.subscribe(queue, callback);
   }
 
-  publish(destination: string, body: any) {
+  publish(destination: string, body: PublishTermial) {
     if (this.client && this.client.active) {
       this.client.publish({ destination, body: JSON.stringify(body) });
     }

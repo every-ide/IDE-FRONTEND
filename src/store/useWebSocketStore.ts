@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import { WebSocketService } from '@/src/services/webSocketService';
+import type { WebSocketConnectOptions } from '@/src/services/webSocketService';
 
 interface WebSocketState {
   webSocketService: WebSocketService | null;
-  connect: (options: { token: string; projectId: string }) => void;
+  connect: (options: WebSocketConnectOptions) => void;
   disconnect: () => void;
 }
 
