@@ -1,11 +1,18 @@
 import { useRef, useState, FC, useEffect } from 'react';
-import { Tree, TreeApi } from 'react-arborist';
+import {
+  CreateHandler,
+  DeleteHandler,
+  MoveHandler,
+  RenameHandler,
+  Tree,
+  TreeApi,
+} from 'react-arborist';
 import Node from './data/Node';
 import { TbFolderPlus } from 'react-icons/tb';
 import { AiOutlineFileAdd } from 'react-icons/ai';
-import { useTreeStore } from '@/src/store/useFileTreeStore';
-import { addNodeToTree } from '@/src/utils/fileTree/fileTreeUtils';
-// import { v4 as uuidv4 } from 'uuid';
+import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
+import { useFileTreeStore } from '@/src/store/useFileTreeStore';
+import { makeNodeId } from '@/src/utils/fileTree/fileTreeUtils';
 
 interface ArboristProps {}
 
@@ -13,43 +20,96 @@ const Arborist: FC<ArboristProps> = () => {
   const [term, setTerm] = useState<string>('');
   const treeRef = useRef<TreeApi<any> | null>(null);
 
-  const logTreeData = () => {
-    const data = treeRef.current; // getData 메소드는 예시일 뿐, 실제 API 확인 필요
-    console.log('Current tree data:', data);
-    console.log('Current tree data:', data?.props.data);
+  const { fileTree, deleteNode, addNode, updateNodeName } = useFileTreeStore();
+
+  useEffect(() => {
+    const unsubscribe = useFileTreeStore.subscribe(
+      (state) => state.fileTree, // 여기서 fileTree 상태만 반환하여 구독합니다.
+      (fileTree) => {
+        console.log('FileTree 변경됨:', fileTree);
+      },
+    );
+
+    // 컴포넌트가 언마운트될 때 구독을 해제
+    return () => unsubscribe();
+  }, []); // 빈 배열을 의존성 배열로 제공하여 컴포넌트 마운트 시에만 구독 설정
+
+  //파일 또는 폴더 생성 클릭 시 동작
+  const onCreate: CreateHandler<FileNodeType> = ({ type, parentId }) => {
+    const newId = makeNodeId(fileTree, parentId, type);
+
+    const newNode: FileNodeType = {
+      id: newId,
+      name: '',
+      type: type === 'internal' ? 'folder' : 'file',
+      ...(type === 'internal' && { children: [] }),
+      // isDirty: false,
+      // isOpened: true,
+      // filePath: findNodePathByName(''),
+      parentId: parentId === null ? 'root' : parentId,
+    };
+    addNode(newNode, parentId);
+    return newNode;
   };
 
-  const onCreate = (node: any) => {
-    addNodeToTree;
+  const onRename: RenameHandler<FileNodeType> = ({ id, name }) => {
+    console.log('Rename:', id, name);
+    updateNodeName(id, name);
   };
 
-  const createFileFolder = (
-    <>
-      <button
-        onClick={() => {
-          treeRef.current?.createInternal();
-          logTreeData();
-        }}
-        title="New Folder..."
-      >
-        <TbFolderPlus />
-      </button>
-      <button
-        onClick={() => {
-          treeRef.current?.createLeaf();
-          logTreeData();
-        }}
-        title="New File..."
-      >
-        <AiOutlineFileAdd />
-      </button>
-    </>
-  );
+  //파일 또는 폴더 삭제 시 동작
+  const onDelete: DeleteHandler<FileNodeType> = ({ ids }) => {
+    deleteNode(ids[0]);
+  };
+
+  // const onMove: MoveHandler<FileNodeType> = ({
+  //   dragIds,
+  //   parentId,
+  //   parentNode,
+  //   dragNodes,
+  // }) => {
+  //   const dragNode = dragNodes[0];
+
+  //   if (parentNode?.data.type === 'file' || dragNode.data.type === 'folder') {
+  //     return;
+  //   }
+
+  //   console.log(dragNode.children?.map((child) => child.data) ?? []);
+  //   // 드래그 성공 시의 로직
+  //   const newId = makeNodeId(fileTree, parentId, dragNode.data.type);
+  //   const newNode = {
+  //     ...dragNode.data,
+  //     children: dragNode.children?.map((child) => child.data) ?? [],
+  //     id: newId,
+  //     parentId: parentId === null ? 'root' : parentId,
+  //   };
+  //   console.log('dragNode.children', dragNode.children);
+  //   addNode(newNode, parentId);
+  //   deleteNode(dragIds[0]);
+  // };
 
   return (
     <>
       <div className="border-b-2 border-mdark">
-        <div className="folderFileActions pl-2">{createFileFolder}</div>
+        <div className="folderFileActions pl-2">
+          <button
+            onClick={() => {
+              treeRef.current?.createInternal();
+            }}
+            title="New Folder..."
+          >
+            <TbFolderPlus />
+          </button>
+          <button
+            onClick={() => {
+              treeRef.current?.createLeaf();
+              // logTreeData();
+            }}
+            title="New File..."
+          >
+            <AiOutlineFileAdd />
+          </button>
+        </div>
         <div className="p-2">
           <input
             type="text"
@@ -65,7 +125,10 @@ const Arborist: FC<ArboristProps> = () => {
         <div className="min-h-[2000px]">
           <Tree
             ref={treeRef}
-            initialData={useTreeStore.getState().nodes}
+            data={fileTree}
+            onCreate={onCreate}
+            onRename={onRename}
+            onDelete={onDelete}
             width={260}
             height={1000}
             indent={24}

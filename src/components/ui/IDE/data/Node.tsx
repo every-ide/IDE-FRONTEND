@@ -19,6 +19,7 @@ import { LiaJava } from 'react-icons/lia';
 interface MyNodeData {
   id: string;
   name: string;
+  type: 'file' | 'folder';
   icon?: React.ElementType;
   iconColor?: string;
   children?: MyNodeData[];
@@ -34,57 +35,60 @@ interface NodeProps {
 const Node: FC<NodeProps> = ({ node, style, dragHandle, tree }) => {
   // 확장자에 따른 아이콘을 반환하는 함수
 
+  // console.log('Node:isLeaf', node.data.id + ' :' + node.isLeaf);
   const getFileIcon = (filename: string) => {
     const extension = filename.split('.').pop()?.toLowerCase();
 
     switch (extension) {
       case 'js':
-        return <DiJavascript1 color="#f0db4f" />;
+        return <DiJavascript1 color="#ffdf5d" />; // 더 밝은 노란색
       case 'jsx':
-        return <DiReact color="#61DBFB" />;
+        return <DiReact color="#97dffd" />; // 더 밝은 파란색
       case 'ts':
-        return <SiTypescript color="#3178c6" />;
+        return <SiTypescript color="#63b3ed" />; // 밝은 청색
       case 'tsx':
-        return <DiReact color="#61DBFB" />;
+        return <DiReact color="#97dffd" />; // 더 밝은 파란색
       case 'py':
-        return <DiPython color="#3776AB" />;
+        return <DiPython color="#7fb4e0" />; // 밝은 파랑
       case 'c':
-        return <TbBrandCpp color="#A8B9CC" />;
+        return <TbBrandCpp color="#b8d3e6" />; // 매우 밝은 청색
       case 'cpp':
-        return <TbBrandCpp color="#004482" />;
+        return <TbBrandCpp color="#6a9fb5" />; // 밝은 청색
       case 'html':
-        return <SiHtml5 color="#E34F26" />;
+        return <SiHtml5 color="#f06529" />; // 밝은 주황색
       case 'css':
-        return <SiCss3 color="#1572B6" />;
+        return <SiCss3 color="#66d3fa" />; // 밝은 하늘색
       case 'json':
-        return <SiJson color="#A8B9CC" />;
+        return <SiJson color="#b8d3e6" />; // 매우 밝은 청색
       case 'md':
-        return <SiMarkdown color="#E34F26" />;
+        return <SiMarkdown color="#f06529" />; // 밝은 주황색
       case 'java':
-        return <LiaJava color="#f89820" />; // Java 파일 아이콘
+        return <LiaJava color="#f9be76" />; // 밝은 오렌지색
       default:
-        return <AiFillFile color="#6bc7f6" />;
+        return <AiFillFile color="#9ad0ec" />; // 매우 밝은 파란색
     }
   };
 
   // 파일 확장자를 기반으로 아이콘 선택
-  const IconComponent = node.isLeaf ? (
-    getFileIcon(node.data.name)
-  ) : (
-    <AiFillFolder color="#f6cf60" />
-  );
-
-  const FolderArrowIcon = node.isInternal ? (
-    node.isOpen ? (
-      <MdArrowDropDown />
+  const IconComponent =
+    node.data.type === 'file' ? (
+      getFileIcon(node.data.name)
     ) : (
-      <MdArrowRight />
-    )
-  ) : (
-    <span className="pl-3"> </span>
-  );
+      <AiFillFolder color="#f6cf60" />
+    );
 
-  const nodeStyle = node.isLeaf ? 'file-node' : 'folder-node';
+  const FolderArrowIcon =
+    node.data.type === 'folder' ? (
+      node.isOpen ? (
+        <MdArrowDropDown />
+      ) : (
+        <MdArrowRight />
+      )
+    ) : (
+      <span className="pl-3"> </span>
+    );
+
+  const nodeStyle = node.data.type === 'file' ? 'file-node' : 'folder-node';
 
   const handleNodeClick = () => {
     console.log('Node ID:', node.data.id); // 현재 노드의 ID 출력

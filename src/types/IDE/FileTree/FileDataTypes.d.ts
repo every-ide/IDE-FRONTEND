@@ -5,9 +5,9 @@ export interface FileNodeType {
   type: string;
   parentId: string | number | null;
 
-  isDirty?: boolean;
-  isOpened?: boolean;
-  language?: string;
-  filePath?: string | null;
-  content?: string | null;
+  // isDirty?: boolean;
+  // isOpened?: boolean;
+  // language?: string;
+  // filePath?: string | null;
+  // content?: string | null;
 }
