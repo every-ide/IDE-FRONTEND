@@ -2,6 +2,7 @@ import { useRef, useState, FC, useEffect } from 'react';
 import {
   CreateHandler,
   DeleteHandler,
+  NodeRendererProps,
   // MoveHandler,
   RenameHandler,
   Tree,
@@ -18,17 +19,14 @@ interface ArboristProps {}
 
 const Arborist: FC<ArboristProps> = () => {
   const [term, setTerm] = useState<string>('');
-  const treeRef = useRef<TreeApi<any> | null>(null);
+  const treeRef = useRef<TreeApi<FileNodeType> | null>(null);
 
   const { fileTree, deleteNode, addNode, updateNodeName } = useFileTreeStore();
 
   useEffect(() => {
-    const unsubscribe = useFileTreeStore.subscribe(
-      (state) => state.fileTree, // 여기서 fileTree 상태만 반환하여 구독합니다.
-      (fileTree) => {
-        console.log('FileTree 변경됨:', fileTree);
-      },
-    );
+    const unsubscribe = useFileTreeStore.subscribe((state) => {
+      console.log('FileTree 변경됨:', state.fileTree);
+    });
 
     return () => unsubscribe();
   }, []);
@@ -137,7 +135,9 @@ const Arborist: FC<ArboristProps> = () => {
               node.data.name.toLowerCase().includes(term.toLowerCase())
             }
           >
-            {Node}
+            {(nodeProps) => (
+              <Node {...(nodeProps as NodeRendererProps<FileNodeType>)} />
+            )}
           </Tree>
         </div>
       </div>

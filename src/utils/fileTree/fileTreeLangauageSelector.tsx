@@ -1,7 +1,4 @@
-import { AiFillFolder, AiFillFile } from 'react-icons/ai';
-import { MdArrowRight, MdArrowDropDown, MdEdit } from 'react-icons/md';
-import { RxCross2 } from 'react-icons/rx';
-// 필요한 아이콘들을 import
+import { AiFillFile } from 'react-icons/ai';
 import { DiJavascript1, DiReact, DiPython } from 'react-icons/di';
 import {
   SiCss3,
