@@ -2,7 +2,7 @@ import { useRef, useState, FC, useEffect } from 'react';
 import {
   CreateHandler,
   DeleteHandler,
-  MoveHandler,
+  // MoveHandler,
   RenameHandler,
   Tree,
   TreeApi,
@@ -30,9 +30,8 @@ const Arborist: FC<ArboristProps> = () => {
       },
     );
 
-    // 컴포넌트가 언마운트될 때 구독을 해제
     return () => unsubscribe();
-  }, []); // 빈 배열을 의존성 배열로 제공하여 컴포넌트 마운트 시에만 구독 설정
+  }, []);
 
   //파일 또는 폴더 생성 클릭 시 동작
   const onCreate: CreateHandler<FileNodeType> = ({ type, parentId }) => {
