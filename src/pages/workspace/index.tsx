@@ -7,7 +7,6 @@ import Editor from './Editor';
 import WorkInfo from './WorkInfo';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import useWebSocketStore from '@/src/store/useWebSocketStore';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
@@ -16,68 +15,44 @@ const WorkspacePage = () => {
   const accessToken = localStorage.getItem('accessToken');
   const [isOpenWorkInfo, setIsOpenWorkInfo] = useState<boolean>(true);
   const clientRef = useRef<Client | null>(null);
-  const connect = useWebSocketStore((state) => state.connect);
-  const webSocketService = useWebSocketStore((state) => state.webSocketService);
 
   useEffect(() => {
     if (!projectId || !accessToken) {
       console.error('Project ID or Access Token is missing');
       return;
     }
+    connect();
+    return () => disconnect();
+  }, [projectId, accessToken]);
 
-    if (!webSocketService) {
-      const webSocketOptions = {
-        token: accessToken,
-        projectId: projectId,
-      };
-      connect(webSocketOptions);
-    }
+  const connect = () => {
+    console.log('connect 실행', clientRef.current);
+    clientRef.current = new Client({
+      // brokerURL: 'wss://socketsbay.com/wss/v2/1/demo',
+      webSocketFactory: () => new SockJS('http://43.203.66.34:8000/ws'),
+      connectHeaders: {},
+      debug: function (str) {
+        console.log(str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+      onConnect: () => {
+        // 구독실행
+        console.log('연결되었습니다!');
+      },
+      onStompError: (frame) => {
+        console.log('연결실패하엿습니다!');
+        console.error(frame);
+      },
+    });
+    console.log('!!', clientRef.current);
+    clientRef.current.activate();
+  };
 
-    return () => {
-      useWebSocketStore.getState().disconnect();
-    };
-  }, [connect]);
-  // useEffect(() => {
-  //   if (!projectId || !accessToken) {
-  //     console.error('Project ID or Access Token is missing');
-  //     return;
-  //   }
-
-  //   // Client 인스턴스 생성 및 설정
-  //   const client = new Client({
-  //     webSocketFactory: () => new SockJS('http://localhost:8000/ws'),
-  //     connectHeaders: {
-  //       // 인증 토큰 등 필요한 헤더 정보
-  //     },
-  //     debug: (str) => {
-  //       console.log(str);
-  //     },
-  //     reconnectDelay: 5000,
-  //     heartbeatIncoming: 4000,
-  //     heartbeatOutgoing: 4000,
-  //   });
-
-  //   client.onConnect = (frame) => {
-  //     console.log('Connected: ' + frame);
-  //     // 연결 성공 시 로직, 예: 구독 설정
-  //   };
-
-  //   client.onStompError = (frame) => {
-  //     console.log('Broker reported error: ' + frame.headers['message']);
-  //     console.log('Additional details: ' + frame.body);
-  //   };
-
-  //   client.onWebSocketError = (evt) => {
-  //     console.error('WebSocket connection error: ', evt);
-  //   };
-
-  //   client.activate();
-  //   clientRef.current = client;
-  //   return () => {
-  //     // 컴포넌트 언마운트 시 연결 해제
-  //     client.deactivate();
-  //   };
-  // }, [projectId, accessToken]);
+  const disconnect = () => {
+    clientRef.current?.deactivate();
+  };
 
   useEffect(() => {
     const toggleWorkInfo = (event: KeyboardEvent) => {
