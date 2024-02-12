@@ -26,7 +26,7 @@ const ContainerBox = ({
   createdAt,
   lastUpdatedAt,
 }: IContainerBoxProps) => {
-  const navigateToUrlInNewTab = (containerId) => {
+  const navigateToUrlInNewTab = (containerId: string) => {
     window.open(
       `http://localhost:5173/workspace/${containerId}`,
       '_blank',
