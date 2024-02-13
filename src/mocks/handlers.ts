@@ -111,4 +111,16 @@ export const handlers = [
       request,
     });
   }),
+
+  // POST: 새로운 컨테이너 생성
+  http.post('/api/user/:userId/containers', async ({ request }) => {
+    return HttpResponse.json(
+      {
+        containerId: 1234,
+      },
+      {
+        status: 200,
+      },
+    );
+  }),
 ];

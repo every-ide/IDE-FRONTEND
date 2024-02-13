@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 
-import { VariantProps, cn, cva } from '@/src/utils/style';
+import { cn, cva, type VariantProps } from '@/src/utils/style';
 
 const tabVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap bg-ldark px-3 py-1.5 text-xs font-medium text-white  disabled:pointer-events-none disabled:opacity-50 ',
@@ -24,20 +24,25 @@ export interface TabProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>,
     VariantProps<typeof tabVariants> {}
 
+export interface TabsListProps {
+  className?: string;
+}
+
 const Tabs = TabsPrimitive.Root;
 
-const TabsList = React.forwardRef<React.ElementRef<typeof TabsPrimitive.List>>(
-  ({ className, ...props }, ref) => (
-    <TabsPrimitive.List
-      ref={ref}
-      className={cn(
-        'inline-flex items-center justify-center bg-ldark',
-        className,
-      )}
-      {...props}
-    />
-  ),
-);
+const TabsList = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.List>,
+  TabsListProps
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.List
+    ref={ref}
+    className={cn(
+      'inline-flex items-center justify-center bg-ldark',
+      className,
+    )}
+    {...props}
+  />
+));
 
 TabsList.displayName = TabsPrimitive.List.displayName;
 
