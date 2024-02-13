@@ -1,20 +1,22 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface IAuthStore {
   isUserValid: boolean;
   userId: string | null;
+  userEmail: string | null;
   accessToken: string | null;
   setIsUserValid: (arg: boolean) => void;
-  setUserId: (arg: string) => void;
+  setUserInfo: (id: string, email: string) => void;
   setAccessToken: (arg: string) => void;
 }
 
 const useAuthStore = create<IAuthStore>((set) => ({
   isUserValid: false,
   userId: null,
+  userEmail: null,
   accessToken: null,
   setIsUserValid: (arg) => set({ isUserValid: arg }),
-  setUserId: (arg) => set({ userId: arg }),
+  setUserInfo: (id, email) => set({ userId: id, userEmail: email }),
   setAccessToken: (arg) => set({ accessToken: arg }),
 }));
 

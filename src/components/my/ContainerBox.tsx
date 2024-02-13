@@ -8,37 +8,34 @@ import {
 } from '@/components/ui/card';
 import { Button } from '../ui/button';
 import { MdOutlineDelete, MdOutlineSettings } from 'react-icons/md';
-import { axiosAuth } from '@/src/api/axios';
-import useAuthStore from '@/src/store/AuthProvier';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import useContainerAPI from '@/src/hooks/useContainerAPI';
+import useContainerStore from '@/src/store/useContainerStore';
 
 interface IContainerBoxProps {
-  containerId: string;
   containerName: string;
+  description: string;
   language: string;
-  type: string;
-  createdAt: Date;
-  lastUpdatedAt: Date;
+  createDate: Date;
+  lastModifiedDate: Date;
 }
 
 const ContainerBox = ({
-  containerId,
   containerName,
+  description,
   language,
-  type,
-  createdAt,
-  lastUpdatedAt,
+  createDate,
+  lastModifiedDate,
 }: IContainerBoxProps) => {
-  const { userId } = useAuthStore();
   const [isDeleting, setIsDeleting] = useState(false);
+  const { deleteContainerData } = useContainerAPI();
+  const { removeContainer } = useContainerStore();
 
   // 컨테이너 열기 버튼 onClick action
-  const navigateToUrlInNewTab = (containerId: string) => {
+  const navigateToUrlInNewTab = (containerName: string) => {
     window.open(
-      `http://localhost:5173/workspace/${containerId}`,
+      `http://localhost:5173/workspace/${containerName}`,
       '_blank',
       'noopener,noreferrer',
     );
@@ -51,12 +48,7 @@ const ContainerBox = ({
     if (window.confirm('정말 삭제하시겠습니까?')) {
       setIsDeleting(true);
       try {
-        // Test용!!!! (추후 삭제)
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        const response = await axiosAuth.delete(
-          BASE_URL + `/api/user/${userId}/containers/${containerId}`,
-        );
+        const response = await deleteContainerData(containerName);
 
         if (response.status === 200) {
           toast('컨테이너가 삭제되었습니다.', {
@@ -66,6 +58,8 @@ const ContainerBox = ({
             closeOnClick: true,
             theme: 'dark',
           });
+
+          removeContainer(containerName);
         }
       } catch (error) {
         console.error(error);
@@ -107,17 +101,18 @@ const ContainerBox = ({
             </Button>
           </div>
         </div>
-        <CardDescription className="text-[#888]">
-          {language} | {type}
+        <CardDescription className="truncate text-[#888]">
+          {description}
         </CardDescription>
       </CardHeader>
-      <CardContent className="pb-2 pt-0 text-sm">
-        <p>created: </p>
-        <p>last update:</p>
+      <CardContent className="flex flex-col gap-1 pb-2 text-sm">
+        <p>스택: {language}</p>
+        <p>생성일: </p>
+        <p>최종수정일:</p>
       </CardContent>
       <CardFooter className="justify-end">
         <Button
-          onClick={() => navigateToUrlInNewTab(containerId)}
+          onClick={() => navigateToUrlInNewTab(containerName)}
           size="sm"
           disabled={isDeleting}
         >

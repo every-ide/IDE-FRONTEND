@@ -1,5 +1,6 @@
 import AuthInput from './AuthInput';
 import { useForm } from 'react-hook-form';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useAuthStore from '@/src/store/AuthProvier';
@@ -15,7 +16,7 @@ type TSignInForm = {
 
 const SignInForm = () => {
   const navigate = useNavigate();
-  const setUserId = useAuthStore((state) => state.setUserId);
+  const setUserInfo = useAuthStore((state) => state.setUserInfo);
 
   const {
     register,
@@ -33,8 +34,9 @@ const SignInForm = () => {
 
       const accessToken = res?.data?.accessToken;
       const userId = res?.data?.userId;
+      const userEmail = res?.data?.email || email;
 
-      setUserId(userId);
+      setUserInfo(userId, userEmail);
       localStorage.setItem('accessToken', accessToken);
 
       // 유저의 마지막 path로 Navigate (없을 시 '/')
