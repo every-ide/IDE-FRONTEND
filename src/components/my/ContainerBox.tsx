@@ -26,7 +26,7 @@ const ContainerBox = ({
   createdAt,
   lastUpdatedAt,
 }: IContainerBoxProps) => {
-  const navigateToUrlInNewTab = (containerId) => {
+  const navigateToUrlInNewTab = (containerId: string) => {
     window.open(
       `http://localhost:5173/workspace/${containerId}`,
       '_blank',
@@ -52,7 +52,7 @@ const ContainerBox = ({
           {language} | {type}
         </CardDescription>
       </CardHeader>
-      <CardContent className="pb-2 pt-0 text-sm">
+      <CardContent className="pb-2 text-sm">
         <p>created: </p>
         <p>last update:</p>
       </CardContent>

@@ -16,15 +16,7 @@ const Header = () => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
-            <Button
-              onClick={() => {
-                // Save action goes here
-              }}
-              variant="ghost"
-              size="icon"
-            >
-              <FiSave size={16} />
-            </Button>
+            <FiSave size={16} onClick={() => {}} />
           </TooltipTrigger>
           <TooltipContent side="bottom">
             <p>저장</p>
@@ -32,14 +24,11 @@ const Header = () => {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger>
-            <Button
-              onClick={handleSave}
-              variant="ghost"
-              className="text-accent"
-              size="icon"
-            >
-              <PiPlayDuotone size={16} />
-            </Button>
+            <PiPlayDuotone
+              className="ml-4 text-accent"
+              size={16}
+              onClick={() => {}}
+            />
           </TooltipTrigger>
           <TooltipContent side="bottom">
             <p>컴파일 및 실행</p>

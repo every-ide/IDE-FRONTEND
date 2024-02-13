@@ -18,12 +18,10 @@ const Editor = () => {
           {files?.map((file) => (
             <TabsTrigger variant="editor" key={file.id} value={file.id}>
               {file.name}
-              <button
+              <FaXmark
+                className="text-[#888] hover:text-white"
                 onClick={() => closeFile(file.id)}
-                className={`text-[#888] hover:text-white `}
-              >
-                <FaXmark />
-              </button>
+              />
             </TabsTrigger>
           ))}
         </TabsList>
