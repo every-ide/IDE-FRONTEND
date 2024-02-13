@@ -1,4 +1,4 @@
-import NavigationBar from '@/src/components/ui/community/Navbar';
+import Navbar from '@/src/components/ui/community/Navbar';
 import Card from '@/src/components/ui/community/Card';
 import Header from '@/src/components/my/Header';
 
@@ -73,8 +73,8 @@ const TogetherPage = () => {
   return (
     <div className="bg-mdark">
       <Header />
-      <NavigationBar />
-      <div className="grid grid-cols-1 gap-7 p-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <Navbar />
+      <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {events.map((event, index) => (
           <Card key={index} {...event} />
         ))}

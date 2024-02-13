@@ -5,6 +5,15 @@ import {
   AiOutlineLike,
 } from 'react-icons/ai';
 import { MdLocationOn, MdPeople } from 'react-icons/md';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '../button';
 
 interface CardProps {
   banner: string;
@@ -16,7 +25,7 @@ interface CardProps {
   likes: number;
 }
 
-const Card: React.FC<CardProps> = ({
+const CardContainer: React.FC<CardProps> = ({
   banner,
   title,
   dateRange,
@@ -26,16 +35,16 @@ const Card: React.FC<CardProps> = ({
   likes,
 }) => {
   return (
-    <div className="w-full max-w-sm overflow-hidden border-2 pb-7 shadow-md dark:bg-mdark">
+    <Card variant="container">
       <img
         src={banner}
         alt="Event Banner"
-        className="h-48 w-full object-cover"
+        className="h-48 w-full object-cover p-4"
       />
-      <div className="p-4 pt-10">
-        <h3 className="mb-2 text-lg font-bold text-white dark:text-white">
-          {title}
-        </h3>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl">{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="text-sm">
         <div className="flex items-center pt-4 text-sm text-white dark:text-white">
           <AiOutlineCalendar />
           <span className="ml-1">{dateRange}</span>
@@ -44,26 +53,12 @@ const Card: React.FC<CardProps> = ({
           <MdLocationOn />
           <span className="ml-1">{location}</span>
         </div>
-        <div className="flex items-center justify-between pt-4 text-sm text-white dark:text-white">
-          <div className="flex items-center pt-4">
-            <MdPeople />
-            <span className="ml-1">{totalParticipants}명</span>
-          </div>
-          <div className="flex items-center pt-4">
-            <AiOutlineUser />
-            <span className="ml-1">{currentlyJoined}명 참여</span>
-          </div>
-          <div className="flex items-center pt-4">
-            <AiOutlineLike />
-            <span className="ml-1">{likes}</span>
-          </div>
-        </div>
-        <button className="mt-4 w-full rounded bg-blue-400 py-2 text-white hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-900">
-          참가하기
-        </button>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter>
+        <Button className="w-full">참가하기</Button>
+      </CardFooter>
+    </Card>
   );
 };
 
-export default Card;
+export default CardContainer;
