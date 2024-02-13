@@ -6,9 +6,36 @@ import Footer from './Footer';
 import Editor from './Editor';
 import WorkInfo from './WorkInfo';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Client } from '@stomp/stompjs';
+import useWebSocketStore from '@/src/store/useWebSocketStore';
 
 const WorkspacePage = () => {
+  const connect = useWebSocketStore((state) => state.connect);
+  const disconnect = useWebSocketStore((state) => state.disconnect);
+  const webSocketService = useWebSocketStore((state) => state.webSocketService);
+  const { workid: projectId } = useParams<{ workid: string }>();
+  const accessToken = localStorage.getItem('accessToken');
   const [isOpenWorkInfo, setIsOpenWorkInfo] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (!projectId || !accessToken) {
+      console.error('Project ID or Access Token is missing');
+      return;
+    }
+
+    if (!webSocketService) {
+      const webSocketOptions = {
+        token: accessToken,
+        projectId: projectId,
+      };
+      connect(webSocketOptions);
+    }
+
+    return () => {
+      disconnect();
+    };
+  }, [projectId, accessToken]);
 
   useEffect(() => {
     const toggleWorkInfo = (event: KeyboardEvent) => {
@@ -26,6 +53,7 @@ const WorkspacePage = () => {
       window.removeEventListener('keydown', toggleWorkInfo);
     };
   }, []);
+
   const toggleTerminal = () => {
     setIsOpenWorkInfo((prevState) => !prevState);
   };
@@ -37,8 +65,8 @@ const WorkspacePage = () => {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <div className="no-scrollbar relative flex flex-1 flex-col ">
-          <Editor />
-          {isOpenWorkInfo && <WorkInfo toggleTerminal={toggleTerminal} />}
+          {/* <Editor /> */}
+          {/* {isOpenWorkInfo && <WorkInfo toggleTerminal={toggleTerminal} />} */}
         </div>
       </div>
       <Footer toggleTerminal={toggleTerminal} isOpenWorkInfo={isOpenWorkInfo} />

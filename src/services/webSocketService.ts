@@ -1,55 +1,60 @@
-import SockJS from 'sockjs-client';
-import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
+import { Client } from '@stomp/stompjs';
 
-interface WebSocketConnectOptions {
+export interface WebSocketConnectOptions {
   token: string;
   projectId: string;
 }
 
+export interface PublishTermial {
+  path: string;
+  command: string;
+}
+
 export class WebSocketService {
   private client: Client;
-  private baseUrl: string = import.meta.env.VITE_API_BASE_URL;
 
   constructor(options: WebSocketConnectOptions) {
     const { token, projectId } = options;
     this.client = new Client({
-      webSocketFactory: () => new SockJS(`${this.baseUrl}/ws`),
+      brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
       connectHeaders: {
         Authorization: token,
         ProjectId: projectId,
       },
+      debug: function (str) {
+        console.log('str', str);
+      },
+      onConnect: () => {
+        console.log('성공!!!');
+      },
+      onStompError: () => {
+        console.log('실패 ㅠㅠ');
+      },
     });
-
-    this.client.onConnect = () => {
-      console.log('Connected');
-      // 초기 구독설정 가능
-    };
-
-    this.client.onStompError = (frame) => {
-      console.error('Broker reported error:', frame.headers['message']);
-      console.error('Additional details:', frame.body);
-    };
-  }
-
-  activate() {
     this.client.activate();
   }
 
-  deactivate() {
-    this.client.deactivate();
+  disconnect() {
+    this.client?.deactivate();
   }
 
   // subscribe example
-  subscribeToTopic(topic: string, callback: (message: IMessage) => void) {
-    this.client.subscribe(topic, (message) => {
-      callback(message);
-    });
-  }
+  // subscribeToTopic(topic: string, callback: (message: IMessage) => void) {
+  //   this.client.subscribe(topic, (message) => {
+  //     callback(message);
+  //   });
+  // }
 
-  subscribeToTerminal(
-    queue: string,
-    callback: (message: IMessage) => void,
-  ): StompSubscription {
-    return this.client.subscribe(queue, callback);
-  }
+  // subscribeToTerminal(
+  //   queue: string,
+  //   callback: (message: IMessage) => void,
+  // ): StompSubscription {
+  //   return this.client.subscribe(queue, callback);
+  // }
+
+  // publish(destination: string, body: PublishTermial) {
+  //   if (this.client && this.client.active) {
+  //     this.client.publish({ destination, body: JSON.stringify(body) });
+  //   }
+  // }
 }
