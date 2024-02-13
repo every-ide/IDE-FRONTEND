@@ -112,6 +112,65 @@ export const handlers = [
     });
   }),
 
+  // GET: 전체 컨테이너 조회
+  http.get('api/user/:userId/containers', () => {
+    return HttpResponse.json(
+      [
+        {
+          containerId: '1',
+          name: 'Container 1',
+          activate: true,
+          createdAt: new Date('2024-01-31'),
+          lastUpdatedAt: new Date('2024-01-31'),
+          language: 'java',
+        },
+        {
+          containerId: '2',
+          name: 'Container 2',
+          activate: true,
+          createdAt: new Date('2024-02-02'),
+          lastUpdatedAt: new Date('2024-02-03'),
+          language: 'python',
+        },
+        {
+          containerId: '3',
+          name: 'Container 3',
+          activate: true,
+          createdAt: new Date('2024-02-05'),
+          lastUpdatedAt: new Date('2024-02-08'),
+          language: 'javascript',
+        },
+        {
+          containerId: '4',
+          name: 'Container 4',
+          activate: false,
+          createdAt: new Date('2024-02-03'),
+          lastUpdatedAt: new Date('2024-02-12'),
+          language: 'javascript',
+        },
+        {
+          containerId: '5',
+          name: 'Container 5',
+          activate: true,
+          createdAt: new Date('2024-01-18'),
+          lastUpdatedAt: new Date('2024-02-03'),
+          language: 'java',
+        },
+        {
+          containerId: '6',
+          name: 'Container 6',
+          activate: false,
+          createdAt: new Date('2024-01-03'),
+          lastUpdatedAt: new Date('2024-02-01'),
+          language: 'python',
+        },
+      ],
+      {
+        status: 200,
+      },
+    );
+  }),
+
   // POST: 새로운 컨테이너 생성
   http.post('/api/user/:userId/containers', async ({ request }) => {
     return HttpResponse.json(
@@ -122,5 +181,12 @@ export const handlers = [
         status: 200,
       },
     );
+  }),
+
+  // DELETE: 컨테이너 삭제
+  http.delete('/api/user/:userId/containers/:containerId', () => {
+    return HttpResponse.json(null, {
+      status: 200,
+    });
   }),
 ];
