@@ -13,7 +13,7 @@ import { TbFolderPlus } from 'react-icons/tb';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 import { useFileTreeStore } from '@/src/store/useFileTreeStore';
-import { makeNodeId } from '@/src/utils/fileTree/fileTreeUtils';
+import { v4 as uuidv4 } from 'uuid';
 
 interface ArboristProps {}
 
@@ -33,10 +33,8 @@ const Arborist: FC<ArboristProps> = () => {
 
   //파일 또는 폴더 생성 클릭 시 동작
   const onCreate: CreateHandler<FileNodeType> = ({ type, parentId }) => {
-    const newId = makeNodeId(fileTree, parentId, type);
-
     const newNode: FileNodeType = {
-      id: newId,
+      id: uuidv4(),
       name: '',
       type: type === 'internal' ? 'folder' : 'file',
       ...(type === 'internal' && { children: [] }),

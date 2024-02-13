@@ -1,74 +1,4 @@
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
-import { findNodeById } from './findNodeUtils';
-
-export const makeNodeId = (
-  fileTree: FileNodeType[],
-  parentId: string | null,
-  type: string,
-): string => {
-  const nowFileTree = fileTree;
-  const parentNode = findNodeById(nowFileTree, parentId, '/');
-
-  console.log('parentNode:', parentNode);
-  let childrenCount = 0;
-  const typeId = typeSelector(type);
-
-  if (parentNode.node && parentNode.node.children) {
-    childrenCount = parentNode.node.children.length;
-  } else {
-    childrenCount = nowFileTree.length;
-  }
-
-  const newId = idSelector(parentId || '', typeId, childrenCount);
-
-  if (nowFileTree.find((node) => node.id === newId)) {
-    return makeNodeId(nowFileTree, parentId, type);
-  }
-  return newId;
-};
-
-// const childrenCounter = (
-//   nodes: FileNodeType[],
-//   fileTree: FileNodeType[],
-//   typeId: string,
-// ) => {
-//   let count = 0;
-//   if (typeId === 'd') {
-//     nodes.children.forEach((node) => {
-//       count++;
-//       if (node.type === 'folder' || node.type === 'internal') {
-//         count += 1;
-//       }
-//     });
-//   } else {
-//     nodes.children.forEach((node) => {
-//       count++;
-//       if (node.type === 'file') {
-//         count += 1;
-//       }
-//     });
-//   }
-//   return count;
-// };
-
-const typeSelector = (type: string) => {
-  if (type === 'folder' || type === 'internal') {
-    return 'd';
-  }
-  return 'f';
-};
-
-const idSelector = (
-  parentId: string,
-  typeId: string,
-  childrenCount: number,
-) => {
-  if (parentId === '') {
-    return String(childrenCount + 1) + typeId;
-  } else {
-    return parentId + (childrenCount + 1) + typeId;
-  }
-};
 
 export const addNodeToTree = (
   nodes: FileNodeType[],
@@ -123,3 +53,72 @@ export const isCorrectName = (inputName: string) => {
   }
   return true;
 };
+
+// export const makeNodeId = (
+//   fileTree: FileNodeType[],
+//   parentId: string | null,
+//   type: string,
+// ): string => {
+//   const nowFileTree = fileTree;
+//   const parentNode = findNodeById(nowFileTree, parentId, '/');
+
+//   console.log('parentNode:', parentNode);
+//   let childrenCount = 0;
+//   const typeId = typeSelector(type);
+
+//   if (parentNode.node && parentNode.node.children) {
+//     childrenCount = parentNode.node.children.length;
+//   } else {
+//     childrenCount = nowFileTree.length;
+//   }
+
+//   const newId = idSelector(parentId || '', typeId, childrenCount);
+
+//   if (nowFileTree.find((node) => node.id === newId)) {
+//     return makeNodeId(nowFileTree, parentId, type);
+//   }
+//   return newId;
+// };
+
+// const childrenCounter = (
+//   nodes: FileNodeType[],
+//   fileTree: FileNodeType[],
+//   typeId: string,
+// ) => {
+//   let count = 0;
+//   if (typeId === 'd') {
+//     nodes.children.forEach((node) => {
+//       count++;
+//       if (node.type === 'folder' || node.type === 'internal') {
+//         count += 1;
+//       }
+//     });
+//   } else {
+//     nodes.children.forEach((node) => {
+//       count++;
+//       if (node.type === 'file') {
+//         count += 1;
+//       }
+//     });
+//   }
+//   return count;
+// };
+
+// const typeSelector = (type: string) => {
+//   if (type === 'folder' || type === 'internal') {
+//     return 'd';
+//   }
+//   return 'f';
+// };
+
+// const idSelector = (
+//   parentId: string,
+//   typeId: string,
+//   childrenCount: number,
+// ) => {
+//   if (parentId === '') {
+//     return String(childrenCount + 1) + typeId;
+//   } else {
+//     return parentId + (childrenCount + 1) + typeId;
+//   }
+// };
