@@ -11,10 +11,13 @@ export interface PublishTermial {
 }
 
 export class WebSocketService {
-  private client: Client;
+  client: Client;
+  isConnected: boolean;
 
   constructor(options: WebSocketConnectOptions) {
     const { token, projectId } = options;
+    this.isConnected = false;
+
     this.client = new Client({
       brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
       connectHeaders: {
@@ -22,20 +25,28 @@ export class WebSocketService {
         ProjectId: projectId,
       },
       debug: function (str) {
-        console.log('str', str);
+        console.log('websocket debug->', str);
       },
       onConnect: () => {
+        this.isConnected = true;
         console.log('성공!!!');
       },
+      onDisconnect: () => {
+        this.isConnected = false;
+        console.log('WebSocket 연결 해제됨');
+      },
       onStompError: () => {
-        console.log('실패 ㅠㅠ');
+        console.log('STOMP Error 발생');
       },
     });
+  }
+
+  activate() {
     this.client.activate();
   }
 
   disconnect() {
-    this.client?.deactivate();
+    this.client.deactivate();
   }
 
   // subscribe example

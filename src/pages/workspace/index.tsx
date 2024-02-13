@@ -1,19 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import useWebSocketStore from '@/src/store/useWebSocketStore';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Navigation from './Navigation';
 import Footer from './Footer';
 import Editor from './Editor';
 import WorkInfo from './WorkInfo';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Client } from '@stomp/stompjs';
-import useWebSocketStore from '@/src/store/useWebSocketStore';
 
 const WorkspacePage = () => {
-  const connect = useWebSocketStore((state) => state.connect);
-  const disconnect = useWebSocketStore((state) => state.disconnect);
-  const webSocketService = useWebSocketStore((state) => state.webSocketService);
+  const { connect, disconnect, webSocketService } = useWebSocketStore(
+    (state) => ({
+      connect: state.connect,
+      disconnect: state.disconnect,
+      webSocketService: state.webSocketService,
+    }),
+  );
+
   const { workid: projectId } = useParams<{ workid: string }>();
   const accessToken = localStorage.getItem('accessToken');
   const [isOpenWorkInfo, setIsOpenWorkInfo] = useState<boolean>(true);
@@ -25,11 +28,7 @@ const WorkspacePage = () => {
     }
 
     if (!webSocketService) {
-      const webSocketOptions = {
-        token: accessToken,
-        projectId: projectId,
-      };
-      connect(webSocketOptions);
+      connect({ token: accessToken, projectId });
     }
 
     return () => {
@@ -65,8 +64,8 @@ const WorkspacePage = () => {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <div className="no-scrollbar relative flex flex-1 flex-col ">
-          {/* <Editor /> */}
-          {/* {isOpenWorkInfo && <WorkInfo toggleTerminal={toggleTerminal} />} */}
+          <Editor />
+          {isOpenWorkInfo && <WorkInfo toggleTerminal={toggleTerminal} />}
         </div>
       </div>
       <Footer toggleTerminal={toggleTerminal} isOpenWorkInfo={isOpenWorkInfo} />
