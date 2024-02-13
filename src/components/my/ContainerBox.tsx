@@ -52,7 +52,7 @@ const ContainerBox = ({
           {language} | {type}
         </CardDescription>
       </CardHeader>
-      <CardContent className="pb-2 pt-0 text-sm">
+      <CardContent className="pb-2 text-sm">
         <p>created: </p>
         <p>last update:</p>
       </CardContent>

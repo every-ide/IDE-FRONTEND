@@ -104,24 +104,14 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="relative">
-      <div
-        className="
-      flex
-      w-full
-      justify-start
-      px-8
-      py-4
-      md:justify-center
-      md:px-0
-    "
-      >
+    <div className="flex h-16 items-center justify-end bg-ldark px-8">
+      <div className="flex w-1/3 items-center justify-end">
         <input
           type="text"
           value={searchkey}
           onChange={(e) => setSearchKey(e.target.value)}
           placeholder="Enter to search..."
-          className="w-[55%] rounded-xl bg-ldark p-3 pr-16 text-accent caret-accent focus:border-[0.5px] focus:border-accent/65 focus:shadow-md focus:shadow-accent focus:outline-none md:w-[35%]"
+          className="flex-1 rounded-xl bg-mdark p-3 pr-16 text-accent caret-accent focus:border-[0.5px] focus:border-accent/65 focus:shadow-sm focus:shadow-accent focus:outline-none"
         />
         <button
           onClick={() => setSearchKey('')}
@@ -133,98 +123,100 @@ const SearchBar = () => {
           <FaSearch size={18} />
         </button>
       </div>
-      {/* 새 컨테이너 추가 버튼 & Modal */}
-      {!pathname.includes('/shared') && (
-        <Dialog open={openModal} onOpenChange={setOpenModal}>
-          <DialogTrigger asChild>
-            <Button
-              variant="outline"
-              size="lg"
-              className="absolute right-8 top-[18px] gap-1 rounded-lg px-4 font-semibold active:scale-95"
-            >
-              <MdAddCircleOutline size={20} className="text-accent" />새
-              컨테이너
-            </Button>
-          </DialogTrigger>
+      <div>
+        {!pathname.includes('/shared') && (
+          <Dialog open={openModal} onOpenChange={setOpenModal}>
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95"
+              >
+                <MdAddCircleOutline size={20} className="text-accent" />새
+                컨테이너
+              </Button>
+            </DialogTrigger>
 
-          <DialogContent className="text-black">
-            <DialogHeader>
-              <DialogTitle className="text-black">
-                컨테이너 생성하기
-              </DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit(newContainerAction)}>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label
-                    htmlFor="containerName"
-                    className="text-right text-black"
+            <DialogContent className="text-black">
+              <DialogHeader>
+                <DialogTitle className="text-black">
+                  컨테이너 생성하기
+                </DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit(newContainerAction)}>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label
+                      htmlFor="containerName"
+                      className="text-right text-black"
+                    >
+                      컨테이너 이름
+                    </Label>
+                    <Input
+                      id="containerName"
+                      placeholder="알파벳, 숫자, -, _만 포함, 20자 이내"
+                      className="col-span-3 text-black"
+                      {...register('containerName')}
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="language" className="text-right text-black">
+                      언어
+                    </Label>
+                    <Controller
+                      name="language"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                          }}
+                        >
+                          <SelectTrigger className="col-span-3 text-black">
+                            <SelectValue id="language" placeholder="언어" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="python">
+                              <div className="inline-flex items-center gap-2">
+                                <FaPython />
+                                Python
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="java">
+                              <div className="inline-flex items-center gap-2">
+                                <FaJava />
+                                Java
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="javascript">
+                              <div className="inline-flex items-center gap-2">
+                                <SiJavascript />
+                                JavaScript
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    type="submit"
+                    className="border-none"
+                    disabled={isSubmitting}
                   >
-                    컨테이너 이름
-                  </Label>
-                  <Input
-                    id="containerName"
-                    placeholder="알파벳, 숫자, -, _만 포함, 20자 이내"
-                    className="col-span-3 text-black"
-                    {...register('containerName')}
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="language" className="text-right text-black">
-                    언어
-                  </Label>
-                  <Controller
-                    name="language"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                        }}
-                      >
-                        <SelectTrigger className="col-span-3 text-black">
-                          <SelectValue id="language" placeholder="언어" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="python">
-                            <div className="inline-flex items-center gap-2">
-                              <FaPython />
-                              Python
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="java">
-                            <div className="inline-flex items-center gap-2">
-                              <FaJava />
-                              Java
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="javascript">
-                            <div className="inline-flex items-center gap-2">
-                              <SiJavascript />
-                              JavaScript
-                            </div>
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <DialogFooter>
-                <Button
-                  type="submit"
-                  className="border-none"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? '컨테이너 생성 중입니다...' : '생성하기'}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      )}
+                    {isSubmitting ? '컨테이너 생성 중입니다...' : '생성하기'}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        )}
+      </div>
+      {/* 새 컨테이너 추가 버튼 & Modal */}
     </div>
   );
 };
