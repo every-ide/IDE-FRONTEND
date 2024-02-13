@@ -13,7 +13,7 @@ interface IcreateNewContainerProps {
 
 const useContainerAPI = () => {
   const { userId, userEmail } = useAuthStore();
-  const { setContainerList } = useContainerStore();
+  const { setContainerList, addContainer } = useContainerStore();
 
   const createNewContainer = async ({
     containerName,
@@ -48,7 +48,16 @@ const useContainerAPI = () => {
       setOpenModal(false);
       reset();
 
-      // Container list refetching
+      // Zustand store : containerList에 추가
+      // -> backend 응답값으로 대체하기!!
+      addContainer({
+        name: containerName,
+        description,
+        active: true,
+        createDate: new Date(),
+        lastModifiedDate: new Date(),
+        language,
+      });
 
       // 새 창에서 컨테이너 열기
       window.open(

@@ -13,6 +13,7 @@ interface IContainerStore {
   containerList: IContainer[];
   setContainerList: (data: IContainer[]) => void;
   removeContainer: (name: string) => void;
+  addContainer: (arg: IContainer) => void;
 }
 
 const useContainerStore = create<IContainerStore>((set) => ({
@@ -24,6 +25,13 @@ const useContainerStore = create<IContainerStore>((set) => ({
 
       return {
         containerList: newList,
+      };
+    });
+  },
+  addContainer: (container) => {
+    set((state) => {
+      return {
+        containerList: [...state.containerList, container],
       };
     });
   },

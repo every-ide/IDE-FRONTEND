@@ -52,7 +52,7 @@ const SearchBar = () => {
     description,
   }: TNewContainerForm) => {
     try {
-      createNewContainer({
+      await createNewContainer({
         containerName,
         language,
         description,
