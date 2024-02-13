@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Navigation from './Navigation';
@@ -8,51 +8,34 @@ import WorkInfo from './WorkInfo';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
+import useWebSocketStore from '@/src/store/useWebSocketStore';
 
 const WorkspacePage = () => {
+  const connect = useWebSocketStore((state) => state.connect);
+  const disconnect = useWebSocketStore((state) => state.disconnect);
+  const webSocketService = useWebSocketStore((state) => state.webSocketService);
   const { workid: projectId } = useParams<{ workid: string }>();
   const accessToken = localStorage.getItem('accessToken');
   const [isOpenWorkInfo, setIsOpenWorkInfo] = useState<boolean>(true);
-  const clientRef = useRef<Client | null>(null);
 
   useEffect(() => {
     if (!projectId || !accessToken) {
       console.error('Project ID or Access Token is missing');
       return;
     }
-    connect();
-    return () => disconnect();
+
+    if (!webSocketService) {
+      const webSocketOptions = {
+        token: accessToken,
+        projectId: projectId,
+      };
+      connect(webSocketOptions);
+    }
+
+    return () => {
+      disconnect();
+    };
   }, [projectId, accessToken]);
-
-  const connect = () => {
-    console.log('connect 실행', clientRef.current);
-    clientRef.current = new Client({
-      // brokerURL: 'wss://socketsbay.com/wss/v2/1/demo',
-      webSocketFactory: () => new SockJS('http://43.203.66.34:8000/ws'),
-      connectHeaders: {},
-      debug: function (str) {
-        console.log(str);
-      },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-      onConnect: () => {
-        // 구독실행
-        console.log('연결되었습니다!');
-      },
-      onStompError: (frame) => {
-        console.log('연결실패하엿습니다!');
-        console.error(frame);
-      },
-    });
-    console.log('!!', clientRef.current);
-    clientRef.current.activate();
-  };
-
-  const disconnect = () => {
-    clientRef.current?.deactivate();
-  };
 
   useEffect(() => {
     const toggleWorkInfo = (event: KeyboardEvent) => {

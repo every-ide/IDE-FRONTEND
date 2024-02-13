@@ -1,5 +1,4 @@
-import SockJS from 'sockjs-client';
-import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
+import { Client } from '@stomp/stompjs';
 
 export interface WebSocketConnectOptions {
   token: string;
@@ -13,13 +12,11 @@ export interface PublishTermial {
 
 export class WebSocketService {
   private client: Client;
-  private baseUrl: string = import.meta.env.VITE_API_BASE_URL;
 
   constructor(options: WebSocketConnectOptions) {
     const { token, projectId } = options;
     this.client = new Client({
-      webSocketFactory: () => new SockJS(`${this.baseUrl}/ws`),
-      // Q: 실제로 headers 어떤 용도로 쓰지? 인증? 유저구분?
+      brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
       connectHeaders: {
         Authorization: token,
         ProjectId: projectId,
