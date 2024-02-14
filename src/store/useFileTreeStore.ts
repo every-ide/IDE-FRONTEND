@@ -1,11 +1,16 @@
 import { create } from 'zustand';
 import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
-import { addNodeToTree, removeNodeById } from '../utils/fileTree/fileTreeUtils';
+import {
+  addNodeToTree,
+  isDuplicateName,
+  removeNodeById,
+} from '../utils/fileTree/fileTreeUtils';
 import {
   findFilePath,
   findFilePathByName,
 } from '../utils/fileTree/findNodeUtils';
 import { data } from '../components/ui/IDE/data/data';
+import { updateNodeNameAndPath } from '../utils/fileTree/nodeUpdate';
 export interface FileTreeState {
   file: FileNodeType | null;
   fileTree: FileNodeType[];
@@ -22,24 +27,14 @@ export interface FileTreeState {
 
 export const useFileTreeStore = create<FileTreeState>((set) => ({
   file: null,
-  fileTree: data,
+  containerName: data.name,
+  fileTree: data.children,
   setFileTree: (fileTree) => set({ fileTree }),
   updateNodeName: (nodeId, newName) =>
-    set((state) => {
-      const updateNodeNameRecursive = (nodes: FileNodeType[]): FileNodeType[] =>
-        nodes.map((node) => {
-          if (node.id === nodeId) {
-            return { ...node, name: newName };
-          } else if (node.children) {
-            return {
-              ...node,
-              children: updateNodeNameRecursive(node.children),
-            };
-          }
-          return node;
-        });
-      return { fileTree: updateNodeNameRecursive(state.fileTree) };
-    }),
+    set((state) => ({
+      fileTree: updateNodeNameAndPath(state.fileTree, nodeId, newName),
+    })),
+
   addNode: (newNode: FileNodeType, parentId?: string | null) =>
     set((state) => {
       return {
@@ -72,7 +67,7 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
   setIsNewNode: (isNewNode) => set({ isNewNode }),
 }));
 
-// fileTree 변경사항을 구독
-useFileTreeStore.subscribe((fileTree: any) => {
-  console.log('FileTree 변경됨:', fileTree);
-});
+// // fileTree 변경사항을 구독
+// useFileTreeStore.subscribe((fileTree: any) => {
+//   console.log('FileTree 변경됨:', fileTree);
+// });
