@@ -1,7 +1,8 @@
 import { toast } from 'react-toastify';
-import useAuthStore from '../store/AuthProvier';
 import useContainerStore from '../store/useContainerStore';
 import useAxiosPrivate from './useAxiosPrivate';
+import useUserStore from '../store/useUserStore';
+import { IUpdateContainerForm } from '../components/my/ContainerBox';
 
 interface IcreateNewContainerProps {
   containerName: string;
@@ -12,8 +13,8 @@ interface IcreateNewContainerProps {
 }
 
 const useContainerAPI = () => {
-  const axiosAuth = useAxiosPrivate();
-  const { userId, userEmail } = useAuthStore();
+  const axiosPrivate = useAxiosPrivate();
+  const { email, userId } = { ...useUserStore((state) => state.user) };
   const { setContainerList, addContainer } = useContainerStore();
 
   const createNewContainer = async ({
@@ -26,10 +27,10 @@ const useContainerAPI = () => {
     // Test용!!!! (추후 삭제)
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    const response = await axiosAuth.post(
+    const response = await axiosPrivate.post(
       `/api/containers`,
       JSON.stringify({
-        email: userEmail,
+        email,
         name: containerName,
         description,
         language,
@@ -73,7 +74,7 @@ const useContainerAPI = () => {
     // Test용!!!! (추후 삭제)
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    const response = await axiosAuth.get(`/api/${userId}/containers`);
+    const response = await axiosPrivate.get(`/api/${userId}/containers`);
 
     if (response.status === 200) {
       setContainerList(response.data);
@@ -85,9 +86,9 @@ const useContainerAPI = () => {
     // Test용!!!! (추후 삭제)
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    const response = await axiosAuth.delete('/api/containers', {
+    const response = await axiosPrivate.delete('/api/containers', {
       data: {
-        email: userEmail,
+        email,
         name: containerName,
       },
     });
@@ -95,7 +96,14 @@ const useContainerAPI = () => {
     return response;
   };
 
-  const updateContainerData = async () => {};
+  const updateContainerData = async (data: IUpdateContainerForm) => {
+    // Test용!!!! (추후 삭제)
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    const response = await axiosPrivate.patch('/api/containers', data);
+
+    return response;
+  };
 
   return {
     createNewContainer,

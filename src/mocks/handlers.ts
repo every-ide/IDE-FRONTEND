@@ -46,18 +46,6 @@ export const handlers = [
       status: 200,
     });
   }),
-  // GET: User info
-  http.get('/user/info', () => {
-    return HttpResponse.json(
-      {
-        userId: '123',
-        email: 'test@test.com',
-      },
-      {
-        status: 200,
-      },
-    );
-  }),
 
   // 테스트
   http.get('/api/users', ({ request, params }) => {
@@ -155,25 +143,25 @@ export const handlers = [
         {
           name: 'Container 4',
           description: 'new container for my toy project !',
-          activate: false,
-          createdAt: new Date('2024-02-03'),
-          lastUpdatedAt: new Date('2024-02-12'),
+          active: false,
+          createDate: '2024-02-13T15:38:23.250293',
+          lastModifiedDate: '2024-02-13T15:38:23.250293',
           language: 'javascript',
         },
         {
           name: 'Container 5',
           description: 'new container for my toy project !',
-          activate: true,
-          createdAt: new Date('2024-01-18'),
-          lastUpdatedAt: new Date('2024-02-03'),
+          active: true,
+          createDate: '2024-02-13T15:38:23.250293',
+          lastModifiedDate: '2024-02-13T15:38:23.250293',
           language: 'java',
         },
         {
           name: 'Container 6',
           description: 'new container for my toy project !',
-          activate: false,
-          createdAt: new Date('2024-01-03'),
-          lastUpdatedAt: new Date('2024-02-01'),
+          active: false,
+          createDate: '2024-02-13T15:38:23.250293',
+          lastModifiedDate: '2024-02-13T15:38:23.250293',
           language: 'python',
         },
       ],

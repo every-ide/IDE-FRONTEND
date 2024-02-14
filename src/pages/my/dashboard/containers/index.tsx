@@ -36,6 +36,7 @@ const ContainerPage = () => {
             containerName={c.name}
             description={c.description}
             language={c.language}
+            active={c.active}
             createDate={c.createDate}
             lastModifiedDate={c.lastModifiedDate}
           />
@@ -46,46 +47,3 @@ const ContainerPage = () => {
 };
 
 export default ContainerPage;
-
-const temporaryContainerData = [
-  {
-    containerId: '123',
-    containerName: 'my-container',
-    language: 'javascript',
-    type: 'private',
-    createdAt: new Date(),
-    lastUpdatedAt: new Date(),
-  },
-  {
-    containerId: '2',
-    containerName: 'my-container2',
-    language: 'python',
-    type: 'shared',
-    createdAt: new Date(),
-    lastUpdatedAt: new Date(),
-  },
-  {
-    containerId: '3',
-    containerName: 'my-container3',
-    language: 'java',
-    type: 'private',
-    createdAt: new Date(),
-    lastUpdatedAt: new Date(),
-  },
-  {
-    containerId: '4',
-    containerName: 'my-container4',
-    language: 'javascript',
-    type: 'shared',
-    createdAt: new Date(),
-    lastUpdatedAt: new Date(),
-  },
-  {
-    containerId: '5',
-    containerName: 'my-container5',
-    language: 'javascript',
-    type: 'private',
-    createdAt: new Date(),
-    lastUpdatedAt: new Date(),
-  },
-];

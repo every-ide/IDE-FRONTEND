@@ -22,17 +22,21 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { useForm } from 'react-hook-form';
+import { Switch } from '@/components/ui/switch';
+import { useForm, Controller } from 'react-hook-form';
+import useUserStore from '@/src/store/useUserStore';
+import { formatDate } from '@/src/utils/formatDate';
 
 interface IContainerBoxProps {
   containerName: string;
   description: string;
   language: string;
+  active: boolean;
   createDate: Date;
   lastModifiedDate: Date;
 }
 
-interface IUpdateContainerForm {
+export interface IUpdateContainerForm {
   email: string;
   oldName: string;
   newName: string;
@@ -44,22 +48,32 @@ const ContainerBox = ({
   containerName,
   description,
   language,
+  active,
   createDate,
   lastModifiedDate,
 }: IContainerBoxProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const { deleteContainerData } = useContainerAPI();
-  const { removeContainer } = useContainerStore();
+  const user = useUserStore((state) => state.user);
+  const { deleteContainerData, updateContainerData } = useContainerAPI();
+  const { removeContainer, updateContainer } = useContainerStore();
 
   // 컨테이너 수정 request를 위한 form
   const {
     control,
-    reset,
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<IUpdateContainerForm>({ mode: 'onChange' });
+  } = useForm<IUpdateContainerForm>({
+    mode: 'onChange',
+    defaultValues: {
+      email: user?.email,
+      oldName: containerName,
+      newName: containerName,
+      newDescription: description,
+      active: active,
+    },
+  });
 
   // 컨테이너 열기 버튼 onClick action
   const navigateToUrlInNewTab = (containerName: string) => {
@@ -71,7 +85,36 @@ const ContainerBox = ({
   };
 
   // 컨테이너 수정 버튼 onClick action
-  const handleUpdateContainer = async () => {};
+  const handleUpdateContainer = async (data: IUpdateContainerForm) => {
+    try {
+      const response = await updateContainerData(data);
+
+      if (response.status === 200) {
+        // zustand store update
+        updateContainer(data);
+
+        toast('컨테이너가 성공적으로 수정되었습니다.', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          theme: 'dark',
+        });
+
+        setOpenModal(false);
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        theme: 'dark',
+      });
+    }
+  };
 
   // 컨테이너 삭제 버튼 onClick action
   const handleDeleteContainer = async () => {
@@ -127,7 +170,7 @@ const ContainerBox = ({
                     컨테이너 수정하기
                   </DialogTitle>
                 </DialogHeader>
-                <form>
+                <form onSubmit={handleSubmit(handleUpdateContainer)}>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label
@@ -178,6 +221,29 @@ const ContainerBox = ({
                         {...register('newDescription')}
                       />
                     </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="active" className="text-right text-black">
+                        활성화 여부
+                      </Label>
+                      <Controller
+                        name="active"
+                        control={control}
+                        defaultValue={active}
+                        render={({
+                          field: { onChange, onBlur, value, name, ref },
+                        }) => (
+                          <Switch
+                            checked={value}
+                            onCheckedChange={(checked) =>
+                              onChange(checked ? true : false)
+                            }
+                            onBlur={onBlur}
+                            name={name}
+                            ref={ref}
+                          />
+                        )}
+                      />
+                    </div>
                   </div>
 
                   <DialogFooter>
@@ -216,12 +282,21 @@ const ContainerBox = ({
           {description}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-1 pb-2 text-sm">
-        <p>스택: {language}</p>
-        <p>생성일: </p>
-        <p>최종수정일:</p>
+      <CardContent className="flex flex-col gap-1 pb-2 text-sm text-neutral-300">
+        <p>스택 : {language}</p>
+        <p>생성일 : {formatDate(new Date(createDate))}</p>
+        <p>최종수정일 : {formatDate(new Date(lastModifiedDate))}</p>
       </CardContent>
-      <CardFooter className="justify-end">
+      <CardFooter className="justify-between">
+        {active ? (
+          <div className="rounded-lg border border-green-400 bg-green-400/20 px-2 text-xs text-green-400">
+            활성
+          </div>
+        ) : (
+          <div className="rounded-lg border border-red-400 bg-red-400/20 px-2 text-xs text-red-400">
+            비활성
+          </div>
+        )}
         <Button
           onClick={() => navigateToUrlInNewTab(containerName)}
           size="sm"
