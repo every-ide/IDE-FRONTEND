@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import useAuthStore from '@/src/store/AuthProvier';
 import { axiosPublic } from '@/src/api/axios';
 import Oauth from './Oauth';
 
@@ -16,7 +15,6 @@ type TSignInForm = {
 
 const SignInForm = () => {
   const navigate = useNavigate();
-  const setUserId = useAuthStore((state) => state.setUserId);
 
   const {
     register,
@@ -27,16 +25,13 @@ const SignInForm = () => {
 
   const signInAction = async ({ email, password }: TSignInForm) => {
     try {
-
       const res = await axiosPublic.post(
         LOGIN_URL,
         JSON.stringify({ email, password }),
       );
 
       const accessToken = res?.data?.accessToken;
-      const userId = res?.data?.userId;
 
-      setUserId(userId);
       localStorage.setItem('accessToken', accessToken);
 
       // 유저의 마지막 path로 Navigate (없을 시 '/')
