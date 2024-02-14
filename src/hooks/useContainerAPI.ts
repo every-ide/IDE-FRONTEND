@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
-import { axiosAuth } from '../api/axios';
 import useAuthStore from '../store/AuthProvier';
 import useContainerStore from '../store/useContainerStore';
+import useAxiosPrivate from './useAxiosPrivate';
 
 interface IcreateNewContainerProps {
   containerName: string;
@@ -12,6 +12,7 @@ interface IcreateNewContainerProps {
 }
 
 const useContainerAPI = () => {
+  const axiosAuth = useAxiosPrivate();
   const { userId, userEmail } = useAuthStore();
   const { setContainerList, addContainer } = useContainerStore();
 
