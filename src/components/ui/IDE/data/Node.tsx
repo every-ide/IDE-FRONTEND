@@ -8,7 +8,7 @@ import useFileStore from '@/src/store/useFileStore';
 import {
   getFileIcon,
   getFileLanguage,
-} from '@/src/utils/fileTree/fileTreeLangauageSelector';
+} from '@/src/utils/fileTree/langauageSelector';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 // DiC 아이콘을 대신할 적절한 아이콘을 찾아 import하세요.
 
