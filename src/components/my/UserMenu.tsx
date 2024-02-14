@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/src/utils/style';
 
 const UserMenu = () => {
   const logout = useLogout();
@@ -22,11 +23,15 @@ const UserMenu = () => {
             <img src={Avartar} alt="avatar" />
           </div>
           <DropdownMenuTrigger>
-            <div
-              className={`hover:text-accent  ${isOpen ? 'rotate-180 text-accent transition-transform duration-150' : 'rotate-0 transition-transform duration-150'}`}
-            >
-              <AiOutlineCaretDown size={18} />
-            </div>
+            <AiOutlineCaretDown
+              size={18}
+              className={cn(
+                'hover:text-accent',
+                isOpen
+                  ? 'rotate-180 text-accent transition-transform duration-150'
+                  : 'rotate-0 transition-transform duration-150',
+              )}
+            />
           </DropdownMenuTrigger>
         </div>
         <DropdownMenuContent className="translate-x-[-35px] translate-y-4 border-accent/50 bg-mdark text-white shadow-md shadow-accent/50">

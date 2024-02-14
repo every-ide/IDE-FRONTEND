@@ -33,7 +33,14 @@ export const handlers = [
       },
     );
   }),
-  // Logout
+  http.get('/user/info', () => {
+    console.log('user info 실행');
+    return HttpResponse.json({
+      email: 'test@mail.com',
+      name: 'Goorm',
+      userId: 12,
+    });
+  }),
   http.post('/logout', () => {
     return HttpResponse.json(null, {
       status: 200,
