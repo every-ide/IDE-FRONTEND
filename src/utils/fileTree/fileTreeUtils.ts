@@ -1,4 +1,38 @@
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
+import { findNodeById, findParentNodeById } from './findNodeUtils';
+
+export const makePath = (
+  nodes: FileNodeType[],
+  name: string,
+  parentId: string | null,
+): string => {
+  // 부모 노드의 path를 찾습니다.
+  const parentNode = parentId ? findNodeById(nodes, parentId, null).node : null;
+  const parentPath = parentNode ? parentNode.path : '';
+
+  // 새로운 path를 생성합니다.
+  const newPath = `${parentPath}/${name}`.replace('//', '/');
+
+  console.log('New path:', newPath);
+  return newPath;
+};
+
+export const isDuplicateName = (
+  nodes: FileNodeType[],
+  id: string | null,
+  name: string,
+): boolean => {
+  // 현재 노드의 부모 노드를 찾습니다.
+  const parentNode = findParentNodeById(nodes, id);
+
+  // 부모 노드가 없다면, 최상위 레벨에서 중복 검사를 합니다.
+  if (parentNode === null) {
+    return nodes.some((node) => node.name === name);
+  }
+
+  // 부모 노드의 자식 노드들 중에서 이름이 중복되는 노드가 있는지 검사합니다.
+  return parentNode.children?.some((node) => node.name === name) ?? false;
+};
 
 export const addNodeToTree = (
   nodes: FileNodeType[],
@@ -53,72 +87,3 @@ export const isCorrectName = (inputName: string) => {
   }
   return true;
 };
-
-// export const makeNodeId = (
-//   fileTree: FileNodeType[],
-//   parentId: string | null,
-//   type: string,
-// ): string => {
-//   const nowFileTree = fileTree;
-//   const parentNode = findNodeById(nowFileTree, parentId, '/');
-
-//   console.log('parentNode:', parentNode);
-//   let childrenCount = 0;
-//   const typeId = typeSelector(type);
-
-//   if (parentNode.node && parentNode.node.children) {
-//     childrenCount = parentNode.node.children.length;
-//   } else {
-//     childrenCount = nowFileTree.length;
-//   }
-
-//   const newId = idSelector(parentId || '', typeId, childrenCount);
-
-//   if (nowFileTree.find((node) => node.id === newId)) {
-//     return makeNodeId(nowFileTree, parentId, type);
-//   }
-//   return newId;
-// };
-
-// const childrenCounter = (
-//   nodes: FileNodeType[],
-//   fileTree: FileNodeType[],
-//   typeId: string,
-// ) => {
-//   let count = 0;
-//   if (typeId === 'd') {
-//     nodes.children.forEach((node) => {
-//       count++;
-//       if (node.type === 'folder' || node.type === 'internal') {
-//         count += 1;
-//       }
-//     });
-//   } else {
-//     nodes.children.forEach((node) => {
-//       count++;
-//       if (node.type === 'file') {
-//         count += 1;
-//       }
-//     });
-//   }
-//   return count;
-// };
-
-// const typeSelector = (type: string) => {
-//   if (type === 'folder' || type === 'internal') {
-//     return 'd';
-//   }
-//   return 'f';
-// };
-
-// const idSelector = (
-//   parentId: string,
-//   typeId: string,
-//   childrenCount: number,
-// ) => {
-//   if (parentId === '') {
-//     return String(childrenCount + 1) + typeId;
-//   } else {
-//     return parentId + (childrenCount + 1) + typeId;
-//   }
-// };

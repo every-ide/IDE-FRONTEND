@@ -3,7 +3,6 @@ import {
   CreateHandler,
   DeleteHandler,
   NodeRendererProps,
-  // MoveHandler,
   RenameHandler,
   Tree,
   TreeApi,
@@ -14,6 +13,8 @@ import { AiOutlineFileAdd } from 'react-icons/ai';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 import { v4 as uuidv4 } from 'uuid';
+import { findNodeById } from '@/src/utils/fileTree/findNodeUtils';
+import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
 
 interface ArboristProps {}
 
@@ -33,22 +34,23 @@ const Arborist: FC<ArboristProps> = () => {
 
   //파일 또는 폴더 생성 클릭 시 동작
   const onCreate: CreateHandler<FileNodeType> = ({ type, parentId }) => {
+    const newPath = makePath(fileTree, '', parentId);
     const newNode: FileNodeType = {
       id: uuidv4(),
       name: '',
       type: type === 'internal' ? 'folder' : 'file',
       ...(type === 'internal' && { children: [] }),
-      // isDirty: false,
-      // isOpened: true,
-      // filePath: findNodePathByName(''),
-      parentId: parentId === null ? 'root' : parentId,
+      path: newPath,
     };
     addNode(newNode, parentId);
     return newNode;
   };
 
   const onRename: RenameHandler<FileNodeType> = ({ id, name }) => {
-    console.log('Rename:', id, name);
+    if (isDuplicateName(fileTree, id, name)) {
+      console.log('중복된 이름입니다.');
+      return;
+    }
     updateNodeName(id, name);
   };
 
