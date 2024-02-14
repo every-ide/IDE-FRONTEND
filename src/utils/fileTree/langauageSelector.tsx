@@ -1,45 +1,46 @@
 import { AiFillFile } from 'react-icons/ai';
-import { DiJavascript1, DiReact, DiPython } from 'react-icons/di';
+import { DiReact, DiPython } from 'react-icons/di';
 import {
   SiCss3,
   SiHtml5,
-  SiJson,
+  SiJavascript,
   SiMarkdown,
   SiTypescript,
 } from 'react-icons/si';
 import { TbBrandCpp } from 'react-icons/tb';
 import { LiaJava } from 'react-icons/lia';
+import { FaNpm } from 'react-icons/fa6';
 export const getFileIcon = (filename: string) => {
   const extension = filename.split('.').pop()?.toLowerCase();
 
   switch (extension) {
     case 'js':
-      return <DiJavascript1 color="#ffdf5d" />; // 더 밝은 노란색
+      return <SiJavascript color="#f0db4f" />; // 진한 노란색
     case 'jsx':
-      return <DiReact color="#97dffd" />; // 더 밝은 파란색
+      return <DiReact color="#61DBFB" />; // 진한 파란색
     case 'ts':
-      return <SiTypescript color="#63b3ed" />; // 밝은 청색
+      return <SiTypescript color="#3178c6" />; // 진한 청색
     case 'tsx':
-      return <DiReact color="#97dffd" />; // 더 밝은 파란색
+      return <DiReact color="#61DBFB" />; // 진한 파란색
     case 'py':
-      return <DiPython color="#7fb4e0" />; // 밝은 파랑
+      return <DiPython color="#3776AB" />; // 진한 파랑
 
     case 'c':
-      return <TbBrandCpp color="#b8d3e6" />; // 매우 밝은 청색
+      return <TbBrandCpp color="#00599C" />; // 진한 청색
     case 'cpp':
-      return <TbBrandCpp color="#6a9fb5" />; // 밝은 청색
+      return <TbBrandCpp color="#004482" />; // 진한 청색
     case 'html':
-      return <SiHtml5 color="#f06529" />; // 밝은 주황색
+      return <SiHtml5 color="#E34F26" />; // 진한 주황색
     case 'css':
-      return <SiCss3 color="#66d3fa" />; // 밝은 하늘색
+      return <SiCss3 color="#1572B6" />; // 진한 하늘색
     case 'json':
-      return <SiJson color="#b8d3e6" />; // 매우 밝은 청색
+      return <FaNpm color="#CB3837" />; // 진한 빨간색
     case 'md':
-      return <SiMarkdown color="#f06529" />; // 밝은 주황색
+      return <SiMarkdown color="#715537" />; // 검은색
     case 'java':
-      return <LiaJava color="#f9be76" />; // 밝은 오렌지색
+      return <LiaJava color="#f89820" />; // 진한 오렌지색
     default:
-      return <AiFillFile color="#9ad0ec" />; // 매우 밝은 파란색
+      return <AiFillFile color="#6c757d" />; // 진한 회색
   }
 };
 
