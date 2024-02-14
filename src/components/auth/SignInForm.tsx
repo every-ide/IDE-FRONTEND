@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { axiosPublic } from '@/src/api/axios';
 import Oauth from './Oauth';
+import useUserStore from '@/src/store/useUserStore';
 
 const LOGIN_URL = '/auth';
 
@@ -15,6 +16,7 @@ type TSignInForm = {
 
 const SignInForm = () => {
   const navigate = useNavigate();
+  const setUser = useUserStore((state) => state.setUser);
 
   const {
     register,
@@ -33,6 +35,13 @@ const SignInForm = () => {
       const accessToken = res?.data?.accessToken;
 
       localStorage.setItem('accessToken', accessToken);
+
+      // user store에 정보 저장
+      setUser({
+        email: res?.data?.email,
+        name: '',
+        userId: res?.data?.userId,
+      });
 
       // 유저의 마지막 path로 Navigate (없을 시 '/')
       navigate('/my/dashboard/containers', { replace: true });
