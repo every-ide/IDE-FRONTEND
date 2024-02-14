@@ -3,7 +3,7 @@ export interface FileNodeType {
   name: string;
   children?: FileNodeType[];
   type: string;
-  parentId: string | number | null;
+  path: string;
 
   // isDirty?: boolean;
   // isOpened?: boolean;
