@@ -11,7 +11,7 @@ interface IContainer {
 }
 
 interface IContainerStore {
-  containerList: IContainer[];
+  containerList: IContainer[] | null;
   setContainerList: (data: IContainer[]) => void;
   removeContainer: (name: string) => void;
   addContainer: (arg: IContainer) => void;
@@ -19,11 +19,11 @@ interface IContainerStore {
 }
 
 const useContainerStore = create<IContainerStore>((set) => ({
-  containerList: [],
+  containerList: null,
   setContainerList: (data) => set({ containerList: data }),
   removeContainer: (name) => {
     set((state) => {
-      const newList = state.containerList.filter((c) => c.name !== name);
+      const newList = state.containerList?.filter((c) => c.name !== name);
 
       return {
         containerList: newList,
@@ -33,13 +33,15 @@ const useContainerStore = create<IContainerStore>((set) => ({
   addContainer: (container) => {
     set((state) => {
       return {
-        containerList: [...state.containerList, container],
+        containerList: state.containerList
+          ? [...state.containerList, container]
+          : [container],
       };
     });
   },
   updateContainer: (container) => {
     set((state) => {
-      const updatedList = state.containerList.map((c) => {
+      const updatedList = state.containerList?.map((c) => {
         if (c.name === container.oldName) {
           return {
             ...c,

@@ -4,6 +4,7 @@ import useContainerAPI from '@/src/hooks/useContainerAPI';
 import useContainerStore from '@/src/store/useContainerStore';
 import { useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import EmptyState from '@/src/components/my/EmptyState';
 
 const ContainerPage = () => {
   const { containerList } = useContainerStore();
@@ -14,7 +15,7 @@ const ContainerPage = () => {
   }, []);
 
   // while Loading data : Show Skeleton
-  if (!containerList.length) {
+  if (!containerList) {
     return (
       <DashboardLayout>
         <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -23,6 +24,14 @@ const ContainerPage = () => {
           <Skeleton className="h-[230px] w-full rounded-xl" />
           <Skeleton className="h-[230px] w-full rounded-xl" />
         </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (!containerList.length) {
+    return (
+      <DashboardLayout>
+        <EmptyState />
       </DashboardLayout>
     );
   }

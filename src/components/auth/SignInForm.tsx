@@ -1,6 +1,5 @@
 import AuthInput from './AuthInput';
 import { useForm } from 'react-hook-form';
-
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { axiosPublic } from '@/src/api/axios';
