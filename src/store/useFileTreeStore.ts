@@ -1,14 +1,12 @@
 import { create } from 'zustand';
-import { FileNodeType } from '@/types/IDE/FileTree/FileDataTypes';
-import { addNodeToTree, removeNodeById } from '@/utils/filetree/fileTreeUtils';
-import { FileSocketReceivedType } from '@/app/api/websocket';
-
-import { processWebSocketFileEvent } from '@/utils/filetree/fileTreeSocketUtils';
+import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
+import { addNodeToTree, removeNodeById } from '../utils/fileTree/fileTreeUtils';
 import {
   findFilePath,
   findFilePathByName,
-} from '@/utils/filetree/findNodeUtils';
-
+} from '../utils/fileTree/findNodeUtils';
+import { data } from '../components/ui/IDE/data/data';
+import { updateNodeNameAndPath } from '../utils/fileTree/nodeUpdate';
 export interface FileTreeState {
   file: FileNodeType | null;
   fileTree: FileNodeType[];
@@ -18,21 +16,21 @@ export interface FileTreeState {
   deleteNode: (nodeids: string | null) => void;
   findNodePath: (nodeid: string | number | null) => string | null | number;
   findNodePathByName: (nodename: string) => string | null;
-  handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => void;
+  // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => void;
   isNewNode: boolean;
   setIsNewNode: (boolean: boolean) => void;
 }
 
 export const useFileTreeStore = create<FileTreeState>((set) => ({
   file: null,
-  fileTree: [],
+  containerName: data.name,
+  fileTree: data.children,
   setFileTree: (fileTree) => set({ fileTree }),
   updateNodeName: (nodeId, newName) =>
     set((state) => ({
-      fileTree: state.fileTree.map((node) => {
-        return node.id === nodeId ? { ...node, name: newName } : node;
-      }),
+      fileTree: updateNodeNameAndPath(state.fileTree, nodeId, newName),
     })),
+
   addNode: (newNode: FileNodeType, parentId?: string | null) =>
     set((state) => {
       return {
@@ -56,11 +54,16 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
     return findFilePathByName(state.fileTree, nodename);
   },
 
-  handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => {
-    set((state) => ({
-      fileTree: processWebSocketFileEvent(state.fileTree, fileData),
-    }));
-  },
+  // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => {
+  //   set((state) => ({
+  //     fileTree: processWebSocketFileEvent(state.fileTree, fileData),
+  //   }));
+  // },
   isNewNode: false,
   setIsNewNode: (isNewNode) => set({ isNewNode }),
 }));
+
+// // fileTree 변경사항을 구독
+// useFileTreeStore.subscribe((fileTree: any) => {
+//   console.log('FileTree 변경됨:', fileTree);
+// });
