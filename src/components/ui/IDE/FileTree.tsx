@@ -15,7 +15,7 @@ import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 import { v4 as uuidv4 } from 'uuid';
 import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
-import { updatePath } from '@/src/utils/fileTree/nodeUpdate';
+import { updatePath } from '@/src/utils/fileTree/nodeUtils';
 import useUserStore from '@/src/store/useUserStore';
 import { useParams } from 'react-router-dom';
 

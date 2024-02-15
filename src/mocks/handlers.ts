@@ -274,4 +274,15 @@ export const handlers = [
       ],
     });
   }),
+  http.get('/api/containers/:containerName/files?=:path', async () => {
+    return HttpResponse.json({
+      id: 'r2d1f',
+      name: 'App.js',
+      path: '/src/App.js',
+      content: 'console.log("hello world22222!");',
+      language: 'javascript',
+      isOpen: false,
+      needSave: false,
+    });
+  }),
 ]; // Remove the extra comma at the end of the array.
