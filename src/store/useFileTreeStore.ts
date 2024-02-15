@@ -68,8 +68,3 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
   isNewNode: false,
   setIsNewNode: (isNewNode) => set({ isNewNode }),
 }));
-
-// fileTree 변경사항을 구독
-useFileTreeStore.subscribe((fileTree: any) => {
-  console.log('FileTree 변경됨:', fileTree);
-});

@@ -267,6 +267,12 @@ export const handlers = [
         },
         {
           id: 'r4f',
+          name: '목데이터.py',
+          type: 'file',
+          path: '/목데이터.py',
+        },
+        {
+          id: 'r5f',
           name: 'README.md',
           type: 'file',
           path: '/README.md',
@@ -279,7 +285,7 @@ export const handlers = [
       id: 'r2d1f',
       name: 'App.js',
       path: '/src/App.js',
-      content: 'console.log("hello world22222!");',
+      content: 'console.log("whoisthelee");',
       language: 'javascript',
       isOpen: false,
       needSave: false,

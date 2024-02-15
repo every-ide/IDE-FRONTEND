@@ -60,22 +60,26 @@ const Node: FC<NodeProps> = ({
 
   const nodeStyle = node.data.type === 'file' ? 'file-node' : 'folder-node';
 
-  const handleNodeClick = async () => {
-    const { id, name, type, path } = node.data;
-    const lang = getFileLanguage(name);
-    console.log('Node ID:', node.data.id); // 현재 노드의 ID 출력
-    console.log('Node Data:', node.data); // 현재 노드의 데이터 출력
-    console.log(node.isInternal);
-
-    if (type === 'file') {
-      // 파일인 경우, 파일 열기
-      selectFile(node.data.id);
-      const selectedFile = await axiosOpenFile(containerName, path);
-      const { content } = selectedFile?.data ?? { content: '' };
-      openFile(id, name, content, lang);
+  const handleNodeClick = () => {
+    if (node.data.type === 'file') {
+      handleFileClick();
+    } else {
+      node.toggle();
     }
-    if (node.isInternal || node.data.type === 'directory') {
-      node.toggle(); // 내부 노드인 경우, 열기/닫기 토글
+  };
+  const handleFileClick = async () => {
+    const { id, name, path } = node.data;
+    try {
+      const selectedFile = await axiosOpenFile(containerName, path);
+      const { content } = selectedFile?.data ?? {
+        content: '',
+      };
+      const fileId = selectedFile?.data?.id ?? '';
+      const filename = selectedFile?.data?.name ?? '';
+      selectFile(fileId);
+      openFile(fileId, filename, content, getFileLanguage(filename));
+    } catch (error) {
+      console.error('Error opening file:', error);
     }
   };
 
