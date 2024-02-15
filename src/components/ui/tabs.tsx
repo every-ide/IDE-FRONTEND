@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
+import { PropsWithChildren } from 'react';
 
 import { cn, cva, type VariantProps } from '@/src/utils/style';
 
@@ -24,8 +25,9 @@ export interface TabProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>,
     VariantProps<typeof tabVariants> {}
 
-export interface TabsListProps {
+export interface TabsListProps extends PropsWithChildren {
   className?: string;
+  id?: string;
 }
 
 const Tabs = TabsPrimitive.Root;
