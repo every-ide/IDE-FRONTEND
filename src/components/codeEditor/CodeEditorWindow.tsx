@@ -7,7 +7,7 @@ import { javascript } from '@codemirror/lang-javascript';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 
 interface ICodeEditorWindowProps {
-  fileId: string;
+  filePath: string;
   content: string;
   language: string;
   selected: boolean;
@@ -21,12 +21,12 @@ const create = (v: EditorView) => {
 const updateListenerExtension = EditorView.updateListener.of(
   (v: ViewUpdate) => {
     //변경된 코드
-    console.log('change', v.state.doc.toString());
+    console.log('code change:::', v.state.doc.toString());
   },
 );
 
 const CodeEditorWindow = ({
-  fileId,
+  filePath,
   content,
   language,
   selected,

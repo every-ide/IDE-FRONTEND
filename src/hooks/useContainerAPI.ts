@@ -37,7 +37,7 @@ const useContainerAPI = () => {
       }),
     );
 
-    if (response.status === 200) {
+    if (response.status === 201) {
       toast('새로운 컨테이너가 생성되었습니다.', {
         position: 'top-right',
         autoClose: 2000,

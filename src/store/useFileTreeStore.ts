@@ -10,6 +10,7 @@ import { updateNodeNameAndPath } from '../utils/fileTree/nodeUtils';
 import { axiosFileTree } from '../api/fileTree/filetreeApi';
 export interface FileTreeState {
   file: FileNodeType | null;
+  containerName: string;
   fileTree: FileNodeType[];
   setFileTree: (fileTree: FileNodeType[]) => void;
   updateNodeName: (nodeId: string, newName: string) => void;
@@ -17,6 +18,7 @@ export interface FileTreeState {
   deleteNode: (nodeids: string | null) => void;
   findNodePath: (nodeid: string | number | null) => string | null | number;
   findNodePathByName: (nodename: string) => string | null;
+  setFileTreeFromApi: (userId: number, containerName: string) => void;
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => void;
   isNewNode: boolean;
   setIsNewNode: (boolean: boolean) => void;

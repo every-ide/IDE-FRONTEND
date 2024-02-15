@@ -1,4 +1,7 @@
+import useUserStore from '@/src/store/useUserStore';
+
 const Navigation = () => {
+  const { name } = { ...useUserStore((state) => state.user) };
   return (
     <nav className="flex h-8 items-center border-b-2 border-mdark bg-ldark px-1">
       <div className="flex grow items-center">
@@ -12,7 +15,7 @@ const Navigation = () => {
         </ul>
       </div>
       <div className="ml-auto cursor-pointer">
-        <h2>John Doe님</h2>
+        <h2>{name} 님</h2>
       </div>
     </nav>
   );
