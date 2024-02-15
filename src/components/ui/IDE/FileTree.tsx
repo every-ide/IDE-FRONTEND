@@ -16,16 +16,19 @@ import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 import { v4 as uuidv4 } from 'uuid';
 import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
 import { updatePath } from '@/src/utils/fileTree/nodeUpdate';
+import useUserStore from '@/src/store/useUserStore';
 
 interface ArboristProps {}
 
 const Arborist: FC<ArboristProps> = () => {
   const [term, setTerm] = useState<string>('');
   const treeRef = useRef<TreeApi<FileNodeType> | null>(null);
-
-  const { fileTree, deleteNode, addNode, updateNodeName } = useFileTreeStore();
+  const { fileTree, deleteNode, addNode, updateNodeName, setFileTreeFromApi } =
+    useFileTreeStore();
+  const { user } = useUserStore();
 
   useEffect(() => {
+    setFileTreeFromApi(user?.userId, '1-container');
     const unsubscribe = useFileTreeStore.subscribe((state) => {
       console.log('FileTree 변경됨:', state.fileTree);
     });

@@ -41,17 +41,17 @@ export const data = {
         },
       ],
     },
-    {
-      id: 'r3f',
-      name: 'package.json',
-      type: 'file',
-      path: '/package.json',
-    },
-    {
-      id: 'r4f',
-      name: 'README.md',
-      type: 'file',
-      path: '/README.md',
-    },
+    // {
+    //   id: 'r3f',
+    //   name: 'package.json',
+    //   type: 'file',
+    //   path: '/package.json',
+    // },
+    // {
+    //   id: 'r4f',
+    //   name: 'README.md',
+    //   type: 'file',
+    //   path: '/README.md',
+    // },
   ],
 };
