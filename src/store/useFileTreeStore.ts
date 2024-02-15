@@ -7,6 +7,7 @@ import {
 } from '../utils/fileTree/findNodeUtils';
 import { data } from '../components/ui/IDE/data/data';
 import { updateNodeNameAndPath } from '../utils/fileTree/nodeUpdate';
+import { axiosFileTree } from '../api/fileTree/projectFileTreeCall';
 export interface FileTreeState {
   file: FileNodeType | null;
   fileTree: FileNodeType[];
@@ -53,7 +54,12 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
     const state: FileTreeState = useFileTreeStore.getState();
     return findFilePathByName(state.fileTree, nodename);
   },
-
+  setFileTreeFromApi: async (userId, containerName) => {
+    const data = await axiosFileTree(userId, containerName);
+    if (data) {
+      set({ fileTree: data.children, containerName: data.name });
+    }
+  },
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => {
   //   set((state) => ({
   //     fileTree: processWebSocketFileEvent(state.fileTree, fileData),
