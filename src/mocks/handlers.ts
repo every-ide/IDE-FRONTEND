@@ -1,11 +1,13 @@
 import { http, HttpResponse } from 'msw';
 
 export const handlers = [
+  // login API
   http.post('/auth', () => {
     return HttpResponse.json(
       {
         accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
         userId: 32,
+        email: 'test@test.com',
       },
       {
         headers: {
@@ -14,6 +16,7 @@ export const handlers = [
       },
     );
   }),
+  // Access token refresh
   http.get('/hello', () => {
     console.log('refresh 실행');
     // console.log("???", req.cookies);
@@ -29,6 +32,14 @@ export const handlers = [
         },
       },
     );
+  }),
+  http.get('/user/info', () => {
+    console.log('user info 실행');
+    return HttpResponse.json({
+      email: 'test@mail.com',
+      name: 'Goorm',
+      userId: 12,
+    });
   }),
   http.post('/logout', () => {
     return HttpResponse.json(null, {
@@ -86,19 +97,7 @@ export const handlers = [
       },
     });
   }),
-  http.get('/users/:userId', async ({ request }) => {
-    // return HttpResponse.text(JSON.stringify("user_exists"), {
-    //   status: 403,
-    // });
-    console.log('user정보 요청');
-    return HttpResponse.json({
-      id: 32,
-      name: 'John Doe',
-      email: 'user@example.com',
-      favoriteList: [12, 22, 2, 4, 7, 8, 24, 17],
-      created_at: '2024-01-12T02:48:55.040Z',
-    });
-  }),
+
   http.patch('/user/updateprofile', async ({ request }) => {
     // 요청 본문(JSON 형식으로 가정)을 파싱합니다.
     const requestBody = await request.json();
@@ -112,15 +111,108 @@ export const handlers = [
     });
   }),
 
-  // POST: 새로운 컨테이너 생성
-  http.post('/api/user/:userId/containers', async ({ request }) => {
+  // 🪐 GET: 전체 컨테이너 목록 조회
+  http.get('api/:userId/containers', () => {
     return HttpResponse.json(
-      {
-        containerId: 1234,
-      },
+      [
+        {
+          name: '1-container',
+          description:
+            'new container for my toy project hahahahahahhhahahahahahahahahahahahahah!',
+          active: true,
+          createDate: '2024-02-13T15:38:18.151331',
+          lastModifiedDate: '2024-02-13T15:38:18.151331',
+          language: 'java',
+        },
+        {
+          name: '2-container',
+          description: 'new container for my toy project !',
+          active: true,
+          createDate: '2024-02-13T15:38:23.250293',
+          lastModifiedDate: '2024-02-13T15:38:23.250293',
+          language: 'javascript',
+        },
+        {
+          name: '3-container',
+          description: 'new container for my toy project !',
+          active: true,
+          createDate: '2024-02-13T15:38:26.031045',
+          lastModifiedDate: '2024-02-13T15:38:26.031045',
+          language: 'python',
+        },
+        {
+          name: 'Container 4',
+          description: 'new container for my toy project !',
+          active: false,
+          createDate: '2024-02-13T15:38:23.250293',
+          lastModifiedDate: '2024-02-13T15:38:23.250293',
+          language: 'javascript',
+        },
+        {
+          name: 'Container 5',
+          description: 'new container for my toy project !',
+          active: true,
+          createDate: '2024-02-13T15:38:23.250293',
+          lastModifiedDate: '2024-02-13T15:38:23.250293',
+          language: 'java',
+        },
+        {
+          name: 'Container 6',
+          description: 'new container for my toy project !',
+          active: false,
+          createDate: '2024-02-13T15:38:23.250293',
+          lastModifiedDate: '2024-02-13T15:38:23.250293',
+          language: 'python',
+        },
+      ],
       {
         status: 200,
       },
     );
+  }),
+
+  // 🪐 POST: 새로운 컨테이너 생성
+  // request body 에시
+  // {
+  //   "email" : "kms@goorm.io",
+  //   "name" : "first-container",
+  //   "description" : "new container for my toy project !"
+  // }
+  http.post('/api/containers', async ({ request }) => {
+    const reqData = await request.json();
+    console.log('params', reqData);
+    return HttpResponse.json(null, {
+      status: 200,
+    });
+  }),
+  // 🪐 PATCH: 컨테이너 정보 수정
+  // request body 에시
+  // {
+  //   "email" : "kms@goorm.io",
+  //   "oldName" : "first-container",
+  //   "newName" : "second-container",
+  //   "newDescription" : "Modify container for my toy project !",
+  //   "active" : true
+  // }
+  http.patch('/api/containers', async ({ request }) => {
+    const reqData = await request.json();
+    console.log('params', reqData);
+    return HttpResponse.json(null, {
+      status: 200,
+    });
+  }),
+
+  // 🪐 DELETE: 컨테이너 삭제
+  // request body 에시
+  // {
+  //   "email" : "kms@goorm.io",
+  //   "name" : "second-container"
+  // }
+  http.delete('/api/containers', async ({ request }) => {
+    const reqData = await request.json();
+    console.log('params', reqData);
+    return HttpResponse.json(null, {
+      status: 200,
+    });
   }),
 ];

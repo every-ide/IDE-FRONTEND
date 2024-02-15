@@ -29,10 +29,10 @@ const PersonalInfoForm = () => {
     const fetchUserInfo = async () => {
       try {
         const response = await axiosPrivate.get('/user/info'); // Assuming this endpoint returns user info
+        console.log('통신', response);
         // Assuming the response contains the email to pre-fill
         const { email, name } = response.data;
 
-        console.log('name', name);
         // Set the email field value
         setValue('email', email);
         setValue('name', name); // Set the name field value
@@ -72,7 +72,7 @@ const PersonalInfoForm = () => {
   return (
     <div className="min-h-screen w-full bg-mdark">
       <Header></Header>
-      <div className="max mx-auto max-w-md pt-5">
+      <div className="mx-auto max-w-md pt-5">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <AuthInput
             label="Name"
@@ -136,7 +136,7 @@ const PersonalInfoForm = () => {
           />
           <button
             type="submit"
-            className="rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            className="rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             Update Info
           </button>

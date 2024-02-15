@@ -1,11 +1,10 @@
 import AuthInput from './AuthInput';
 import { useForm } from 'react-hook-form';
-
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import useAuthStore from '@/src/store/AuthProvier';
 import { axiosPublic } from '@/src/api/axios';
 import Oauth from './Oauth';
+import useUserStore from '@/src/store/useUserStore';
 
 const LOGIN_URL = '/auth';
 
@@ -16,7 +15,7 @@ type TSignInForm = {
 
 const SignInForm = () => {
   const navigate = useNavigate();
-  const setUserId = useAuthStore((state) => state.setUserId);
+  const setUser = useUserStore((state) => state.setUser);
 
   const {
     register,
@@ -27,17 +26,21 @@ const SignInForm = () => {
 
   const signInAction = async ({ email, password }: TSignInForm) => {
     try {
-
       const res = await axiosPublic.post(
         LOGIN_URL,
         JSON.stringify({ email, password }),
       );
 
       const accessToken = res?.data?.accessToken;
-      const userId = res?.data?.userId;
 
-      setUserId(userId);
       localStorage.setItem('accessToken', accessToken);
+
+      // user store에 정보 저장
+      setUser({
+        email: res?.data?.email,
+        name: '',
+        userId: res?.data?.userId,
+      });
 
       // 유저의 마지막 path로 Navigate (없을 시 '/')
       navigate('/my/dashboard/containers', { replace: true });
