@@ -7,7 +7,6 @@ import { MdAddCircleOutline } from 'react-icons/md';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -24,20 +23,20 @@ import {
 } from '@/components/ui/select';
 import { SiJavascript } from 'react-icons/si';
 import { useForm, Controller } from 'react-hook-form';
-import { axiosAuth } from '@/src/api/axios';
-import useAuthStore from '@/src/store/AuthProvier';
 import { toast } from 'react-toastify';
+import useContainerAPI from '@/src/hooks/useContainerAPI';
 
 type TNewContainerForm = {
   containerName: string;
   language: string;
+  description: string;
 };
 
 const SearchBar = () => {
   const [searchkey, setSearchKey] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const { pathname } = useLocation();
-  const { userId } = useAuthStore();
+  const { createNewContainer } = useContainerAPI();
 
   const {
     control,
@@ -50,46 +49,16 @@ const SearchBar = () => {
   const newContainerAction = async ({
     containerName,
     language,
+    description,
   }: TNewContainerForm) => {
-    console.log('form data: ', { containerName, language });
-
     try {
-      // Test용!!!! (추후 삭제)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      const response = await axiosAuth.post(
-        `/api/user/${userId}/containers`,
-        JSON.stringify({
-          containerName,
-          language,
-        }),
-      );
-
-      if (response.status === 200) {
-        console.log('containerId: ', response.data.containerId);
-        const containerId = response.data.containerId;
-
-        toast('새로운 컨테이너가 생성되었습니다.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
-
-        // Modal Close & reset
-        setOpenModal(false);
-        reset();
-
-        // Container list refetching
-
-        // 새 창에서 컨테이너 열기
-        window.open(
-          `http://localhost:5173/workspace/${containerId}`,
-          '_blank',
-          'noopener,noreferrer',
-        );
-      }
+      await createNewContainer({
+        containerName,
+        language,
+        description,
+        setOpenModal,
+        reset,
+      });
     } catch (error) {
       console.error(error);
 
@@ -156,7 +125,23 @@ const SearchBar = () => {
                       id="containerName"
                       placeholder="알파벳, 숫자, -, _만 포함, 20자 이내"
                       className="col-span-3 text-black"
-                      {...register('containerName')}
+                      {...register('containerName', {
+                        required: '컨테이너 이름은 필수 입력입니다.',
+                      })}
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label
+                      htmlFor="description"
+                      className="text-right text-black"
+                    >
+                      컨테이너 설명
+                    </Label>
+                    <Input
+                      id="description"
+                      placeholder="(선택) 컨테이너 설명을 간단히 작성해주세요."
+                      className="col-span-3 text-black"
+                      {...register('description')}
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -166,11 +151,12 @@ const SearchBar = () => {
                     <Controller
                       name="language"
                       control={control}
-                      render={({ field }) => (
+                      rules={{ required: '언어 선택은 필수입니다.' }}
+                      render={({ field: { ref, ...restField } }) => (
                         <Select
-                          {...field}
+                          {...restField}
                           onValueChange={(value) => {
-                            field.onChange(value);
+                            restField.onChange(value);
                           }}
                         >
                           <SelectTrigger className="col-span-3 text-black">
@@ -203,6 +189,19 @@ const SearchBar = () => {
                 </div>
 
                 <DialogFooter>
+                  <div className="flex flex-col items-end justify-center">
+                    {errors['containerName'] && (
+                      <p className="text-xs text-error">
+                        {errors['containerName'].message}
+                      </p>
+                    )}
+                    {errors['language'] && (
+                      <p className="text-xs text-error">
+                        {errors['language'].message}
+                      </p>
+                    )}
+                  </div>
+
                   <Button
                     type="submit"
                     className="border-none"
@@ -216,7 +215,6 @@ const SearchBar = () => {
           </Dialog>
         )}
       </div>
-      {/* 새 컨테이너 추가 버튼 & Modal */}
     </div>
   );
 };
