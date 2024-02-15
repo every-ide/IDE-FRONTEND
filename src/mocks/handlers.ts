@@ -267,11 +267,28 @@ export const handlers = [
         },
         {
           id: 'r4f',
+          name: '목데이터.py',
+          type: 'file',
+          path: '/목데이터.py',
+        },
+        {
+          id: 'r5f',
           name: 'README.md',
           type: 'file',
           path: '/README.md',
         },
       ],
+    });
+  }),
+  http.get('/api/containers/:containerName/files?=:path', async () => {
+    return HttpResponse.json({
+      id: 'r2d1f',
+      name: 'App.js',
+      path: '/src/App.js',
+      content: 'console.log("whoisthelee");',
+      language: 'javascript',
+      isOpen: false,
+      needSave: false,
     });
   }),
 ]; // Remove the extra comma at the end of the array.

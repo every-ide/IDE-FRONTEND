@@ -49,29 +49,29 @@ export const getFileLanguage = (filename: string) => {
 
   switch (extension) {
     case 'js':
-      return 'JavaScript';
+      return 'javaScript';
     case 'jsx':
       return 'React JSX';
     case 'ts':
-      return 'TypeScript';
+      return 'typeScript';
     case 'tsx':
       return 'React TypeScript';
     case 'py':
-      return 'Python';
+      return 'python';
     case 'c':
-      return 'C';
+      return 'c';
     case 'cpp':
-      return 'C++';
+      return 'c++';
     case 'html':
-      return 'HTML';
+      return 'html';
     case 'css':
-      return 'CSS';
+      return 'css';
     case 'json':
-      return 'JSON';
+      return 'json';
     case 'md':
-      return 'Markdown';
+      return 'markdown';
     case 'java':
-      return 'Java';
+      return 'java';
     default:
       return 'Unknown';
   }

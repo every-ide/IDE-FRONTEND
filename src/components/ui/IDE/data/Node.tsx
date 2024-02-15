@@ -10,6 +10,7 @@ import {
   getFileLanguage,
 } from '@/src/utils/fileTree/langauageSelector';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
+import { axiosOpenFile } from '@/src/api/fileTree/filetreeApi';
 // DiC 아이콘을 대신할 적절한 아이콘을 찾아 import하세요.
 
 interface MyNodeData {
@@ -19,6 +20,7 @@ interface MyNodeData {
   icon?: React.ElementType;
   iconColor?: string;
   children?: MyNodeData[];
+  path: string;
 }
 
 interface NodeProps {
@@ -34,6 +36,7 @@ const Node: FC<NodeProps> = ({
   dragHandle,
   tree,
 }): NodeRendererProps<FileNodeType> => {
+  const { containerName } = useFileStore();
   const { selectFile, openFile } = useFileStore();
 
   // 파일 확장자를 기반으로 아이콘 선택
@@ -58,18 +61,25 @@ const Node: FC<NodeProps> = ({
   const nodeStyle = node.data.type === 'file' ? 'file-node' : 'folder-node';
 
   const handleNodeClick = () => {
-    const { id, name, type } = node.data;
-    const lang = getFileLanguage(name);
-    console.log('Node ID:', node.data.id); // 현재 노드의 ID 출력
-    console.log('Node Data:', node.data); // 현재 노드의 데이터 출력
-    console.log(node.isInternal);
-
-    if (type === 'file') {
-      selectFile(node.data.id);
-      openFile(id, name, null, lang);
+    if (node.data.type === 'file') {
+      handleFileClick();
+    } else {
+      node.toggle();
     }
-    if (node.isInternal || node.data.type === 'directory') {
-      node.toggle(); // 내부 노드인 경우, 열기/닫기 토글
+  };
+  const handleFileClick = async () => {
+    const { id, name, path } = node.data;
+    try {
+      const selectedFile = await axiosOpenFile(containerName, path);
+      const { content } = selectedFile?.data ?? {
+        content: '',
+      };
+      const fileId = selectedFile?.data?.id ?? '';
+      const filename = selectedFile?.data?.name ?? '';
+      selectFile(fileId);
+      openFile(fileId, filename, content, getFileLanguage(filename));
+    } catch (error) {
+      console.error('Error opening file:', error);
     }
   };
 

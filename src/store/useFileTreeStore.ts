@@ -6,9 +6,8 @@ import {
   findFilePathByName,
 } from '../utils/fileTree/findNodeUtils';
 import { data } from '../components/ui/IDE/data/data';
-import { updateNodeNameAndPath } from '../utils/fileTree/nodeUpdate';
-import { axiosFileTree } from '../api/fileTree/projectFileTreeCall';
-
+import { updateNodeNameAndPath } from '../utils/fileTree/nodeUtils';
+import { axiosFileTree } from '../api/fileTree/filetreeApi';
 export interface FileTreeState {
   file: FileNodeType | null;
   containerName: string;
@@ -71,8 +70,3 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
   isNewNode: false,
   setIsNewNode: (isNewNode) => set({ isNewNode }),
 }));
-
-// // fileTree 변경사항을 구독
-// useFileTreeStore.subscribe((fileTree: any) => {
-//   console.log('FileTree 변경됨:', fileTree);
-// });
