@@ -1,4 +1,5 @@
 import { axiosPublic } from '@/src/api/axios';
+import { AxiosError } from 'axios';
 import {} from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -23,8 +24,9 @@ const useLogout = () => {
           theme: 'dark',
         });
       }
-    } catch (err) {
-      //error
+    } catch (error) {
+      localStorage.removeItem('accessToken');
+      navigate('/login');
     }
   };
 
