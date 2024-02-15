@@ -2,6 +2,7 @@ import { useRef, useState, FC, useEffect } from 'react';
 import {
   CreateHandler,
   DeleteHandler,
+  MoveHandler,
   NodeRendererProps,
   RenameHandler,
   Tree,
@@ -15,6 +16,11 @@ import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 import { v4 as uuidv4 } from 'uuid';
 import { findNodeById } from '@/src/utils/fileTree/findNodeUtils';
 import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
+import {
+  moveNode,
+  movingNode,
+  updatePath,
+} from '@/src/utils/fileTree/nodeUpdate';
 
 interface ArboristProps {}
 
@@ -59,32 +65,59 @@ const Arborist: FC<ArboristProps> = () => {
     deleteNode(ids[0]);
   };
 
-  // const onMove: MoveHandler<FileNodeType> = ({
-  //   dragIds,
-  //   parentId,
-  //   parentNode,
-  //   dragNodes,
-  // }) => {
-  //   const dragNode = dragNodes[0];
+  const onMove: MoveHandler<FileNodeType> = ({
+    dragIds,
+    parentId,
+    parentNode,
+    dragNodes,
+  }) => {
+    let newDragNodeData: FileNodeType = {} as FileNodeType;
+    const dragNodeData = dragNodes[0].data;
+    const parentNodeData = parentNode?.data;
 
-  //   if (parentNode?.data.type === 'file' || dragNode.data.type === 'folder') {
-  //     return;
-  //   }
+    if (parentNodeData?.type === 'file') return;
+    const newPath = parentNode
+      ? `${parentNode.data.path}/${dragNodeData.name}`
+      : '';
 
-  //   console.log(dragNode.children?.map((child) => child.data) ?? []);
-  //   // 드래그 성공 시의 로직
-  //   const newId = makeNodeId(fileTree, parentId, dragNode.data.type);
-  //   const newNode = {
-  //     ...dragNode.data,
-  //     children: dragNode.children?.map((child) => child.data) ?? [],
-  //     id: newId,
-  //     parentId: parentId === null ? 'root' : parentId,
-  //   };
-  //   console.log('dragNode.children', dragNode.children);
-  //   addNode(newNode, parentId);
-  //   deleteNode(dragIds[0]);
-  // };
+    if (dragNodeData.children) {
+      newDragNodeData = updatePath(dragNodeData, newPath);
+    } else {
+      newDragNodeData = { ...dragNodeData, path: newPath };
+    }
+    console.log('newDragNodeData: ', newDragNodeData);
 
+    if (!parentNode) {
+      console.log(
+        '!fileTree.some((node) => node.name === dragNodeData.name: ',
+        !fileTree.some((node) => node.name === dragNodeData.name),
+      );
+      if (!fileTree.some((node) => node.name === dragNodeData.name)) {
+        console.log('slaanjgka??????');
+        deleteNode(dragIds[0]);
+        addNode(newDragNodeData);
+        return;
+      }
+    } else {
+      console.log(
+        '!parentNodeData?.children?.some((node) => node.name === dragNodeData.name: ',
+        !parentNodeData?.children?.some(
+          (node) => node.name === dragNodeData.name,
+        ),
+      );
+      if (
+        !parentNodeData?.children?.some(
+          (node) => node.name === dragNodeData.name,
+        )
+      ) {
+        deleteNode(dragIds[0]);
+        addNode(newDragNodeData, parentId);
+        return;
+      }
+    }
+
+    console.log('중복된 이름입니다');
+  };
   return (
     <>
       <div className="border-b-2 border-mdark">
@@ -126,6 +159,7 @@ const Arborist: FC<ArboristProps> = () => {
             onCreate={onCreate}
             onRename={onRename}
             onDelete={onDelete}
+            onMove={onMove}
             width={260}
             height={1000}
             indent={24}

@@ -1,4 +1,5 @@
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
+import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 
 // 노드의 이름과 그 자식 노드들의 path를 업데이트하는 함수
 export function updateNodeNameAndPath(
@@ -38,4 +39,45 @@ export function updateNodeNameAndPath(
     }
     return node; // 변경이 없는 노드는 그대로 반환
   });
+}
+
+export function moveNode(
+  nodes: FileNodeType[],
+  dragId: string,
+  dragNode: FileNodeType,
+  parentNode: FileNodeType | null,
+) {
+  if (parentNode?.type === 'file') return;
+  const newPath = parentNode ? `${parentNode.path}/${parentNode.name}` : '';
+
+  if (dragNode.children) {
+    dragNode.children.map(() => {
+      updatePath(dragNode, newPath);
+    });
+  }
+
+  // if (parentNode) {
+  //   if (!nodes.some((node) => node.name === dragNode.name)) {
+  //     deleteNode(dragId);
+  //     addNode(dragNode, parentNode?.id);
+  //   }
+  // } else {
+  //   if (parentNode?.children?.some((node) => node.name === dragNode.name)) {
+  //     deleteNode(dragId);
+  //     addNode(dragNode);
+  //   }
+  // }
+}
+
+export function updatePath(node: FileNodeType, newPath: string): FileNodeType {
+  // 자식 노드가 있는 경우, 각 자식에 대해 재귀적으로 업데이트
+  const updatedChildren = node.children?.map((child) =>
+    updatePath(child, `${newPath}/${child.name}`),
+  );
+
+  return {
+    ...node,
+    path: newPath,
+    ...(updatedChildren && { children: updatedChildren }),
+  };
 }

@@ -1,10 +1,6 @@
 import { create } from 'zustand';
 import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
-import {
-  addNodeToTree,
-  isDuplicateName,
-  removeNodeById,
-} from '../utils/fileTree/fileTreeUtils';
+import { addNodeToTree, removeNodeById } from '../utils/fileTree/fileTreeUtils';
 import {
   findFilePath,
   findFilePathByName,
