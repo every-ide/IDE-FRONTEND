@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
 import { updatePath } from '@/src/utils/fileTree/nodeUpdate';
 import useUserStore from '@/src/store/useUserStore';
+import { useParams } from 'react-router-dom';
 
 interface ArboristProps {}
 
@@ -26,9 +27,10 @@ const Arborist: FC<ArboristProps> = () => {
   const { fileTree, deleteNode, addNode, updateNodeName, setFileTreeFromApi } =
     useFileTreeStore();
   const { user } = useUserStore();
+  const { workid: projectId } = useParams<{ workid: string }>();
 
   useEffect(() => {
-    setFileTreeFromApi(user?.userId, '1-container');
+    setFileTreeFromApi(user?.userId, projectId);
     const unsubscribe = useFileTreeStore.subscribe((state) => {
       console.log('FileTree 변경됨:', state.fileTree);
     });
