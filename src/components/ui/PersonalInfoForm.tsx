@@ -4,8 +4,10 @@ import AuthInput from '@/components/auth/AuthInput'; // Adjust import as necessa
 import { toast } from 'react-toastify';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import Header from '../my/Header';
+import useUserStore from '@/src/store/useUserStore';
 
 const PersonalInfoForm = () => {
+  const { user } = useUserStore();
   const axiosPrivate = useAxiosPrivate();
   const {
     register,
@@ -15,8 +17,8 @@ const PersonalInfoForm = () => {
     setValue, // Add this to use setValue
   } = useForm({
     defaultValues: {
-      name: '',
-      email: '',
+      name: user?.name || '',
+      email: user?.email || '',
       oldPassword: '', // Add this
       newPassword: '',
       confirmPassword: '',
@@ -24,26 +26,26 @@ const PersonalInfoForm = () => {
     mode: 'onChange',
   });
 
-  useEffect(() => {
-    // Fetch user information when the component mounts
-    const fetchUserInfo = async () => {
-      try {
-        const response = await axiosPrivate.get('/user/info'); // Assuming this endpoint returns user info
-        console.log('통신', response);
-        // Assuming the response contains the email to pre-fill
-        const { email, name } = response.data;
+  // useEffect(() => {
+  //   // Fetch user information when the component mounts
+  //   const fetchUserInfo = async () => {
+  //     try {
+  //       const response = await axiosPrivate.get('/user/info'); // Assuming this endpoint returns user info
+  //       console.log('통신', response);
+  //       // Assuming the response contains the email to pre-fill
+  //       const { email, name } = response.data;
 
-        // Set the email field value
-        setValue('email', email);
-        setValue('name', name); // Set the name field value
-      } catch (error) {
-        console.error('Failed to fetch user info:', error);
-        toast.error('Failed to fetch user info', { theme: 'dark' });
-      }
-    };
+  //       // Set the email field value
+  //       setValue('email', email);
+  //       setValue('name', name); // Set the name field value
+  //     } catch (error) {
+  //       console.error('Failed to fetch user info:', error);
+  //       toast.error('Failed to fetch user info', { theme: 'dark' });
+  //     }
+  //   };
 
-    fetchUserInfo();
-  }, [axiosPrivate, setValue]);
+  //   fetchUserInfo();
+  // }, [axiosPrivate, setValue]);
 
   const onSubmit = async (data) => {
     const { email, oldPassword, newPassword, confirmPassword, name } = data;
