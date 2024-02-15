@@ -22,9 +22,9 @@ export default defineConfig({
       },
     ],
   },
-  define: {
-    global: {},
-  },
+  // define: {
+  //   global: {},
+  // },
   plugins: [react(), tsconfigPaths()],
   server: {
     proxy: {
