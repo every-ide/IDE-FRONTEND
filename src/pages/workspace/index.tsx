@@ -60,7 +60,7 @@ const WorkspacePage = () => {
   return (
     <div className="flex h-screen flex-col text-xs">
       <Navigation />
-      <Header />
+      {/* <Header /> */}
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <div className="no-scrollbar relative flex flex-1 flex-col ">

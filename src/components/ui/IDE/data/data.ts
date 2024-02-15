@@ -1,29 +1,57 @@
-export const data = [
-  {
-    id: '1',
-    name: 'public',
-    children: [
-      {
-        id: 'c1-1',
-        name: 'index.html',
-      },
-    ],
-  },
-  {
-    id: '2',
-    name: 'src',
-    children: [
-      {
-        id: 'c2-1',
-        name: 'App.js',
-      },
-      {
-        id: 'c2-2',
-        name: 'index.js',
-      },
-      { id: 'c2-3', name: 'styles.css' },
-    ],
-  },
-  { id: '3', name: 'package.json' },
-  { id: '4', name: 'README.md' },
-];
+export const data = {
+  name: '1-container',
+  children: [
+    {
+      id: 'r1d',
+      name: 'public',
+      type: 'directory',
+      path: '/public',
+      children: [
+        {
+          id: 'r1d1f',
+          name: 'index.html',
+          type: 'file',
+          path: '/public/index.html',
+        },
+      ],
+    },
+    {
+      id: 'r2d',
+      name: 'src',
+      type: 'directory',
+      path: '/src',
+      children: [
+        {
+          id: 'r2d1f',
+          name: 'App.js',
+          type: 'file',
+          path: '/src/App.js',
+        },
+        {
+          id: 'r2d2f',
+          name: 'index.js',
+          type: 'file',
+          path: '/src/index.js',
+        },
+        {
+          id: 'r2d3f',
+          name: 'styles.css',
+          type: 'file',
+          path: '/src/styles.css',
+        },
+      ],
+    },
+    {
+      id: 'r3f',
+      name: 'package.json',
+      type: 'file',
+      path: '/package.json',
+    },
+    {
+      id: 'r4f',
+      name: 'README.md',
+      type: 'file',
+      path: '/README.md',
+    },
+  ],
+};

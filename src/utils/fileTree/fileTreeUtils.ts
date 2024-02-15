@@ -1,27 +1,62 @@
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
+import { findNodeById, findParentNodeById } from './findNodeUtils';
 
-//트리에 노드 추가하는 함수
+export const makePath = (
+  nodes: FileNodeType[],
+  name: string,
+  parentId: string | null,
+): string => {
+  // 부모 노드의 path를 찾습니다.
+  const parentNode = parentId ? findNodeById(nodes, parentId, null).node : null;
+  const parentPath = parentNode ? parentNode.path : '';
+
+  // 새로운 path를 생성합니다.
+  const newPath = `${parentPath}/${name}`.replace('//', '/');
+
+  console.log('New path:', newPath);
+  return newPath;
+};
+
+export const isDuplicateName = (
+  nodes: FileNodeType[],
+  id: string | null,
+  name: string,
+): boolean => {
+  // 현재 노드의 부모 노드를 찾습니다.
+  const parentNode = findParentNodeById(nodes, id);
+
+  // 부모 노드가 없다면, 최상위 레벨에서 중복 검사를 합니다.
+  if (parentNode === null) {
+    return nodes.some((node) => node.name === name);
+  }
+
+  // 부모 노드의 자식 노드들 중에서 이름이 중복되는 노드가 있는지 검사합니다.
+  return parentNode.children?.some((node) => node.name === name) ?? false;
+};
+
 export const addNodeToTree = (
   nodes: FileNodeType[],
   newNode: FileNodeType,
-  parentId?: string,
-): FileNodeType[] =>
-  nodes.map((node) => {
+  parentId: string | null,
+) => {
+  return nodes.reduce((acc: FileNodeType[], node: FileNodeType) => {
+    const newNodeArray = [...acc];
     if (node.id === parentId) {
-      return {
+      newNodeArray.push({
         ...node,
-        children: [...(node.children || []), newNode],
-      };
+        children: node.children ? [...node.children, newNode] : [newNode],
+      });
     } else {
-      return {
+      newNodeArray.push({
         ...node,
         children: node.children
           ? addNodeToTree(node.children, newNode, parentId)
-          : node.children,
-      };
+          : [],
+      });
     }
-  });
-
+    return newNodeArray;
+  }, []);
+};
 //트리 노드 삭제하는 함수
 export const removeNodeById = (
   nodes: FileNodeType[],

@@ -2,7 +2,6 @@ import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 
 interface NodeWithParent {
   node: FileNodeType | null;
-  befParentId: string | null;
 }
 
 export const findNodeById = (
@@ -10,9 +9,10 @@ export const findNodeById = (
   nodeId: string | null,
   currentParentId: string | null,
 ): NodeWithParent => {
+  console.log('nodeId: ', nodeId);
   for (const node of nodes) {
     if (node.id === nodeId) {
-      return { node, befParentId: currentParentId };
+      return { node };
     }
     if (node.children) {
       const foundNode = findNodeById(node.children, nodeId, node.id);
@@ -21,7 +21,7 @@ export const findNodeById = (
       }
     }
   }
-  return { node: null, befParentId: null };
+  return { node: null };
 };
 
 export const findFilePath = (
@@ -46,6 +46,25 @@ export const findFilePath = (
     }
   }
   return null;
+};
+
+export const findParentNodeById = (
+  nodes: FileNodeType[],
+  id: string | null,
+): FileNodeType | null => {
+  const parentPath = findNodeById(nodes, id, '/').node?.path;
+  console.log('parentPath:', parentPath);
+  const lastSlashIndex = parentPath.lastIndexOf('/');
+  const pathWithoutLastPart =
+    lastSlashIndex > -1 ? parentPath.substring(0, lastSlashIndex) : parentPath;
+
+  if (pathWithoutLastPart === '') {
+    return null;
+  }
+  const parentId = findNodeIdByPath(nodes, pathWithoutLastPart);
+  const parentNode = findNodeById(nodes, parentId, '/');
+
+  return parentNode.node;
 };
 
 export const findNodeIdByPath = (
@@ -90,22 +109,4 @@ export const findFilePathByName = (
     }
   }
   return null;
-};
-
-export const findNodeByIdWithoutP = (
-  nodes: FileNodeType[],
-  nodeId: string | null,
-): FileNodeType | null => {
-  for (const node of nodes) {
-    if (node.id === nodeId) {
-      return node; // 찾은 노드 반환
-    }
-    if (node.children) {
-      const foundNode = findNodeByIdWithoutP(node.children, nodeId);
-      if (foundNode) {
-        return foundNode; // 자식 노드에서 찾은 노드 반환
-      }
-    }
-  }
-  return null; // 노드를 찾지 못했을 경우 null 반환
 };

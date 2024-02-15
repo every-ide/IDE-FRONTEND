@@ -1,79 +1,129 @@
-import { useRef, useState, FC } from 'react';
-import { Tree, TreeApi } from 'react-arborist';
-import { data } from './data/data';
+import { useRef, useState, FC, useEffect } from 'react';
+import {
+  CreateHandler,
+  DeleteHandler,
+  MoveHandler,
+  NodeRendererProps,
+  RenameHandler,
+  Tree,
+  TreeApi,
+} from 'react-arborist';
 import Node from './data/Node';
 import { TbFolderPlus } from 'react-icons/tb';
 import { AiOutlineFileAdd } from 'react-icons/ai';
-// import { v4 as uuidv4 } from 'uuid';
+import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
+import { useFileTreeStore } from '@/src/store/useFileTreeStore';
+import { v4 as uuidv4 } from 'uuid';
+import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
+import { updatePath } from '@/src/utils/fileTree/nodeUpdate';
 
 interface ArboristProps {}
 
 const Arborist: FC<ArboristProps> = () => {
   const [term, setTerm] = useState<string>('');
-  const treeRef = useRef<TreeApi<any> | null>(null);
+  const treeRef = useRef<TreeApi<FileNodeType> | null>(null);
 
-  const logTreeData = () => {
-    // 트리 데이터를 가져와서 콘솔에 출력하는 함수
-    const data = treeRef.current; // getData 메소드는 예시일 뿐, 실제 API 확인 필요
-    const Tree = treeRef;
-    console.log('Current tree data:', Tree);
-    console.log('Current tree data:', data);
-    console.log('Current tree data:', data?.idToIndex);
-    // console.log('Current tree data:', data?.);
-    // console.log('Current tree data:', data?.);
-    // console.log('Current tree data:', data?.);
-    // console.log('Current tree data:', data?.);
-    // console.log('Current tree data:', data?.);
+  const { fileTree, deleteNode, addNode, updateNodeName } = useFileTreeStore();
+
+  useEffect(() => {
+    const unsubscribe = useFileTreeStore.subscribe((state) => {
+      console.log('FileTree 변경됨:', state.fileTree);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  //파일 또는 폴더 생성 클릭 시 동작
+  const onCreate: CreateHandler<FileNodeType> = ({ type, parentId }) => {
+    const newPath = makePath(fileTree, '', parentId);
+    const newNode: FileNodeType = {
+      id: uuidv4(),
+      name: '',
+      type: type === 'internal' ? 'directory' : 'file',
+      ...(type === 'internal' && { children: [] }),
+      path: newPath,
+    };
+    addNode(newNode, parentId);
+    return newNode;
   };
 
-  // const generateCustomId = (name) => {
-  //   // 예: 이름과 현재 시간을 기반으로 ID 생성
-  //   return `custom-${name}-${Date.now()}`;
-  // };
+  const onRename: RenameHandler<FileNodeType> = ({ id, name }) => {
+    if (isDuplicateName(fileTree, id, name)) {
+      console.log('중복된 이름입니다.');
+      return;
+    }
+    updateNodeName(id, name);
+  };
 
-  // //파일 또는 폴더 생성 클릭 시 동작
-  // const onCreate: CreateHandler<FileNodeType> = ({ type, parentId }) => {
-  //   const newNode: FileNodeType = {
-  //     id: uuidv4(),
-  //     name: '',
-  //     type: type === 'internal' ? 'DIRECTORY' : 'FILE',
-  //     ...(type === 'internal' && { children: [] }),
-  //     isDirty: false,
-  //     isOpened: true,
-  //     filePath: findNodePathByName(''),
-  //     parentId: parentId === null ? 'root' : parentId,
-  //   };
-  //   addNode(newNode, parentId);
-  //   return newNode;
-  // };
+  //파일 또는 폴더 삭제 시 동작
+  const onDelete: DeleteHandler<FileNodeType> = ({ ids }) => {
+    deleteNode(ids[0]);
+  };
 
-  const createFileFolder = (
-    <>
-      <button
-        onClick={() => {
-          treeRef.current?.createInternal();
-          logTreeData();
-        }}
-        title="New Folder..."
-      >
-        <TbFolderPlus />
-      </button>
-      <button
-        onClick={() => {
-          treeRef.current?.createLeaf();
-          logTreeData();
-        }}
-        title="New File..."
-      >
-        <AiOutlineFileAdd />
-      </button>
-    </>
-  );
+  const onMove: MoveHandler<FileNodeType> = ({
+    dragIds,
+    parentId,
+    parentNode,
+    dragNodes,
+  }) => {
+    let newDragNodeData: FileNodeType = {} as FileNodeType;
+    const dragNodeData = dragNodes[0].data;
+    const parentNodeData = parentNode?.data;
 
+    if (parentNodeData?.type === 'file') return;
+    const newPath = parentNode
+      ? `${parentNode.data.path}/${dragNodeData.name}`
+      : '';
+
+    if (dragNodeData.children) {
+      newDragNodeData = updatePath(dragNodeData, newPath);
+    } else {
+      newDragNodeData = { ...dragNodeData, path: newPath };
+    }
+    console.log('newDragNodeData: ', newDragNodeData);
+
+    if (!parentNode) {
+      if (!fileTree.some((node) => node.name === dragNodeData.name)) {
+        deleteNode(dragIds[0]);
+        addNode(newDragNodeData);
+        return;
+      }
+    } else {
+      if (
+        !parentNodeData?.children?.some(
+          (node) => node.name === dragNodeData.name,
+        )
+      ) {
+        deleteNode(dragIds[0]);
+        addNode(newDragNodeData, parentId);
+        return;
+      }
+    }
+
+    alert('중복된 이름입니다.');
+  };
   return (
     <>
       <div className="border-b-2 border-mdark">
-        <div className="folderFileActions pl-2">{createFileFolder}</div>
+        <div className="folderFileActions pl-2">
+          <button
+            onClick={() => {
+              treeRef.current?.createInternal();
+            }}
+            title="New Folder..."
+          >
+            <TbFolderPlus />
+          </button>
+          <button
+            onClick={() => {
+              treeRef.current?.createLeaf();
+              // logTreeData();
+            }}
+            title="New File..."
+          >
+            <AiOutlineFileAdd />
+          </button>
+        </div>
         <div className="p-2">
           <input
             type="text"
@@ -89,7 +139,11 @@ const Arborist: FC<ArboristProps> = () => {
         <div className="min-h-[2000px]">
           <Tree
             ref={treeRef}
-            initialData={data}
+            data={fileTree}
+            onCreate={onCreate}
+            onRename={onRename}
+            onDelete={onDelete}
+            onMove={onMove}
             width={260}
             height={1000}
             indent={24}
@@ -99,7 +153,9 @@ const Arborist: FC<ArboristProps> = () => {
               node.data.name.toLowerCase().includes(term.toLowerCase())
             }
           >
-            {Node}
+            {(nodeProps) => (
+              <Node {...(nodeProps as NodeRendererProps<FileNodeType>)} />
+            )}
           </Tree>
         </div>
       </div>
