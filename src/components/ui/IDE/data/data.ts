@@ -4,7 +4,7 @@ export const data = {
     {
       id: 'r1d',
       name: 'public',
-      type: 'folder',
+      type: 'directory',
       path: '/public',
       children: [
         {
@@ -18,7 +18,7 @@ export const data = {
     {
       id: 'r2d',
       name: 'src',
-      type: 'folder',
+      type: 'directory',
       path: '/src',
       children: [
         {

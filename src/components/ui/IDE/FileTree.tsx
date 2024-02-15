@@ -14,13 +14,8 @@ import { AiOutlineFileAdd } from 'react-icons/ai';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 import { v4 as uuidv4 } from 'uuid';
-import { findNodeById } from '@/src/utils/fileTree/findNodeUtils';
 import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
-import {
-  moveNode,
-  movingNode,
-  updatePath,
-} from '@/src/utils/fileTree/nodeUpdate';
+import { updatePath } from '@/src/utils/fileTree/nodeUpdate';
 
 interface ArboristProps {}
 
@@ -44,7 +39,7 @@ const Arborist: FC<ArboristProps> = () => {
     const newNode: FileNodeType = {
       id: uuidv4(),
       name: '',
-      type: type === 'internal' ? 'folder' : 'file',
+      type: type === 'internal' ? 'directory' : 'file',
       ...(type === 'internal' && { children: [] }),
       path: newPath,
     };

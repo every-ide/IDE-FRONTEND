@@ -15,7 +15,7 @@ import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 interface MyNodeData {
   id: string;
   name: string;
-  type: 'file' | 'folder';
+  type: 'file' | 'directory';
   icon?: React.ElementType;
   iconColor?: string;
   children?: MyNodeData[];
@@ -45,7 +45,7 @@ const Node: FC<NodeProps> = ({
     );
 
   const FolderArrowIcon =
-    node.data.type === 'folder' ? (
+    node.data.type === 'directory' ? (
       node.isOpen ? (
         <MdArrowDropDown />
       ) : (
@@ -68,7 +68,7 @@ const Node: FC<NodeProps> = ({
       selectFile(node.data.id);
       openFile(id, name, null, lang);
     }
-    if (node.isInternal || node.data.type === 'folder') {
+    if (node.isInternal || node.data.type === 'directory') {
       node.toggle(); // 내부 노드인 경우, 열기/닫기 토글
     }
   };
