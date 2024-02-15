@@ -83,23 +83,12 @@ const Arborist: FC<ArboristProps> = () => {
     console.log('newDragNodeData: ', newDragNodeData);
 
     if (!parentNode) {
-      console.log(
-        '!fileTree.some((node) => node.name === dragNodeData.name: ',
-        !fileTree.some((node) => node.name === dragNodeData.name),
-      );
       if (!fileTree.some((node) => node.name === dragNodeData.name)) {
-        console.log('slaanjgka??????');
         deleteNode(dragIds[0]);
         addNode(newDragNodeData);
         return;
       }
     } else {
-      console.log(
-        '!parentNodeData?.children?.some((node) => node.name === dragNodeData.name: ',
-        !parentNodeData?.children?.some(
-          (node) => node.name === dragNodeData.name,
-        ),
-      );
       if (
         !parentNodeData?.children?.some(
           (node) => node.name === dragNodeData.name,
@@ -111,7 +100,7 @@ const Arborist: FC<ArboristProps> = () => {
       }
     }
 
-    console.log('중복된 이름입니다');
+    alert('중복된 이름입니다.');
   };
   return (
     <>
