@@ -8,8 +8,9 @@ import {
 import { data } from '../components/ui/IDE/data/data';
 import { updateNodeNameAndPath } from '../utils/fileTree/nodeUtils';
 import { axiosFileTree } from '../api/fileTree/filetreeApi';
+import { globalDocRef } from '../api/fileTree/setyorkie';
+import { updateYorkieFileTree } from '../utils/yorkie/yorkieUtils';
 export interface FileTreeState {
-  file: FileNodeType | null;
   fileTree: FileNodeType[];
   setFileTree: (fileTree: FileNodeType[]) => void;
   updateNodeName: (nodeId: string, newName: string) => void;
@@ -18,20 +19,20 @@ export interface FileTreeState {
   findNodePath: (nodeid: string | number | null) => string | null | number;
   findNodePathByName: (nodename: string) => string | null;
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => void;
-  isNewNode: boolean;
-  setIsNewNode: (boolean: boolean) => void;
 }
 
 export const useFileTreeStore = create<FileTreeState>((set) => ({
-  file: null,
+  document: globalDocRef,
   containerName: data.name,
   fileTree: data.children,
-  setFileTree: (fileTree) => set({ fileTree }),
+  setFileTree: (fileTree) => {
+    set({ fileTree });
+  },
+
   updateNodeName: (nodeId, newName) =>
     set((state) => ({
       fileTree: updateNodeNameAndPath(state.fileTree, nodeId, newName),
     })),
-
   addNode: (newNode: FileNodeType, parentId?: string | null) =>
     set((state) => {
       return {
@@ -40,7 +41,6 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
           : [...state.fileTree, newNode],
       };
     }),
-
   deleteNode: (nodeId) =>
     set((state) => ({
       fileTree: removeNodeById(state.fileTree, nodeId),
@@ -60,11 +60,10 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
       set({ fileTree: data.children, containerName: data.name });
     }
   },
+
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => {
   //   set((state) => ({
   //     fileTree: processWebSocketFileEvent(state.fileTree, fileData),
   //   }));
   // },
-  isNewNode: false,
-  setIsNewNode: (isNewNode) => set({ isNewNode }),
 }));

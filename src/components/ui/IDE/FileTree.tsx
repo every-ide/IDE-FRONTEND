@@ -18,6 +18,7 @@ import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
 import { updatePath } from '@/src/utils/fileTree/nodeUtils';
 import useUserStore from '@/src/store/useUserStore';
 import { useParams } from 'react-router-dom';
+import { run } from '@/src/api/fileTree/setyorkie';
 
 interface ArboristProps {}
 
@@ -36,6 +37,11 @@ const Arborist: FC<ArboristProps> = () => {
     });
 
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    console.log('호출!!!');
+    run();
   }, []);
 
   //파일 또는 폴더 생성 클릭 시 동작
