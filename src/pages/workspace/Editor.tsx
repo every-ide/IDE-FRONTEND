@@ -51,6 +51,21 @@ const Editor = () => {
             />
           </TabsContent>
         ))}
+
+        {/* 열린 파일이 없는 경우 */}
+        {!files.length && (
+          <div className="flex h-[370px] flex-col items-center justify-center gap-2">
+            <p className="text-[1rem] text-neutral-200">
+              탭을 열어 시작하세요.
+            </p>
+            <p className="text-[1rem] text-[#888]">
+              Open Terminal{' '}
+              <span className="rounded-md border border-[#888] p-1">⌘</span>
+              <span>J</span>
+            </p>
+            <p className="text-[1rem] text-[#888]">Save File</p>
+          </div>
+        )}
       </Tabs>
     </main>
   );
