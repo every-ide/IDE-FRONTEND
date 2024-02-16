@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 interface IFile {
-  id: string;
+  path: string;
   name: string;
   content: string;
   language: string;
@@ -11,10 +11,10 @@ interface IFile {
 
 interface IFileStore {
   files: IFile[];
-  selectedFileId: string | null;
+  selectedFilePath: string | undefined;
   selectFile: (id: string) => void;
   openFile: (
-    id: string,
+    path: string,
     name: string,
     content: string,
     language: string,
@@ -25,38 +25,38 @@ interface IFileStore {
 const useFileStore = create<IFileStore>((set) => ({
   files: [
     {
-      id: '1',
-      name: 'sample.js',
-      content: 'console.log("hello world!");',
-      language: 'javascript',
+      path: '/public/index.html',
+      name: 'index.html',
+      content: '<div>Hello World!</div>',
+      language: 'html',
       isOpen: true,
       needSave: false,
     },
     {
-      id: '2',
-      name: 'sample2.js',
-      content: 'console.log("hello world22222!");',
-      language: 'javascript',
+      path: '/README.md',
+      name: 'README.md',
+      content: '### Hello!',
+      language: 'markdown',
       isOpen: false,
       needSave: false,
     },
   ],
-  selectedFileId: '1',
-  selectFile: (id) => set({ selectedFileId: id }),
-  openFile: (id, name, content, language) => {
+  selectedFilePath: '/public/index.html',
+  selectFile: (path) => set({ selectedFilePath: path }),
+  openFile: (path, name, content, language) => {
     set((state) => {
       // 이미 열려있는 파일인 경우
-      const existingFile = state.files.find((file) => file.id === id);
+      const existingFile = state.files.find((file) => file.path === path);
 
       if (existingFile) {
         return {
           ...state,
-          selectedFileId: id,
+          selectedFilePath: path,
         };
       }
 
       const newOpenFile = {
-        id,
+        path,
         name,
         content,
         language,
@@ -66,16 +66,18 @@ const useFileStore = create<IFileStore>((set) => ({
 
       return {
         files: [...state.files, newOpenFile],
-        selectedFileId: id,
+        selectedFilePath: path,
       };
     });
   },
-  closeFile: (id) =>
+  closeFile: (path) =>
     set((state) => {
       return {
-        files: state.files.filter((file) => file.id !== id),
-        selectedFileId:
-          state.selectedFileId === id ? null : state.selectedFileId,
+        files: state.files.filter((file) => file.path !== path),
+        selectedFilePath:
+          state.selectedFilePath === path
+            ? state.files[0].path
+            : state.selectedFilePath,
       };
     }),
 }));

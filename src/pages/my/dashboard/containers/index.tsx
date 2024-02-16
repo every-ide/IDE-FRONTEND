@@ -5,14 +5,18 @@ import useContainerStore from '@/src/store/useContainerStore';
 import { useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import EmptyState from '@/src/components/my/EmptyState';
+import useUserStore from '@/src/store/useUserStore';
 
 const ContainerPage = () => {
   const { containerList } = useContainerStore();
   const { getContainersData } = useContainerAPI();
+  const { userId } = { ...useUserStore((state) => state.user) };
 
   useEffect(() => {
-    getContainersData();
-  }, []);
+    if (userId) {
+      getContainersData();
+    }
+  }, [userId]);
 
   // while Loading data : Show Skeleton
   if (!containerList) {

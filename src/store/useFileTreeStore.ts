@@ -11,6 +11,8 @@ import { axiosFileTree } from '../api/fileTree/filetreeApi';
 import { globalDocRef } from '../api/fileTree/setyorkie';
 import { updateYorkieFileTree } from '../utils/yorkie/yorkieUtils';
 export interface FileTreeState {
+  file: FileNodeType | null;
+  containerName: string;
   fileTree: FileNodeType[];
   setFileTree: (fileTree: FileNodeType[]) => void;
   updateNodeName: (nodeId: string, newName: string) => void;
@@ -18,6 +20,7 @@ export interface FileTreeState {
   deleteNode: (nodeids: string | null) => void;
   findNodePath: (nodeid: string | number | null) => string | null | number;
   findNodePathByName: (nodename: string) => string | null;
+  setFileTreeFromApi: (userId: number, containerName: string) => void;
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => void;
 }
 
