@@ -27,26 +27,26 @@ interface IFileStore {
 
 const useFileStore = create<IFileStore>((set) => ({
   files: [
-    {
-      id: 'abc',
-      path: '/public/index.html',
-      name: 'index.html',
-      content: '<div>Hello World!</div>',
-      language: 'html',
-      isOpen: true,
-      needSave: false,
-    },
-    {
-      id: 'def',
-      path: '/README.md',
-      name: 'README.md',
-      content: '### Hello!',
-      language: 'markdown',
-      isOpen: false,
-      needSave: false,
-    },
+    // {
+    //   id: 'abc',
+    //   path: '/public/index.html',
+    //   name: 'index.html',
+    //   content: '<div>Hello World!</div>',
+    //   language: 'html',
+    //   isOpen: true,
+    //   needSave: false,
+    // },
+    // {
+    //   id: 'def',
+    //   path: '/README.md',
+    //   name: 'README.md',
+    //   content: '### Hello!',
+    //   language: 'markdown',
+    //   isOpen: false,
+    //   needSave: false,
+    // },
   ],
-  selectedFileId: '/public/index.html',
+  selectedFileId: 'abc',
   selectFile: (id) => set({ selectedFileId: id }),
   openFile: (id, path, name, content, language) => {
     set((state) => {
