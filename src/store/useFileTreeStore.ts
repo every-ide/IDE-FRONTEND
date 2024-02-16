@@ -7,7 +7,10 @@ import {
 } from '../utils/fileTree/findNodeUtils';
 import { data } from '../components/ui/IDE/data/data';
 import { updateNodeNameAndPath } from '../utils/fileTree/nodeUtils';
-import { globalDocRef } from '../api/fileTree/setYorkie';
+import {
+  globalDocRef,
+  initializeYorkieAndSyncWithZustand,
+} from '../api/fileTree/setYorkie';
 import useFileTreeApi from '../hooks/useFileTreeApi';
 export interface FileTreeState {
   document: any;
@@ -19,6 +22,7 @@ export interface FileTreeState {
   deleteNode: (nodeids: string | null) => void;
   findNodePath: (nodeid: string | number | null) => string | null | number;
   findNodePathByName: (nodename: string) => string | null;
+  setFileTreeFromApi: (containerName: string) => void;
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => void;
 }
 
@@ -61,6 +65,12 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
     if (data) {
       set({ fileTree: data.children, containerName: data.name });
     }
+  },
+  initializeAndSync: async (containerName) => {
+    const { client, doc } =
+      await initializeYorkieAndSyncWithZustand(containerName);
+
+    set({ client, doc }); // Zustand 스토어 상태에 Yorkie 클라이언트와 문서 저장
   },
 
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => {

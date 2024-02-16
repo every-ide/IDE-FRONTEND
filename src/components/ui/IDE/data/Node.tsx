@@ -63,6 +63,7 @@ const Node: FC<NodeProps> = ({
   const nodeStyle = node.data.type === 'file' ? 'file-node' : 'folder-node';
 
   const handleNodeClick = () => {
+    console.log('Node clicked:', node);
     if (node.data.type === 'file') {
       handleFileClick();
     } else {

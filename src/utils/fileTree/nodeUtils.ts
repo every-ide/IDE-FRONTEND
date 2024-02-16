@@ -1,5 +1,4 @@
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
-import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 
 // 노드의 이름과 그 자식 노드들의 path를 업데이트하는 함수
 export function updateNodeNameAndPath(
@@ -9,10 +8,14 @@ export function updateNodeNameAndPath(
 ): FileNodeType[] {
   // 경로 업데이트를 위한 내부 함수
   const updatePath = (node: FileNodeType, newPath: string): FileNodeType => {
+    console.log('siuuuuuuuuu : ', node, newPath);
     // 자식 노드가 있는 경우, 각 자식에 대해 재귀적으로 업데이트
-    const updatedChildren = node.children?.map((child) =>
-      updatePath(child, `${newPath}/${child.name}`),
-    );
+    const updatedChildren = node.children?.map((child) => {
+      isFileNode(child)
+        ? console.log('파일 수정 : ', child, `${newPath}/${child.name}`)
+        : console.log('디렉토리 수정 : ', child, `${newPath}/${child.name}`);
+      updatePath(child, `${newPath}/${child.name}`);
+    });
 
     return {
       ...node,
@@ -80,4 +83,8 @@ export function updatePath(node: FileNodeType, newPath: string): FileNodeType {
     path: newPath,
     ...(updatedChildren && { children: updatedChildren }),
   };
+}
+
+export function isFileNode(node: FileNodeType) {
+  return node.type === 'file';
 }
