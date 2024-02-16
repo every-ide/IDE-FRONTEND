@@ -18,7 +18,7 @@ import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
 import { updatePath } from '@/src/utils/fileTree/nodeUtils';
 import useUserStore from '@/src/store/useUserStore';
 import { useParams } from 'react-router-dom';
-import { run } from '@/src/api/fileTree/setyorkie';
+import { run } from '@/src/api/fileTree/setYorkie';
 
 interface ArboristProps {}
 

@@ -7,7 +7,7 @@ import {
 } from '../utils/fileTree/findNodeUtils';
 import { data } from '../components/ui/IDE/data/data';
 import { updateNodeNameAndPath } from '../utils/fileTree/nodeUtils';
-import { globalDocRef } from '../api/fileTree/setyorkie';
+import { globalDocRef } from '../api/fileTree/setYorkie';
 import useFileTreeApi from '../hooks/useFileTreeApi';
 export interface FileTreeState {
   document: any;
