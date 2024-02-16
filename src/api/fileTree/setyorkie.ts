@@ -3,9 +3,10 @@ import { checkDocumentInitialization } from '@/src/utils/yorkie/yorkieUtils';
 import yorkie, { Document, Indexable } from 'yorkie-js-sdk';
 export let globalDocRef = null;
 
+const API_KEY = import.meta.env.VITE_YORKIE_API_KEY;
 export async function initializeYorkie(containerName: string) {
   const client = new yorkie.Client('https://api.yorkie.dev', {
-    apiKey: 'cn25p6lafcg8gj9hpmu0',
+    apiKey: API_KEY,
   });
   await client.activate();
 
