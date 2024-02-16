@@ -10,8 +10,8 @@ import {
   getFileLanguage,
 } from '@/src/utils/fileTree/langauageSelector';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
-import { axiosOpenFile } from '@/src/api/fileTree/filetreeApi';
 import { useParams } from 'react-router-dom';
+import useFileTreeApi from '@/src/hooks/useFileTreeApi';
 // DiC 아이콘을 대신할 적절한 아이콘을 찾아 import하세요.
 
 interface MyNodeData {
@@ -37,8 +37,9 @@ const Node: FC<NodeProps> = ({
   dragHandle,
   tree,
 }): NodeRendererProps<FileNodeType> => {
+  const { axiosOpenFile } = useFileTreeApi();
   const { workid: containerName } = useParams<{ workid: string }>();
-  const { selectFile, openFile } = useFileStore();
+  const { openFile } = useFileStore();
 
   // 파일 확장자를 기반으로 아이콘 선택
   const IconComponent =
@@ -71,14 +72,11 @@ const Node: FC<NodeProps> = ({
   const handleFileClick = async () => {
     const { id, name, path } = node.data;
     try {
-      const selectedFile = await axiosOpenFile(containerName, path);
+      const selectedFile = axiosOpenFile(containerName, path);
       const { content } = selectedFile?.data ?? {
         content: '',
       };
-      const filePath = selectedFile?.data?.path ?? '';
-      const filename = selectedFile?.data?.name ?? '';
-      selectFile(filePath);
-      openFile(filePath, filename, content, getFileLanguage(filename));
+      openFile(path, name, content, getFileLanguage(name));
     } catch (error) {
       console.error('Error opening file:', error);
     }

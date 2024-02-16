@@ -7,11 +7,10 @@ import {
 } from '../utils/fileTree/findNodeUtils';
 import { data } from '../components/ui/IDE/data/data';
 import { updateNodeNameAndPath } from '../utils/fileTree/nodeUtils';
-import { axiosFileTree } from '../api/fileTree/filetreeApi';
 import { globalDocRef } from '../api/fileTree/setyorkie';
-import { updateYorkieFileTree } from '../utils/yorkie/yorkieUtils';
+import useFileTreeApi from '../hooks/useFileTreeApi';
 export interface FileTreeState {
-  file: FileNodeType | null;
+  document: any;
   containerName: string;
   fileTree: FileNodeType[];
   setFileTree: (fileTree: FileNodeType[]) => void;
@@ -20,7 +19,6 @@ export interface FileTreeState {
   deleteNode: (nodeids: string | null) => void;
   findNodePath: (nodeid: string | number | null) => string | null | number;
   findNodePathByName: (nodename: string) => string | null;
-  setFileTreeFromApi: (userId: number, containerName: string) => void;
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => void;
 }
 
@@ -57,8 +55,9 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
     const state: FileTreeState = useFileTreeStore.getState();
     return findFilePathByName(state.fileTree, nodename);
   },
-  setFileTreeFromApi: async (userId, containerName) => {
-    const data = await axiosFileTree(userId, containerName);
+  setFileTreeFromApi: async (containerName) => {
+    const { axiosFileTree } = useFileTreeApi();
+    const data = axiosFileTree(containerName);
     if (data) {
       set({ fileTree: data.children, containerName: data.name });
     }

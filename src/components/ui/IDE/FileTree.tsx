@@ -33,7 +33,7 @@ const Arborist: FC<ArboristProps> = () => {
   useEffect(() => {
     // userId가 있는지 체크해야 id가 null값일 때 request가 안날라가요!
     if (user?.userId && projectId) {
-      setFileTreeFromApi(user?.userId, projectId);
+      setFileTreeFromApi(projectId);
     }
     const unsubscribe = useFileTreeStore.subscribe((state) => {
       console.log('FileTree 변경됨:', state.fileTree);
