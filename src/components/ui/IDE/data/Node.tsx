@@ -38,7 +38,7 @@ const Node: FC<NodeProps> = ({
   tree,
 }): NodeRendererProps<FileNodeType> => {
   const { workid: containerName } = useParams<{ workid: string }>();
-  const { selectFile, openFile } = useFileStore();
+  const { openFile } = useFileStore();
 
   // 파일 확장자를 기반으로 아이콘 선택
   const IconComponent =
@@ -68,17 +68,19 @@ const Node: FC<NodeProps> = ({
       node.toggle();
     }
   };
+
   const handleFileClick = async () => {
     const { id, name, path } = node.data;
+
     try {
+      // 특정 파일 조회 API 요청
       const selectedFile = await axiosOpenFile(containerName, path);
       const { content } = selectedFile?.data ?? {
         content: '',
       };
-      const filePath = selectedFile?.data?.path ?? '';
-      const filename = selectedFile?.data?.name ?? '';
-      selectFile(filePath);
-      openFile(filePath, filename, content, getFileLanguage(filename));
+
+      // Zustand File Store 상태 추가
+      openFile(id, path, name, content, getFileLanguage(name));
     } catch (error) {
       console.error('Error opening file:', error);
     }
