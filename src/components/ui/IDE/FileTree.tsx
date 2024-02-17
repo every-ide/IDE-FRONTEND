@@ -18,23 +18,33 @@ import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
 import { updatePath } from '@/src/utils/fileTree/nodeUtils';
 import useUserStore from '@/src/store/useUserStore';
 import { useParams } from 'react-router-dom';
-import { run } from '@/src/api/fileTree/setYorkie';
+import {
+  initializeYorkie,
+  initializeYorkieAndSyncWithZustand,
+  run,
+} from '@/src/api/fileTree/setYorkie';
 
 interface ArboristProps {}
 
 const Arborist: FC<ArboristProps> = () => {
   const [term, setTerm] = useState<string>('');
   const treeRef = useRef<TreeApi<FileNodeType> | null>(null);
-  const { fileTree, deleteNode, addNode, updateNodeName, setFileTreeFromApi } =
-    useFileTreeStore();
+  const {
+    fileTree,
+    deleteNode,
+    addNode,
+    updateNodeName,
+    setFileTreeFromApi,
+    initializeAndSync,
+  } = useFileTreeStore();
   const { user } = useUserStore();
   const { workid: projectId } = useParams<{ workid: string }>();
 
   useEffect(() => {
     // userId가 있는지 체크해야 id가 null값일 때 request가 안날라가요!
-    if (user?.userId && projectId) {
-      setFileTreeFromApi(projectId);
-    }
+    // if (user?.userId && projectId) {
+    //   setFileTreeFromApi(projectId);
+    // }
     const unsubscribe = useFileTreeStore.subscribe((state) => {
       console.log('FileTree 변경됨:', state.fileTree);
     });
@@ -44,7 +54,7 @@ const Arborist: FC<ArboristProps> = () => {
 
   useEffect(() => {
     console.log('호출!!!');
-    run();
+    initializeAndSync(projectId);
   }, []);
 
   //파일 또는 폴더 생성 클릭 시 동작

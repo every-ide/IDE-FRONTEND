@@ -1,4 +1,5 @@
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
+import { CRDTTreeNodeIDStruct } from 'yorkie-js-sdk';
 
 // 노드의 이름과 그 자식 노드들의 path를 업데이트하는 함수
 export function updateNodeNameAndPath(
@@ -7,7 +8,10 @@ export function updateNodeNameAndPath(
   newName: string,
 ): FileNodeType[] {
   // 경로 업데이트를 위한 내부 함수
-  const updatePath = (node: FileNodeType, newPath: string): FileNodeType => {
+  const updatePath = (
+    node: CRDTTreeNodeIDStruct,
+    newPath: string,
+  ): FileNodeType => {
     console.log('siuuuuuuuuu : ', node, newPath);
     // 자식 노드가 있는 경우, 각 자식에 대해 재귀적으로 업데이트
     const updatedChildren = node.children?.map((child) => {

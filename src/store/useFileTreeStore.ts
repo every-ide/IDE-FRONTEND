@@ -23,6 +23,7 @@ export interface FileTreeState {
   findNodePath: (nodeid: string | number | null) => string | null | number;
   findNodePathByName: (nodename: string) => string | null;
   setFileTreeFromApi: (containerName: string) => void;
+  initializeAndSync: (containerName: string) => void;
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => void;
 }
 
@@ -67,10 +68,11 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
     }
   },
   initializeAndSync: async (containerName) => {
-    const { client, doc } =
-      await initializeYorkieAndSyncWithZustand(containerName);
-
-    set({ client, doc }); // Zustand 스토어 상태에 Yorkie 클라이언트와 문서 저장
+    console.log('containerName: ', containerName);
+    await initializeYorkieAndSyncWithZustand(containerName, (tree) => {
+      console.log('tree: ', tree);
+      set({ fileTree: tree });
+    });
   },
 
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => {

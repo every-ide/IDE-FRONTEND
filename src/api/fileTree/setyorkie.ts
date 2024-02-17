@@ -16,7 +16,7 @@ export async function initializeYorkie(containerName: string) {
   return { client, doc };
 }
 
-export function initializeFileTree(doc: Document<unknown, Indexable>) {
+export function treeInputTest(doc: Document<unknown, Indexable>) {
   doc.update((root) => {
     root.yorkieContainer = {
       name: '1-container',
@@ -32,12 +32,6 @@ export function initializeFileTree(doc: Document<unknown, Indexable>) {
               name: 'index.html',
               type: 'file',
               path: '/public/index.html',
-            },
-            {
-              id: 'r1df',
-              name: 'inde.html',
-              type: 'file',
-              path: '/public/inde.html',
             },
           ],
         },
@@ -60,23 +54,30 @@ export function subscribeToFileTreeChanges(doc) {
   return unsubscribe;
 }
 
-export async function initializeYorkieAndSyncWithZustand(containerName) {
+export async function initializeYorkieAndSyncWithZustand(
+  containerName: string,
+  setFileTree: (fileTree: unknown) => void,
+) {
   const { client, doc } = await initializeYorkie(containerName);
+
+  // treeInputTest(doc);
   globalDocRef = doc;
+  doc.subscribe((event) => {
+    if (event.type === 'remote-change' || event.type === 'local-change') {
+      const fileTree = doc.getRoot().yorkieContainer.children;
+      console.log('fileTree: ', fileTree);
+      setFileTree(fileTree); // Zustand 스토어의 setFileTree 함수를 호출
+    }
+  });
 
   const isInitialized = await checkDocumentInitialization(doc);
   if (!isInitialized) {
-    // 문서가 새로 생성되었거나 초기화가 필요한 경우
-    initializeFileTree(doc);
+    // 초기화 로직 구현
   } else {
-    const fileTree = doc.getRoot().yorkieContainer;
-    useFileTreeStore.getState().setFileTree(fileTree.children);
+    const fileTree = doc.getRoot().yorkieContainer.children;
+    console.log('fileTree: ', fileTree);
+    setFileTree(fileTree); // 초기 상태 설정
   }
 
-  subscribeToFileTreeChanges(doc);
   return { client, doc };
-}
-
-export async function run() {
-  await initializeYorkieAndSyncWithZustand('1-container');
 }
