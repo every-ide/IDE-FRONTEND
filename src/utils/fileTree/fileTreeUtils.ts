@@ -41,6 +41,8 @@ export const addNodeToTree = (
 ) => {
   return nodes.reduce((acc: FileNodeType[], node: FileNodeType) => {
     const newNodeArray = [...acc];
+    console.log('node: ', node.data);
+    console.log('parentId: ', parentId);
     if (node.id === parentId) {
       newNodeArray.push({
         ...node,
@@ -54,6 +56,8 @@ export const addNodeToTree = (
           : [],
       });
     }
+    console.log('newNodeArray: ', newNodeArray);
+
     return newNodeArray;
   }, []);
 };

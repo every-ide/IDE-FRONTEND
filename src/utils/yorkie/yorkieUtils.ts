@@ -1,7 +1,7 @@
 export async function checkDocumentInitialization(doc) {
   const root = doc.getRoot();
   // 문서의 root에 yorkieContainer가 존재하는지 확인
-  if (root.yorkieContainer) {
+  if (root) {
     console.log('이 문서는 이미 초기화되었습니다.');
     return true;
   } else {
@@ -12,7 +12,7 @@ export async function checkDocumentInitialization(doc) {
 
 export function updateYorkieFileTree(doc, fileTree) {
   doc.update((root) => {
-    root.yorkieContainer = fileTree;
+    root = fileTree;
   }, 'Update file tree');
 }
 

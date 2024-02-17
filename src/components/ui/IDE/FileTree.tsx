@@ -18,47 +18,42 @@ import { isDuplicateName, makePath } from '@/src/utils/fileTree/fileTreeUtils';
 import { updatePath } from '@/src/utils/fileTree/nodeUtils';
 import useUserStore from '@/src/store/useUserStore';
 import { useParams } from 'react-router-dom';
-import {
-  initializeYorkie,
-  initializeYorkieAndSyncWithZustand,
-  run,
-} from '@/src/api/fileTree/setYorkie';
-
-interface ArboristProps {}
+import useYorkieHook from '@/src/hooks/useYorkie';
 
 const Arborist: FC<ArboristProps> = () => {
   const [term, setTerm] = useState<string>('');
   const treeRef = useRef<TreeApi<FileNodeType> | null>(null);
-  const {
-    fileTree,
-    deleteNode,
-    addNode,
-    updateNodeName,
-    setFileTreeFromApi,
-    initializeAndSync,
-  } = useFileTreeStore();
+  const { fileTree, deleteNode, addNode, updateNodeName } = useFileTreeStore();
+  const { initializeYorkieAndSyncWithZustand } = useYorkieHook();
   const { user } = useUserStore();
   const { workid: projectId } = useParams<{ workid: string }>();
 
-  useEffect(() => {
-    // userId가 있는지 체크해야 id가 null값일 때 request가 안날라가요!
-    // if (user?.userId && projectId) {
-    //   setFileTreeFromApi(projectId);
-    // }
-    const unsubscribe = useFileTreeStore.subscribe((state) => {
-      console.log('FileTree 변경됨:', state.fileTree);
-    });
+  // useEffect(() => {
+  //   // userId가 있는지 체크해야 id가 null값일 때 request가 안날라가요!
+  //   // if (user?.userId && projectId) {
+  //   //   const { axiosFileTree } = useFileTreeApi();
+  //   // const data = axiosFileTree(containerName);
+  //   //   setFileTreeFromApi(projectId);
+  //   // }
+  //   const unsubscribe = useFileTreeStore.subscribe((state) => {
+  //     // console.log('FileTree 변경됨:', state.fileTree);
+  //   });
 
-    return () => unsubscribe();
-  }, [user]);
+  //   return () => unsubscribe();
+  // }, [user]);
 
   useEffect(() => {
-    console.log('호출!!!');
-    initializeAndSync(projectId);
+    async function initializeYorkie() {
+      console.log('호출!!!');
+      await initializeYorkieAndSyncWithZustand(projectId ?? '');
+      console.log('initializeYorkieAndSyncWithZustand 호출됨', fileTree);
+    }
+    initializeYorkie();
   }, []);
 
   //파일 또는 폴더 생성 클릭 시 동작
   const onCreate: CreateHandler<FileNodeType> = ({ type, parentId }) => {
+    console.log('parentId: ', parentId);
     const newPath = makePath(fileTree, '', parentId);
     const newNode: FileNodeType = {
       id: uuidv4(),
@@ -68,6 +63,7 @@ const Arborist: FC<ArboristProps> = () => {
       path: newPath,
     };
     addNode(newNode, parentId);
+
     return newNode;
   };
 

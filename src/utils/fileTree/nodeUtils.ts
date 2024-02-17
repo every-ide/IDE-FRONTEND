@@ -8,23 +8,17 @@ export function updateNodeNameAndPath(
   newName: string,
 ): FileNodeType[] {
   // 경로 업데이트를 위한 내부 함수
-  const updatePath = (
-    node: CRDTTreeNodeIDStruct,
-    newPath: string,
-  ): FileNodeType => {
-    console.log('siuuuuuuuuu : ', node, newPath);
+  const updatePath = (node: FileNodeType, newPath: string): FileNodeType => {
     // 자식 노드가 있는 경우, 각 자식에 대해 재귀적으로 업데이트
     const updatedChildren = node.children?.map((child) => {
-      isFileNode(child)
-        ? console.log('파일 수정 : ', child, `${newPath}/${child.name}`)
-        : console.log('디렉토리 수정 : ', child, `${newPath}/${child.name}`);
-      updatePath(child, `${newPath}/${child.name}`);
+      const updatedChildPath = `${newPath}/${child.name}`;
+      return updatePath(child, updatedChildPath); // 업데이트된 자식 노드 반환
     });
 
     return {
       ...node,
       path: newPath,
-      ...(updatedChildren && { children: updatedChildren }),
+      ...(node.children && { children: updatedChildren }), // 업데이트된 자식 노드들을 반영
     };
   };
 
