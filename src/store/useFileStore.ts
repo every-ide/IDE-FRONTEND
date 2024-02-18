@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { type Document, Indexable } from 'yorkie-js-sdk';
+import { YorkieDoc } from '@/components/codeEditor/CodeEditorWindow';
 
 interface IFile {
   id: string;
@@ -6,8 +8,8 @@ interface IFile {
   name: string;
   content: string;
   language: string;
-  isOpen: boolean;
   needSave: boolean;
+  yorkieDoc: Document<YorkieDoc, Indexable> | null;
 }
 
 interface IFileStore {
@@ -23,6 +25,9 @@ interface IFileStore {
   ) => void;
   closeFile: (id: string) => void;
   updateFileNameAndPath: (id: string, path: string, name?: string) => void;
+  setYorkieDoc: (fileId: string, doc: Document<YorkieDoc, Indexable>) => void;
+  getYorkieDoc: (fileId: string) => Document<YorkieDoc, Indexable> | null;
+  setNeedSave: (fileId: string, val: boolean) => void;
 }
 
 const useFileStore = create<IFileStore>((set) => ({
@@ -66,8 +71,8 @@ const useFileStore = create<IFileStore>((set) => ({
         name,
         content,
         language,
-        isOpen: true,
         needSave: false,
+        yorkieDoc: null,
       };
 
       return {
@@ -115,6 +120,45 @@ const useFileStore = create<IFileStore>((set) => ({
 
       return {
         ...state,
+      };
+    });
+  },
+  setYorkieDoc: (fileId, doc) => {
+    set((state) => {
+      return {
+        files: state.files.map((file) => {
+          if (file.id === fileId) {
+            return {
+              ...file,
+              yorkieDoc: doc,
+            };
+          } else {
+            return file;
+          }
+        }),
+      };
+    });
+  },
+  getYorkieDoc: (fileId) => {
+    const state: IFileStore = useFileStore.getState();
+
+    const selectedFile = state.files.filter((file) => file.id === fileId)[0];
+
+    return selectedFile.yorkieDoc;
+  },
+  setNeedSave: (fileId, val) => {
+    set((state) => {
+      return {
+        files: state.files.map((file) => {
+          if (file.id === fileId) {
+            return {
+              ...file,
+              needSave: val,
+            };
+          } else {
+            return file;
+          }
+        }),
       };
     });
   },

@@ -291,4 +291,11 @@ export const handlers = [
       needSave: false,
     });
   }),
+  http.patch('/api/files', async ({ request }) => {
+    const reqData = await request.json();
+    console.log('코드 저장 request body: ', reqData);
+    return HttpResponse.json(null, {
+      status: 200,
+    });
+  }),
 ]; // Remove the extra comma at the end of the array.

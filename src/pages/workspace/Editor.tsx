@@ -49,7 +49,6 @@ const Editor = () => {
               filePath={file.path}
               content={file.content}
               language={file.language}
-              selected={file.isOpen}
             />
           </TabsContent>
         ))}

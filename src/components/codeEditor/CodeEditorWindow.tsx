@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { Transaction } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-
 import useFileStore from '@/src/store/useFileStore';
 import yorkie, { type Text } from 'yorkie-js-sdk';
 import createEditorState from './CreateEditorState';
+import useFileAPI from '@/src/hooks/useFileAPI';
 
 interface ICodeEditorWindowProps {
   fileId: string;
@@ -12,7 +12,6 @@ interface ICodeEditorWindowProps {
   filePath: string;
   content: string;
   language: string;
-  selected: boolean;
 }
 
 export type YorkieDoc = {
@@ -25,11 +24,11 @@ const CodeEditorWindow = ({
   filePath,
   content,
   language,
-  selected,
 }: ICodeEditorWindowProps) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const codemirrorViewRef = useRef<EditorView>();
-  const { files } = useFileStore();
+  const { setYorkieDoc, setNeedSave, getYorkieDoc } = useFileStore();
+  const { saveFileContent } = useFileAPI();
 
   const initializeYorkieEditor = useCallback(async () => {
     // 01. Create & Activate yorkie client
@@ -101,6 +100,9 @@ const CodeEditorWindow = ({
               adj += insertText.length - (toA - fromA);
             });
           }
+
+          // zustand store state change
+          setNeedSave(fileId, true);
         }
       },
     );
@@ -113,11 +115,32 @@ const CodeEditorWindow = ({
       state,
       parent: editorRef.current ? editorRef.current : undefined,
     });
+
+    // 07. zustand fileStore에 yorkieDoc 저장
+    setYorkieDoc(fileId, doc);
   }, []);
 
   useEffect(() => {
     initializeYorkieEditor();
-  }, [files, initializeYorkieEditor]);
+  }, []);
+
+  useEffect(() => {
+    const handleCodeSave = (event: KeyboardEvent) => {
+      if (event.key === 's' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        saveFileContent({
+          filePath,
+          newContent: getYorkieDoc(fileId)!.getRoot().content.toString(),
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleCodeSave);
+
+    return () => {
+      window.removeEventListener('keydown', handleCodeSave);
+    };
+  }, []);
 
   return (
     <div
