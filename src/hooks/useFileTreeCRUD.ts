@@ -33,9 +33,15 @@ const useFileTreeCRUD = () => {
     onDrop: async (acceptedFiles) => {
       // 여기에서 파일 처리 로직 구현
       const dropData = await createFileTree(acceptedFiles);
-      console.log('createFileTree(acceptedFiles);: ', dropData);
+      console.log('createFileTree(acceptedFiles);: ', ...dropData);
+      dropData.forEach((item) => {
+        if (isDuplicateName(fileTree, item.id, item.name)) {
+          console.log('중복된 이름입니다.');
+          return;
+        }
+      });
       doc.update((root) => {
-        root.yorkieContainer.children.push(...dropData);
+        dropData.forEach((item) => root.yorkieContainer.children.push(item));
       });
     },
   });

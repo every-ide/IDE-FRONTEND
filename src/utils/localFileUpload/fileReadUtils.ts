@@ -6,8 +6,13 @@ export async function createFileTree(files) {
 
   for (const file of files) {
     const pathParts = file.path.split('/').filter(Boolean);
+    console.log('pathParts: ', pathParts);
     let currentLevel = { children: root };
-
+    if (file.path.split('/').length === 1) {
+      root.push(fileMetadataToObject(file, `/${file.name}`));
+      console.log('root: ', root);
+      continue;
+    }
     for (let index = 0; index < pathParts.length; index++) {
       const part = pathParts[index];
       let node = currentLevel.children.find((node) => node.name === part);
@@ -38,12 +43,12 @@ export async function createFileTree(files) {
 }
 
 // fileMetadataToObject 함수 수정. content 인자 추가
-export function fileMetadataToObject(file) {
+export function fileMetadataToObject(file, filePath?) {
   return {
     id: uuidv4(),
     name: file.name,
     type: 'file',
-    path: file.path || '',
+    path: filePath || file.path,
     children: [],
   };
 }
