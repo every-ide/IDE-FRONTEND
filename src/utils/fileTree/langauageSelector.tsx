@@ -49,7 +49,7 @@ export const getFileLanguage = (filename: string) => {
 
   switch (extension) {
     case 'js':
-      return 'javaScript';
+      return 'javascript';
     case 'jsx':
       return 'React JSX';
     case 'ts':
