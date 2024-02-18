@@ -87,6 +87,10 @@ const ContainerBox = ({
   // 컨테이너 수정 버튼 onClick action
   const handleUpdateContainer = async (data: IUpdateContainerForm) => {
     try {
+      if (data.email === undefined) {
+        data.email = user!.email;
+      }
+
       const response = await updateContainerData(data);
 
       if (response.status === 200) {

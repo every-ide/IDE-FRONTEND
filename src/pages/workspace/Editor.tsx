@@ -44,6 +44,8 @@ const Editor = () => {
         {files?.map((file) => (
           <TabsContent key={file.id} value={file.id} asChild>
             <CodeEditorWindow
+              fileId={file.id}
+              fileName={file.name}
               filePath={file.path}
               content={file.content}
               language={file.language}
