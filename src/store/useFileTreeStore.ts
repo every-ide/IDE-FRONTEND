@@ -1,10 +1,6 @@
 import { create } from 'zustand';
 import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
 import { addNodeToTree, removeNodeById } from '../utils/fileTree/fileTreeUtils';
-import {
-  findFilePath,
-  findFilePathByName,
-} from '../utils/fileTree/findNodeUtils';
 import { data } from '../components/ui/IDE/data/data';
 import { updateNodeNameAndPath } from '../utils/fileTree/nodeUtils';
 export interface FileTreeState {

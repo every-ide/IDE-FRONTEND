@@ -9,6 +9,13 @@ export function updateNodeNameAndPath(
 ): FileNodeType[] {
   // 경로 업데이트를 위한 내부 함수
   const updatePath = (node: FileNodeType, newPath: string): FileNodeType => {
+    if (node.type === 'file') {
+      console.log('node: ', node);
+      console.log('newPath: ', newPath);
+    } else {
+      console.log('node: ', node);
+      console.log('newPath: ', newPath);
+    }
     // 자식 노드가 있는 경우, 각 자식에 대해 재귀적으로 업데이트
     const updatedChildren = node.children?.map((child) => {
       const updatedChildPath = `${newPath}/${child.name}`;

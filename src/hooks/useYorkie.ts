@@ -1,12 +1,12 @@
 import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 import { checkDocumentInitialization } from '@/src/utils/yorkie/yorkieUtils';
 import yorkie, { Document, Indexable } from 'yorkie-js-sdk';
-export const globalDocRef = null;
-
+import useFileTree from '@/src/hooks/useFileTreeApi';
 const API_KEY = import.meta.env.VITE_YORKIE_API_KEY;
 
 const useYorkieHook = () => {
   const { setFileTree, setDocument } = useFileTreeStore();
+  const { axiosFileTree } = useFileTree();
 
   const initializeYorkie = async (containerName: string) => {
     const client = new yorkie.Client('https://api.yorkie.dev', {
@@ -20,28 +20,15 @@ const useYorkieHook = () => {
     return { client, doc };
   };
 
-  const treeInputTest = (doc: Document<unknown, Indexable>) => {
+  const treeInputTest = async (
+    doc: Document<unknown, Indexable>,
+    containerName,
+  ) => {
+    const axiosFile = await axiosFileTree(containerName);
+    console.log('axiosFile: ', axiosFile);
+
     doc.update((root) => {
-      root.yorkieContainer = {
-        name: '1-container',
-        children: [
-          {
-            id: 'r1d',
-            name: 'public',
-            type: 'directory',
-            path: '/public',
-            children: [
-              {
-                id: 'r1d1f',
-                name: 'index.html',
-                type: 'file',
-                path: '/public/index.html',
-              },
-            ],
-          },
-          // 추가 디렉토리와 파일을 여기에 정의합니다.
-        ],
-      };
+      root.yorkieContainer = axiosFile;
     }, 'Initialize file tree');
   };
 
@@ -59,7 +46,7 @@ const useYorkieHook = () => {
   const initializeYorkieAndSyncWithZustand = async (containerName: string) => {
     const { client, doc } = await initializeYorkie(containerName);
 
-    // treeInputTest(doc);
+    treeInputTest(doc);
     setDocument(doc);
     subscribeToFileTreeChanges(doc);
 

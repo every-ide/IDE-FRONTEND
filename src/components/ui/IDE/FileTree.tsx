@@ -19,65 +19,92 @@ import { updatePath } from '@/src/utils/fileTree/nodeUtils';
 import useUserStore from '@/src/store/useUserStore';
 import { useParams } from 'react-router-dom';
 import useYorkieHook from '@/src/hooks/useYorkie';
+import useFileTreeApi from '@/src/hooks/useFileTreeApi';
+import {
+  findFileNodeByPath,
+  findMaxFileNumberByPath,
+  findNodeById,
+} from '@/src/utils/fileTree/findNodeUtils';
 
 const Arborist: FC<ArboristProps> = () => {
   const [term, setTerm] = useState<string>('');
   const treeRef = useRef<TreeApi<FileNodeType> | null>(null);
   const { fileTree, deleteNode, addNode, updateNodeName } = useFileTreeStore();
   const { initializeYorkieAndSyncWithZustand } = useYorkieHook();
+  const { axiosCreateIsFile, axiosRenameIsFile, axiosDeleteIsFile } =
+    useFileTreeApi();
   const { user } = useUserStore();
-  const { workid: projectId } = useParams<{ workid: string }>();
+  const { workid: containerName } = useParams<{ workid: string }>();
 
-  // useEffect(() => {
-  //   // userId가 있는지 체크해야 id가 null값일 때 request가 안날라가요!
-  //   // if (user?.userId && projectId) {
-  //   //   const { axiosFileTree } = useFileTreeApi();
-  //   // const data = axiosFileTree(containerName);
-  //   //   setFileTreeFromApi(projectId);
-  //   // }
-  //   const unsubscribe = useFileTreeStore.subscribe((state) => {
-  //     // console.log('FileTree 변경됨:', state.fileTree);
-  //   });
-
-  //   return () => unsubscribe();
-  // }, [user]);
+  useEffect(() => {
+    console.log('파일트리 변경됨 : ', fileTree);
+  }, [fileTree]);
 
   useEffect(() => {
     async function initializeYorkie() {
       console.log('호출!!!');
-      await initializeYorkieAndSyncWithZustand(projectId ?? '');
-      console.log('initializeYorkieAndSyncWithZustand 호출됨', fileTree);
+      await initializeYorkieAndSyncWithZustand(containerName);
     }
-    initializeYorkie();
+    console.log('containerName: ', containerName);
+    console.log('user?.userId: ', user?.userId);
+    if (containerName) {
+      initializeYorkie();
+    }
   }, []);
 
   //파일 또는 폴더 생성 클릭 시 동작
-  const onCreate: CreateHandler<FileNodeType> = ({ type, parentId }) => {
-    console.log('parentId: ', parentId);
-    const newPath = makePath(fileTree, '', parentId);
+  const onCreate: CreateHandler<FileNodeType> = async ({ type, parentId }) => {
+    const baseFilename = type === 'internal' ? 'newFolder' : 'newFile';
+
+    // parentId를 기반으로 최대 파일 번호 찾기
+    const maxNumber = findMaxFileNumberByPath(fileTree, parentId, baseFilename);
+    console.log('maxNumber: ', maxNumber);
+    const newName =
+      maxNumber > 0 ? `${baseFilename}(${maxNumber})` : baseFilename;
+
+    const newPath = makePath(fileTree, newName, parentId);
     const newNode: FileNodeType = {
       id: uuidv4(),
-      name: '',
+      name: newName,
       type: type === 'internal' ? 'directory' : 'file',
       ...(type === 'internal' && { children: [] }),
       path: newPath,
     };
+
     addNode(newNode, parentId);
 
+    try {
+      await axiosCreateIsFile(containerName, newPath, newNode.type);
+    } catch (error) {
+      console.error('File creation error:', error);
+      throw error;
+    }
     return newNode;
   };
 
-  const onRename: RenameHandler<FileNodeType> = ({ id, name }) => {
+  const onRename: RenameHandler<FileNodeType> = async ({ id, name, node }) => {
     if (isDuplicateName(fileTree, id, name)) {
       console.log('중복된 이름입니다.');
       return;
     }
     updateNodeName(id, name);
+    const oldPath = node.data.path;
+    const newPath = oldPath.substring(0, oldPath.lastIndexOf('/')) + `/${name}`;
+    try {
+      await axiosRenameIsFile(containerName, oldPath, newPath, node.data.type);
+    } catch (error) {
+      console.error('File renaming error:', error);
+      throw error;
+    }
   };
 
   //파일 또는 폴더 삭제 시 동작
   const onDelete: DeleteHandler<FileNodeType> = ({ ids }) => {
+    const deletingNode = findNodeById(fileTree, ids[0], null).node;
+    console.log('deletingNode: ', deletingNode);
     deleteNode(ids[0]);
+    axiosDeleteIsFile(containerName, deletingNode.path, deletingNode.type);
+    console.log('deletingNode: ', deletingNode);
   };
 
   const onMove: MoveHandler<FileNodeType> = ({
