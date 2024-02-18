@@ -39,6 +39,12 @@ export const data = {
           type: 'file',
           path: '/src/styles.css',
         },
+        {
+          id: 'r2dadfe3f',
+          name: '이건더미데이터.css',
+          type: 'file',
+          path: '/src/이건더미데이터.css',
+        },
       ],
     },
     // {

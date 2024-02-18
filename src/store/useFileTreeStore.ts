@@ -1,72 +1,66 @@
 import { create } from 'zustand';
 import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
 import { addNodeToTree, removeNodeById } from '../utils/fileTree/fileTreeUtils';
-import {
-  findFilePath,
-  findFilePathByName,
-} from '../utils/fileTree/findNodeUtils';
 import { data } from '../components/ui/IDE/data/data';
-import { updateNodeNameAndPath } from '../utils/fileTree/nodeUtils';
-import { axiosFileTree } from '../api/fileTree/filetreeApi';
+import useFileTreeNodeUtils from '../utils/fileTree/nodeUtils';
 export interface FileTreeState {
-  file: FileNodeType | null;
+  doc: any;
   containerName: string;
   fileTree: FileNodeType[];
   setFileTree: (fileTree: FileNodeType[]) => void;
-  updateNodeName: (nodeId: string, newName: string) => void;
+  setDocument: (document: any) => void;
+  // UpdateNodeName: (nodeId: string, newName: string) => void;
   addNode: (newNode: FileNodeType, parentId?: string | null) => void;
   deleteNode: (nodeids: string | null) => void;
-  findNodePath: (nodeid: string | number | null) => string | null | number;
-  findNodePathByName: (nodename: string) => string | null;
-  setFileTreeFromApi: (userId: number, containerName: string) => void;
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => void;
-  isNewNode: boolean;
-  setIsNewNode: (boolean: boolean) => void;
 }
 
 export const useFileTreeStore = create<FileTreeState>((set) => ({
-  file: null,
+  doc: null,
   containerName: data.name,
   fileTree: data.children,
-  setFileTree: (fileTree) => set({ fileTree }),
-  updateNodeName: (nodeId, newName) =>
-    set((state) => ({
-      fileTree: updateNodeNameAndPath(state.fileTree, nodeId, newName),
-    })),
-
-  addNode: (newNode: FileNodeType, parentId?: string | null) =>
-    set((state) => {
-      return {
-        fileTree: parentId
-          ? addNodeToTree(state.fileTree, newNode, parentId)
-          : [...state.fileTree, newNode],
-      };
-    }),
-
-  deleteNode: (nodeId) =>
-    set((state) => ({
-      fileTree: removeNodeById(state.fileTree, nodeId),
-    })),
-
-  findNodePath: (nodeid: string | number | null) => {
-    const state: FileTreeState = useFileTreeStore.getState();
-    return findFilePath(state.fileTree, nodeid);
+  setDocument: (document) => {
+    set({ doc: document });
   },
-  findNodePathByName: (nodename: string) => {
-    const state: FileTreeState = useFileTreeStore.getState();
-    return findFilePathByName(state.fileTree, nodename);
+  setFileTree: (fileTree) => {
+    set({ fileTree });
   },
-  setFileTreeFromApi: async (userId, containerName) => {
-    const data = await axiosFileTree(userId, containerName);
-    if (data) {
-      set({ fileTree: data.children, containerName: data.name });
-    }
+
+  // UpdateNodeName: (nodeId, newName) => {
+  //   {
+  //     const { updateNodeNameAndPath } = useFileTreeNodeUtils();
+  //     const fileTree = useFileTreeStore.getState().fileTree;
+  //     const doc = useFileTreeStore.getState().doc;
+  //     doc.update((root) => {
+  //       root.yorkieContainer.children = updateNodeNameAndPath(
+  //         fileTree,
+  //         nodeId,
+  //         newName,
+  //       );
+  //     }, 'Update node name');
+  //   }
+  // },
+  addNode: (newNode: FileNodeType, parentId?: string | null) => {
+    const fileTree = useFileTreeStore.getState().fileTree;
+    const doc = useFileTreeStore.getState().doc;
+    doc.update((root) => {
+      root.yorkieContainer.children = parentId
+        ? addNodeToTree(fileTree, newNode, parentId)
+        : [...fileTree, newNode];
+      console.log('root.yorkieContainer: ', root.yorkieContainer.toJS());
+    }, 'Add new node');
   },
+  deleteNode: (nodeId) => {
+    const fileTree = useFileTreeStore.getState().fileTree;
+    const doc = useFileTreeStore.getState().doc;
+    doc.update((root) => {
+      root.yorkieContainer.children = removeNodeById(fileTree, nodeId);
+    }, 'Delete node');
+  },
+
   // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => {
   //   set((state) => ({
   //     fileTree: processWebSocketFileEvent(state.fileTree, fileData),
   //   }));
   // },
-  isNewNode: false,
-  setIsNewNode: (isNewNode) => set({ isNewNode }),
 }));

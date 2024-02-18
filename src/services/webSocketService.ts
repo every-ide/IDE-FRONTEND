@@ -25,18 +25,18 @@ export class WebSocketService {
         ProjectId: projectId,
       },
       debug: function (str) {
-        console.log('websocket debug->', str);
+        // console.log('websocket debug->', str);
       },
       onConnect: () => {
         this.isConnected = true;
-        console.log('성공!!!');
+        // console.log('성공!!!');
       },
       onDisconnect: () => {
         this.isConnected = false;
-        console.log('WebSocket 연결 해제됨');
+        // console.log('WebSocket 연결 해제됨');
       },
       onStompError: () => {
-        console.log('STOMP Error 발생');
+        // console.log('STOMP Error 발생');
       },
     });
   }

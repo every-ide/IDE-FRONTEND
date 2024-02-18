@@ -10,8 +10,8 @@ import {
   getFileLanguage,
 } from '@/src/utils/fileTree/langauageSelector';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
-import { axiosOpenFile } from '@/src/api/fileTree/filetreeApi';
 import { useParams } from 'react-router-dom';
+import useFileTreeApi from '@/src/hooks/useFileTreeApi';
 // DiC 아이콘을 대신할 적절한 아이콘을 찾아 import하세요.
 
 interface MyNodeData {
@@ -37,6 +37,7 @@ const Node: FC<NodeProps> = ({
   dragHandle,
   tree,
 }): NodeRendererProps<FileNodeType> => {
+  const { axiosOpenFile } = useFileTreeApi();
   const { workid: containerName } = useParams<{ workid: string }>();
   const { openFile } = useFileStore();
 
@@ -62,6 +63,7 @@ const Node: FC<NodeProps> = ({
   const nodeStyle = node.data.type === 'file' ? 'file-node' : 'folder-node';
 
   const handleNodeClick = () => {
+    console.log('Node clicked:', node.data);
     if (node.data.type === 'file') {
       handleFileClick();
     } else {
