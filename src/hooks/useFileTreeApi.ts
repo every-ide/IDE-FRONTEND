@@ -121,7 +121,8 @@ const useFileTreeApi = () => {
     }
   };
 
-  const axiosDeleteFile = async (containerName: string, path: string) => {
+  const axiosDeleteFile = async (containerName: string, deletePath: string) => {
+    const path = `/${containerName}${deletePath}`;
     try {
       const response = await axiosPrivate.delete(
         `/api/containers/${containerName}/files`,

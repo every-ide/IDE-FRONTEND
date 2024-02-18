@@ -53,14 +53,22 @@ export const findMaxFileNumberByPath = (
   baseFilename: string = 'newfile',
 ): number => {
   let maxNumber = -1; // 기본값 설정
+  const regex = new RegExp(`^${baseFilename}(\\((\\d+)\\))?$`);
 
   // parentId에 해당하는 노드 찾기
   const parentNode = findNodeById(nodes, parentId, null).node;
   if (!parentNode || !parentNode.children) {
-    return maxNumber + 1; // parentId에 해당하는 노드가 없거나 자식이 없는 경우
+    nodes.forEach((node) => {
+      const match = node.name.match(regex);
+      if (match) {
+        const number = match[2] ? parseInt(match[2], 10) : 0;
+        if (number > maxNumber) {
+          maxNumber = number;
+        }
+      }
+    });
+    return maxNumber + 1;
   }
-
-  const regex = new RegExp(`^${baseFilename}(\\((\\d+)\\))?$`);
 
   parentNode.children.forEach((node) => {
     const match = node.name.match(regex);

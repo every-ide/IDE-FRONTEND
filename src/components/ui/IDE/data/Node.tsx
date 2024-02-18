@@ -40,7 +40,6 @@ const Node: FC<NodeProps> = ({
   const { axiosOpenFile } = useFileTreeApi();
   const { workid: containerName } = useParams<{ workid: string }>();
   const { openFile } = useFileStore();
-  const { openFile } = useFileStore();
 
   // 파일 확장자를 기반으로 아이콘 선택
   const IconComponent =
