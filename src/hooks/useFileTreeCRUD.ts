@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import { useFileTreeStore } from '../store/useFileTreeStore';
-import useUserStore from '../store/useUserStore';
 import useFileTreeNodeUtils, { updatePath } from '../utils/fileTree/nodeUtils';
 import useFileTreeApi from './useFileTreeApi';
 import useYorkieHook from './useYorkie';
@@ -18,6 +17,8 @@ import {
 import { isDuplicateName, makePath } from '../utils/fileTree/fileTreeUtils';
 import { v4 as uuidv4 } from 'uuid';
 import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
+import { useDropzone } from 'react-dropzone';
+import { createFileTree } from '../utils/localFileUpload/fileReadUtils';
 
 const useFileTreeCRUD = () => {
   const { fileTree, deleteNode, addNode, doc } = useFileTreeStore();
@@ -25,9 +26,19 @@ const useFileTreeCRUD = () => {
   const { initializeYorkieAndSyncWithZustand } = useYorkieHook();
   const { axiosCreateIsFile, axiosRenameIsFile, axiosDeleteIsFile } =
     useFileTreeApi();
-  const { user } = useUserStore();
   const { workid: containerName } = useParams<{ workid: string }>();
-
+  const { getRootProps, getInputProps } = useDropzone({
+    noClick: true,
+    // 파일을 드랍했을 때 실행될 콜백
+    onDrop: async (acceptedFiles) => {
+      // 여기에서 파일 처리 로직 구현
+      const dropData = await createFileTree(acceptedFiles);
+      console.log('createFileTree(acceptedFiles);: ', dropData);
+      doc.update((root) => {
+        root.yorkieContainer.children.push(...dropData);
+      });
+    },
+  });
   useEffect(() => {
     console.log('파일트리 변경됨 : ', fileTree);
   }, [fileTree]);
@@ -46,7 +57,6 @@ const useFileTreeCRUD = () => {
     const baseFilename = type === 'internal' ? 'newFolder' : 'newFile';
 
     const maxNumber = findMaxFileNumberByPath(fileTree, parentId, baseFilename);
-    console.log('maxNumber: ', maxNumber);
     const newName =
       maxNumber > 0 ? `${baseFilename}(${maxNumber})` : baseFilename;
 
@@ -94,7 +104,6 @@ const useFileTreeCRUD = () => {
     const deletingNode = findNodeById(fileTree, ids[0], null).node;
     deleteNode(ids[0]);
     axiosDeleteIsFile(containerName, deletingNode.path, deletingNode.type);
-    console.log('deletingNode: ', deletingNode);
   };
 
   const onMove: MoveHandler<FileNodeType> = ({
@@ -102,7 +111,9 @@ const useFileTreeCRUD = () => {
     parentId,
     parentNode,
     dragNodes,
+    index,
   }) => {
+    console.log('index: ', index);
     let newDragNodeData: FileNodeType = {} as FileNodeType;
     const dragNodeData = dragNodes[0].data;
     const parentNodeData = parentNode?.data;
@@ -144,6 +155,7 @@ const useFileTreeCRUD = () => {
     onRename,
     onDelete,
     onMove,
+    getRootProps,
   };
 };
 

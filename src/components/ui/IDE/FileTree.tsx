@@ -18,7 +18,8 @@ const Arborist = () => {
   const [term, setTerm] = useState<string>('');
   const treeRef = useRef<TreeApi<FileNodeType> | null>(null);
 
-  const { fileTree, onCreate, onRename, onDelete, onMove } = useFileTreeCRUD(); // 수정된 부분
+  const { fileTree, onCreate, onRename, onDelete, onMove, getRootProps } =
+    useFileTreeCRUD(); // 수정된 부분
 
   return (
     <>
@@ -52,7 +53,7 @@ const Arborist = () => {
           />
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto" {...getRootProps()}>
         {/* Tree 컴포넌트 height가 충분히 있으면 min-h-2000px -> div 태그 지워도됩니다. */}
         <div className="min-h-[2000px]">
           <Tree
