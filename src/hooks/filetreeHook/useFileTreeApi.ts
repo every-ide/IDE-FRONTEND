@@ -1,6 +1,6 @@
-import useAxiosPrivate from './useAxiosPrivate';
-import useUserStore from '../store/useUserStore';
-import { useFileTreeStore } from '../store/useFileTreeStore';
+import useAxiosPrivate from '../useAxiosPrivate';
+import useUserStore from '../../store/useUserStore';
+import { useFileTreeStore } from '../../store/useFileTreeStore';
 
 const useFileTreeApi = () => {
   const axiosPrivate = useAxiosPrivate();

@@ -11,7 +11,7 @@ import {
 } from '@/src/utils/fileTree/langauageSelector';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 import { useParams } from 'react-router-dom';
-import useFileTreeApi from '@/src/hooks/useFileTreeApi';
+import useFileTreeApi from '@/src/hooks/filetreeHook/useFileTreeApi';
 // DiC 아이콘을 대신할 적절한 아이콘을 찾아 import하세요.
 
 interface MyNodeData {

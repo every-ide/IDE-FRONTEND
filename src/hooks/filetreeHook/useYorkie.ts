@@ -1,6 +1,6 @@
 import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 import yorkie, { Document, Indexable } from 'yorkie-js-sdk';
-import useFileTree from '@/src/hooks/useFileTreeApi';
+import useFileTree from '@/src/hooks/filetreeHook/useFileTreeApi';
 const API_KEY = import.meta.env.VITE_YORKIE_API_KEY;
 
 const useYorkieHook = () => {

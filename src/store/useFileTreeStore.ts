@@ -18,8 +18,8 @@ export interface FileTreeState {
 
 export const useFileTreeStore = create<FileTreeState>((set) => ({
   doc: null,
-  containerName: data.name,
-  containerId: data.id,
+  containerName: '',
+  containerId: '',
   fileTree: data.children,
   setDocument: (document) => {
     set({ doc: document });

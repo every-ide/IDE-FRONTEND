@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { useFileTreeStore } from '../store/useFileTreeStore';
-import useFileTreeNodeUtils, { updatePath } from '../utils/fileTree/nodeUtils';
+import { useFileTreeStore } from '../../store/useFileTreeStore';
+import useFileTreeNodeUtils, {
+  updatePath,
+} from '../../utils/fileTree/nodeUtils';
 import useFileTreeApi from './useFileTreeApi';
 import {
   CreateHandler,
@@ -11,17 +13,17 @@ import {
 import {
   findMaxFileNumberByPath,
   findNodeById,
-} from '../utils/fileTree/findNodeUtils';
+} from '../../utils/fileTree/findNodeUtils';
 import {
   isCorrectName,
   isDuplicateName,
   makePath,
-} from '../utils/fileTree/fileTreeUtils';
+} from '../../utils/fileTree/fileTreeUtils';
 import { v4 as uuidv4 } from 'uuid';
-import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
+import { FileNodeType } from '../../types/IDE/FileTree/FileDataTypes';
 import { useDropzone } from 'react-dropzone';
-import { createFileTree } from '../utils/localFileUpload/fileReadUtils';
-import useFileStore from '../store/useFileStore';
+import { createFileTree } from '../../utils/localFileUpload/fileReadUtils';
+import useFileStore from '../../store/useFileStore';
 
 const useFileTreeCRUD = () => {
   const { fileTree, deleteNode, addNode, doc } = useFileTreeStore();

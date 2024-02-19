@@ -4,8 +4,8 @@ import Node from './data/Node';
 import { TbFolderPlus } from 'react-icons/tb';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
-import useFileTreeCRUD from '@/src/hooks/useFileTreeCRUD';
-import useYorkieHook from '@/src/hooks/useYorkie';
+import useFileTreeCRUD from '@/src/hooks/filetreeHook/useFileTreeCRUD';
+import useYorkieHook from '@/src/hooks/filetreeHook/useYorkie';
 import { useParams } from 'react-router-dom';
 import useUserStore from '@/src/store/useUserStore';
 
