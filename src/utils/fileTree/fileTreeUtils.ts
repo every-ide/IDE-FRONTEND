@@ -30,6 +30,9 @@ export const isDuplicateName = (
     return nodes.some((node) => node.name === name);
   }
 
+  if (name == 'newFile') {
+    return true;
+  }
   // 부모 노드의 자식 노드들 중에서 이름이 중복되는 노드가 있는지 검사합니다.
   return parentNode.children?.some((node) => node.name === name) ?? false;
 };
@@ -54,6 +57,7 @@ export const addNodeToTree = (
           : [],
       });
     }
+
     return newNodeArray;
   }, []);
 };

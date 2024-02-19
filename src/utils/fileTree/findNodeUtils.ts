@@ -47,6 +47,41 @@ export const findFilePath = (
   }
   return null;
 };
+export const findMaxFileNumberByPath = (
+  nodes: FileNodeType[],
+  parentId: string,
+  baseFilename: string = 'newfile',
+): number => {
+  let maxNumber = -1; // 기본값 설정
+  const regex = new RegExp(`^${baseFilename}(\\((\\d+)\\))?$`);
+
+  // parentId에 해당하는 노드 찾기
+  const parentNode = findNodeById(nodes, parentId, null).node;
+  if (!parentNode || !parentNode.children) {
+    nodes.forEach((node) => {
+      const match = node.name.match(regex);
+      if (match) {
+        const number = match[2] ? parseInt(match[2], 10) : 0;
+        if (number > maxNumber) {
+          maxNumber = number;
+        }
+      }
+    });
+    return maxNumber + 1;
+  }
+
+  parentNode.children.forEach((node) => {
+    const match = node.name.match(regex);
+    if (match) {
+      const number = match[2] ? parseInt(match[2], 10) : 0;
+      if (number > maxNumber) {
+        maxNumber = number;
+      }
+    }
+  });
+
+  return maxNumber + 1; // 새 파일에 사용할 수 있는 번호 반환
+};
 
 export const findParentNodeById = (
   nodes: FileNodeType[],
@@ -54,9 +89,9 @@ export const findParentNodeById = (
 ): FileNodeType | null => {
   const parentPath = findNodeById(nodes, id, '/').node?.path;
   console.log('parentPath:', parentPath);
-  const lastSlashIndex = parentPath.lastIndexOf('/');
+  const lastSlashIndex = parentPath?.lastIndexOf('/');
   const pathWithoutLastPart =
-    lastSlashIndex > -1 ? parentPath.substring(0, lastSlashIndex) : parentPath;
+    lastSlashIndex > -1 ? parentPath?.substring(0, lastSlashIndex) : parentPath;
 
   if (pathWithoutLastPart === '') {
     return null;

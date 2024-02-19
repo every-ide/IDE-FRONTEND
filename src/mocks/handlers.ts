@@ -308,6 +308,48 @@ export const handlers = [
       needSave: false,
     });
   }),
+  http.post('api/directories', async ({ request }) => {
+    const reqData = await request.json();
+    console.log('디렉토리 포스트 params', reqData);
+    return HttpResponse.json(null, {
+      status: 200,
+    });
+  }),
+  http.delete('/api/directories', async ({ request }) => {
+    const reqData = await request.json();
+    console.log('디렉토리 삭제 params', reqData);
+    return HttpResponse.json(null, {
+      status: 200,
+    });
+  }),
+  http.patch('/api/directories', async ({ request }) => {
+    const reqData = await request.json();
+    console.log('디렉토리 패치 :', reqData);
+    return HttpResponse.json(null, {
+      status: 200,
+    });
+  }),
+  http.post('/api/files', async ({ request }) => {
+    const reqData = await request.json();
+    console.log('파일 포스트params', reqData);
+    return HttpResponse.json(null, {
+      status: 200,
+    });
+  }),
+  http.patch('/api/files', async ({ request }) => {
+    const reqData = await request.json();
+    console.log('파일 패치 params', reqData);
+    return HttpResponse.json(null, {
+      status: 200,
+    });
+  }),
+  http.delete('/api/containers/:containerName/files', async ({ request }) => {
+    const reqData = await request.json();
+    console.log('파일 삭제 : ', reqData);
+    return HttpResponse.json(null, {
+      status: 200,
+    });
+  }),
   http.patch('/api/files', async ({ request }) => {
     const reqData = await request.json();
     console.log('코드 저장 request body: ', reqData);

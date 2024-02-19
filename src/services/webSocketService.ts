@@ -12,11 +12,9 @@ export interface PublishTermial {
 
 export class WebSocketService {
   client: Client;
-  isConnected: boolean;
 
   constructor(options: WebSocketConnectOptions) {
     const { token, projectId } = options;
-    this.isConnected = false;
 
     this.client = new Client({
       brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
@@ -25,18 +23,16 @@ export class WebSocketService {
         ProjectId: projectId,
       },
       debug: function (str) {
-        console.log('websocket debug->', str);
+        // console.log('websocket debug->', str);
       },
       onConnect: () => {
-        this.isConnected = true;
-        console.log('성공!!!');
+        // console.log('성공!!!');
       },
       onDisconnect: () => {
-        this.isConnected = false;
-        console.log('WebSocket 연결 해제됨');
+        // console.log('WebSocket 연결 해제됨');
       },
       onStompError: () => {
-        console.log('STOMP Error 발생');
+        // console.log('STOMP Error 발생');
       },
     });
   }

@@ -25,7 +25,7 @@ const useWebSocketStore = create<WebSocketState>((set) => ({
     };
 
     console.log('connect zustand', webSocketService);
-    set({ webSocketService, isConnected: webSocketService.isConnected }); // 초기 상태
+    set({ webSocketService, isConnected: false }); // 초기 상태
 
     webSocketService.activate(); // 연결 활성화
   },

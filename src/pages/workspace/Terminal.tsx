@@ -5,6 +5,7 @@ import { StompSubscription } from '@stomp/stompjs';
 import { useParams } from 'react-router-dom';
 import type { PublishTermial } from '@/src/services/webSocketService';
 import 'xterm/css/xterm.css';
+
 const Terminal = () => {
   const { workid: projectId } = useParams<{ workid: string }>();
   const { webSocketService, isConnected } = useWebSocketStore();
@@ -18,7 +19,7 @@ const Terminal = () => {
       console.log('sendCommand', projectId, body);
       if (webSocketService && isConnected && projectId) {
         webSocketService.client.publish({
-          destination: `/app/room/${projectId}/terminal/command`,
+          destination: `/app/container/${projectId}/terminal`,
           body: JSON.stringify(body),
         });
       }
@@ -34,7 +35,7 @@ const Terminal = () => {
         isConnected,
       );
       const subscription: StompSubscription = webSocketService.client.subscribe(
-        `/user/queue/room/${projectId}/terminal`,
+        `/user/queue/container/${projectId}/terminal`,
         (message) => {
           console.log('터미널 구독 message', message);
           const { success, content, path } = JSON.parse(message.body);
