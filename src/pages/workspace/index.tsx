@@ -7,6 +7,7 @@ import Navigation from './Navigation';
 import Footer from './Footer';
 import Editor from './Editor';
 import WorkInfo from './WorkInfo';
+import { cn } from '@/src/utils/style';
 
 const WorkspacePage = () => {
   const { connect, disconnect, webSocketService } = useWebSocketStore(
@@ -65,7 +66,9 @@ const WorkspacePage = () => {
         <Sidebar />
         <div className="no-scrollbar relative flex flex-1 flex-col ">
           <Editor />
-          {isOpenWorkInfo && <WorkInfo toggleTerminal={toggleTerminal} />}
+          <div className={cn(isOpenWorkInfo ? 'block' : 'hidden')}>
+            <WorkInfo toggleTerminal={toggleTerminal} />
+          </div>
         </div>
       </div>
       <Footer toggleTerminal={toggleTerminal} isOpenWorkInfo={isOpenWorkInfo} />

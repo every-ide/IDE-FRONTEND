@@ -1,7 +1,6 @@
 import useWebSocketStore from '@/src/store/useWebSocketStore';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Terminal as Xterm } from 'xterm';
-import { StompSubscription } from '@stomp/stompjs';
 import { useParams } from 'react-router-dom';
 import type { PublishTermial } from '@/src/services/webSocketService';
 import 'xterm/css/xterm.css';
@@ -34,7 +33,7 @@ const Terminal = () => {
 
   useEffect(() => {
     if (webSocketService && containerId && isConnected) {
-      const subscription: StompSubscription = webSocketService.client.subscribe(
+      webSocketService.client.subscribe(
         `/user/queue/container/${containerId}/terminal`,
         (message) => {
           const { success, content, path } = JSON.parse(message.body);
@@ -45,7 +44,10 @@ const Terminal = () => {
           setCurrentPath(path);
         },
       );
-      return () => subscription.unsubscribe();
+
+      xtermRef.current?.onData(handleInput);
+
+      // stomp disconnect시, 자동 구독해제
     }
   }, [webSocketService, containerId, isConnected]);
 
@@ -74,8 +76,6 @@ const Terminal = () => {
       }
     }
   };
-
-  xtermRef.current?.onData(handleInput);
 
   const processCommand = () => {
     const command = currentCommandRef.current.trim();
