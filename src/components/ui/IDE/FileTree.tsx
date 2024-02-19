@@ -24,12 +24,14 @@ const Arborist = () => {
   useEffect(() => {
     async function initializeYorkie() {
       console.log('projectName: ', projectName);
-      await initializeYorkieAndSyncWithZustand(projectName);
+      if (projectName) {
+        await initializeYorkieAndSyncWithZustand(projectName);
+      }
     }
     if (projectName && userId) {
       initializeYorkie();
     }
-  }, [userId]);
+  }, [projectName, userId]);
   return (
     <>
       <div className="border-b-2 border-mdark">
