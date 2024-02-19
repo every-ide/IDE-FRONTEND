@@ -34,12 +34,16 @@ const useFileTreeCRUD = () => {
       // 여기에서 파일 처리 로직 구현
       const dropData = await createFileTree(acceptedFiles);
       console.log('createFileTree(acceptedFiles);: ', ...dropData);
-      dropData.forEach((item) => {
-        if (isDuplicateName(fileTree, item.id, item.name)) {
-          console.log('중복된 이름입니다.');
-          return;
-        }
-      });
+      const isDuplicate = dropData.some((item) =>
+        fileTree.some((node) => node.name === item.name),
+      );
+
+      // 중복된 파일이 있으면 경고 메시지를 출력하고 함수를 종료
+      if (isDuplicate) {
+        alert('중복된 파일이 있어 처리를 중지합니다.');
+        return; // 함수 종료
+      }
+
       doc.update((root) => {
         dropData.forEach((item) => root.yorkieContainer.children.push(item));
       });
