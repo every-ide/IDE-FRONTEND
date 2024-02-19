@@ -57,20 +57,6 @@ const useYorkieHook = () => {
     return unsubscribe;
   };
 
-  // const initializeYorkieAndSyncWithZustand = async (containerName: string) => {
-  //   const { client, doc } = await initializeYorkie(containerName);
-
-  //   const isInitialized = await checkDocumentInitialization(doc);
-  //   if (!isInitialized) {
-  //     // 초기화 로직 구현
-  //   } else {
-  //     const fileTree = doc.getRoot().yorkieContainer.children.toJS();
-  //     setFileTree(fileTree); // 초기 상태 설정
-  //   }
-
-  //   return { client, doc };
-  // };
-
   const checkDocumentInitialization = async (doc) => {
     const root = doc.getRoot();
     // 문서의 root에 yorkieContainer가 존재하는지 확인
