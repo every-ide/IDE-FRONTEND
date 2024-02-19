@@ -9,7 +9,7 @@ const useYorkieHook = () => {
     useFileTreeStore();
   const { axiosFileTree } = useFileTree();
 
-  // const {containerId : projectId } = useParams<{containerId: string}>();
+  const { containerId: projectId } = useParams<{ containerId: string }>();
 
   const initializeYorkieAndSyncWithZustand = async (projectName: string) => {
     const client = new yorkie.Client('https://api.yorkie.dev', {
@@ -18,11 +18,12 @@ const useYorkieHook = () => {
     await client.activate();
 
     const axiosFile = await axiosFileTree(projectName);
-    const doc = new yorkie.Document(`${projectName}-${axiosFile.id}`);
+    const doc = new yorkie.Document(`${projectName}-${projectId}`);
 
     // Zustand 스토어에 yorkie 문서와 컨테이너 아이디를 설정
-    // await setContainerId(projectId);
-    setContainerId(axiosFile.id);
+    setContainerId(projectId);
+    console.log('projectId: ', projectId);
+    // setContainerId(axiosFile.id);
     setDocument(doc);
     setContainerName(projectName);
     await client.attach(doc);

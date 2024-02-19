@@ -82,6 +82,14 @@ const Node: FC<NodeProps> = ({
         content: '',
       };
 
+      console.log(
+        'id, path, name, content, getFileLanguage(name): ',
+        id,
+        path,
+        name,
+        content,
+        getFileLanguage(name),
+      );
       // Zustand File Store 상태 추가
       openFile(id, path, name, content, getFileLanguage(name));
     } catch (error) {

@@ -9,28 +9,6 @@ const useFileTreeNodeUtils = () => {
     nodeId: string,
     newName: string,
   ): FileNodeType[] => {
-    // 경로 업데이트를 위한 내부 함수
-    // const updatePath = (node: FileNodeType, newPath: string): FileNodeType => {
-    //   if (node.type === 'file') {
-    //     console.log('이것은 파일이여!');
-    //     updateFileNameAndPath(node.id, newPath, newName);
-    //   } else {
-    //     console.log('이것은 디렉토리이여!');
-    //     updateFileNameAndPath(node.id, newPath);
-    //   }
-    //   // 자식 노드가 있는 경우, 각 자식에 대해 재귀적으로 업데이트
-    //   const updatedChildren = node.children?.map((child) => {
-    //     const updatedChildPath = `${newPath}/${child.name}`;
-    //     return updatePath(child, updatedChildPath); // 업데이트된 자식 노드 반환
-    //   });
-
-    //   return {
-    //     ...node,
-    //     path: newPath,
-    //     ...(node.children && { children: updatedChildren }), // 업데이트된 자식 노드들을 반영
-    //   };
-    // };
-
     // 전체 트리를 순회하며 대상 노드와 그 자식 노드들의 이름과 경로 업데이트
     return nodes.map((node) => {
       if (node.id === nodeId) {
