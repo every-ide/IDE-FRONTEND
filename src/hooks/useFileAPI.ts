@@ -31,6 +31,8 @@ const useFileAPI = () => {
           theme: 'dark',
         });
       }
+
+      return response;
     } catch (error) {
       console.error(error);
 

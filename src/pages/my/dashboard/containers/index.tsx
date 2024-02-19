@@ -46,6 +46,7 @@ const ContainerPage = () => {
         {containerList.map((c) => (
           <ContainerBox
             key={c.name}
+            containerId={c.id}
             containerName={c.name}
             description={c.description}
             language={c.language}

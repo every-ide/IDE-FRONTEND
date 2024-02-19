@@ -6,8 +6,9 @@ import {
   TabsTrigger,
 } from '@/src/components/ui/tabs';
 import useFileStore from '@/src/store/useFileStore';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaXmark } from 'react-icons/fa6';
+import { toast } from 'react-toastify';
 
 const Editor = () => {
   const { files, selectedFileId, closeFile, selectFile } = useFileStore();
@@ -19,6 +20,20 @@ const Editor = () => {
       setTab(selectedFileId);
     }
   }, [selectedFileId, closeFile]);
+
+  const handleTabClose = (fileId: string, needSave: boolean) => {
+    if (needSave) {
+      toast.error('파일을 저장해주세요.', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        theme: 'dark',
+      });
+    } else {
+      closeFile(fileId);
+    }
+  };
 
   return (
     <main className="h-[calc(100vh-96px)] flex-1 overflow-y-auto bg-mdark">
@@ -33,16 +48,17 @@ const Editor = () => {
           {files?.map((file) => (
             <TabsTrigger variant="editor" key={file.id} value={file.id}>
               {file.name}
+              {file.needSave ? <span className="text-[10px]">●</span> : ''}
               <FaXmark
                 className="text-[#888] hover:text-white"
-                onClick={() => closeFile(file.id)}
+                onClick={() => handleTabClose(file.id, file.needSave)}
               />
             </TabsTrigger>
           ))}
         </TabsList>
 
         {files?.map((file) => (
-          <TabsContent key={file.id} value={file.id} asChild>
+          <TabsContent key={file.id} value={file.id}>
             <CodeEditorWindow
               fileId={file.id}
               fileName={file.name}

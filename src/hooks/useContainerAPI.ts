@@ -52,14 +52,7 @@ const useContainerAPI = () => {
 
       // Zustand store : containerList에 추가
       // -> backend 응답값으로 대체하기!!
-      addContainer({
-        name: containerName,
-        description,
-        active: true,
-        createDate: new Date(),
-        lastModifiedDate: new Date(),
-        language,
-      });
+      addContainer(response.data);
 
       // 새 창에서 컨테이너 열기
       window.open(
@@ -71,9 +64,6 @@ const useContainerAPI = () => {
   };
 
   const getContainersData = async () => {
-    // Test용!!!! (추후 삭제)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
     const response = await axiosPrivate.get(`/api/${userId}/containers`);
 
     if (response.status === 200) {
@@ -83,9 +73,6 @@ const useContainerAPI = () => {
   };
 
   const deleteContainerData = async (containerName: string) => {
-    // Test용!!!! (추후 삭제)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
     const response = await axiosPrivate.delete('/api/containers', {
       data: {
         email,

@@ -116,6 +116,7 @@ export const handlers = [
     return HttpResponse.json(
       [
         {
+          id: '1',
           name: '1-container',
           description:
             'new container for my toy project hahahahahahhhahahahahahahahahahahahahah!',
@@ -125,6 +126,7 @@ export const handlers = [
           language: 'java',
         },
         {
+          id: '2',
           name: '2-container',
           description: 'new container for my toy project !',
           active: true,
@@ -133,6 +135,7 @@ export const handlers = [
           language: 'javascript',
         },
         {
+          id: '3',
           name: '3-container',
           description: 'new container for my toy project !',
           active: true,
@@ -141,6 +144,7 @@ export const handlers = [
           language: 'python',
         },
         {
+          id: '4',
           name: 'Container 4',
           description: 'new container for my toy project !',
           active: false,
@@ -149,6 +153,7 @@ export const handlers = [
           language: 'javascript',
         },
         {
+          id: '5',
           name: 'Container 5',
           description: 'new container for my toy project !',
           active: true,
@@ -157,6 +162,7 @@ export const handlers = [
           language: 'java',
         },
         {
+          id: '6',
           name: 'Container 6',
           description: 'new container for my toy project !',
           active: false,
@@ -181,9 +187,20 @@ export const handlers = [
   http.post('/api/containers', async ({ request }) => {
     const reqData = await request.json();
     console.log('params', reqData);
-    return HttpResponse.json(null, {
-      status: 200,
-    });
+    return HttpResponse.json(
+      {
+        id: '7',
+        name: 'Container 7',
+        description: 'new container for my toy project !',
+        active: true,
+        createDate: '2024-02-13T15:38:23.250293',
+        lastModifiedDate: '2024-02-13T15:38:23.250293',
+        language: 'python',
+      },
+      {
+        status: 201,
+      },
+    );
   }),
   // 🪐 PATCH: 컨테이너 정보 수정
   // request body 에시

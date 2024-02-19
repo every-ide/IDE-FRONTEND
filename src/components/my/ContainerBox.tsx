@@ -28,6 +28,7 @@ import useUserStore from '@/src/store/useUserStore';
 import { formatDate } from '@/src/utils/formatDate';
 
 interface IContainerBoxProps {
+  containerId: string;
   containerName: string;
   description: string;
   language: string;
@@ -45,6 +46,7 @@ export interface IUpdateContainerForm {
 }
 
 const ContainerBox = ({
+  containerId,
   containerName,
   description,
   language,
@@ -76,9 +78,12 @@ const ContainerBox = ({
   });
 
   // 컨테이너 열기 버튼 onClick action
-  const navigateToUrlInNewTab = (containerName: string) => {
+  const navigateToUrlInNewTab = (
+    containerName: string,
+    containerId: string,
+  ) => {
     window.open(
-      `http://localhost:5173/workspace/${containerName}`,
+      `http://localhost:5173/workspace/${containerName}/${containerId}`,
       '_blank',
       'noopener,noreferrer',
     );
@@ -302,7 +307,7 @@ const ContainerBox = ({
           </div>
         )}
         <Button
-          onClick={() => navigateToUrlInNewTab(containerName)}
+          onClick={() => navigateToUrlInNewTab(containerName, containerId)}
           size="sm"
           disabled={isDeleting}
         >

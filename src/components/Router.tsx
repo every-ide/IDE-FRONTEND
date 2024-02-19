@@ -29,7 +29,10 @@ export default function Router() {
           <Route path="own" element={<MyContainerPage />} />
           <Route path="shared" element={<SharedContainerPage />} />
         </Route>
-        <Route path="/workspace/:workid" element={<WorkspacePage />} />
+        <Route
+          path="/workspace/:containerName/:containerId"
+          element={<WorkspacePage />}
+        />
         <Route path="/my/info" element={<PersonalInfoForm />} />
         <Route path="/together" element={<TogetherPage />} />
         <Route path="/teamspace/:containerName" element={<TeamSpacePage />} />

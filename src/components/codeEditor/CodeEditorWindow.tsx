@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { Transaction } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import useFileStore from '@/src/store/useFileStore';
-import yorkie, { type Text } from 'yorkie-js-sdk';
+import yorkie, { type Text, Client, Document, Indexable } from 'yorkie-js-sdk';
 import createEditorState from './CreateEditorState';
 import useFileAPI from '@/src/hooks/useFileAPI';
 
@@ -15,6 +15,7 @@ interface ICodeEditorWindowProps {
 }
 
 export type YorkieDoc = {
+  backendSaved: boolean;
   content: Text;
 };
 
@@ -27,6 +28,8 @@ const CodeEditorWindow = ({
 }: ICodeEditorWindowProps) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const codemirrorViewRef = useRef<EditorView>();
+  const yorkieClientRef = useRef<Client>();
+  const yorkieDocRef = useRef<Document<YorkieDoc, Indexable>>();
   const { setYorkieDoc, setNeedSave, getYorkieDoc } = useFileStore();
   const { saveFileContent } = useFileAPI();
 
@@ -37,9 +40,11 @@ const CodeEditorWindow = ({
     });
 
     await client.activate();
+    yorkieClientRef.current = client;
 
     // 02. Create new yorkie document
     const doc = new yorkie.Document<YorkieDoc>(`${fileId}-${fileName}`); // Document key: [containerName]-[fileName]
+    yorkieDocRef.current = doc;
 
     await client.attach(doc); // 생성한 doc을 client에 attach : 로컬 Document의 변경사항이 원격지의 Document와 동기화됨
 
@@ -68,7 +73,15 @@ const CodeEditorWindow = ({
 
     doc.subscribe((event) => {
       if (event.type === 'remote-change') {
+        const backendSaved = doc.getRoot().backendSaved;
+
         syncText();
+
+        if (backendSaved) {
+          setNeedSave(fileId, false);
+        } else {
+          setNeedSave(fileId, true);
+        }
       }
     });
 
@@ -98,11 +111,14 @@ const CodeEditorWindow = ({
                 root.content.edit(fromA + adj, toA + adj, insertText);
               }, `update content by ${client.getID()}`);
               adj += insertText.length - (toA - fromA);
+
+              // zustand store state change
+              doc.update((root) => {
+                root.backendSaved = false;
+              }, `update backendSaved by ${client.getID()}`);
+              setNeedSave(fileId, true);
             });
           }
-
-          // zustand store state change
-          setNeedSave(fileId, true);
         }
       },
     );
@@ -122,16 +138,32 @@ const CodeEditorWindow = ({
 
   useEffect(() => {
     initializeYorkieEditor();
+
+    return () => {
+      // Unmount시 yorkie client & document detaching
+      if (yorkieClientRef.current && yorkieDocRef.current !== undefined) {
+        yorkieClientRef.current.detach(yorkieDocRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
-    const handleCodeSave = (event: KeyboardEvent) => {
+    const handleCodeSave = async (event: KeyboardEvent) => {
       if (event.key === 's' && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
-        saveFileContent({
+
+        const response = await saveFileContent({
           filePath,
           newContent: getYorkieDoc(fileId)!.getRoot().content.toString(),
         });
+
+        if (response?.status === 200) {
+          yorkieDocRef.current!.update((root) => {
+            root.backendSaved = true;
+          }, `update backendSaved by ${yorkieClientRef.current!.getID()}`);
+
+          setNeedSave(fileId, false);
+        }
       }
     };
 
