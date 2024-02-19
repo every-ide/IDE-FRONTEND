@@ -163,6 +163,9 @@ button {
 }
 
 .content ul li:nth-child(3) {
-  color: white;
+  font-weight: bold;
+}
+
+.folder-node {
   font-weight: bold;
 }

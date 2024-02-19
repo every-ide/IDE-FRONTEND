@@ -26,10 +26,7 @@ const SignUpForm = () => {
   const signUpAction = async ({ email, name, password }: TSignUpForm) => {
     // 회원가입 request
     try {
-      // Test용!!!! (추후 삭제)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // login request (axios)
+      // signup request (axios)
       const res = await axiosPublic.post(
         SIGNUP_URL,
         JSON.stringify({ email, name, password }),
@@ -49,10 +46,28 @@ const SignUpForm = () => {
           theme: 'dark',
         });
       }
-    } catch (error) {
-      // 에러
-      if (error instanceof Error) {
-        console.error(error.message);
+    } catch (error: any) {
+      // 서버 응답 없음
+      if (!error?.response) {
+        toast.error('No Server Response', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          theme: 'dark',
+        });
+      }
+      // 중복 이메일인 경우
+      else if (error.response.status === 400) {
+        toast.error('이미 가입된 이메일 주소입니다.', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          theme: 'dark',
+        });
+      } else {
+        console.log('error :>> ', error);
 
         toast.error('문제가 발생했습니다.다시 시도해주세요.', {
           position: 'top-right',

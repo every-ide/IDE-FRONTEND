@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }: TChildProps) => {
   return (
     <div className="h-dvh bg-mdark">
       <Header />
-      <div className="flex h-[calc(100vh-80px)] flex-row">
+      <div className="flex h-[calc(100vh-87px)] flex-row">
         <Sidebar />
         <div className="w-[80%]">
           <SearchBar />

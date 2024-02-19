@@ -5,6 +5,7 @@ interface IAuthInput {
   registerOptions: any;
   placeholder: string;
   errors: any;
+  isReadOnly?: boolean;
 }
 
 const AuthInput = ({
@@ -14,6 +15,7 @@ const AuthInput = ({
   registerOptions,
   placeholder,
   errors,
+  isReadOnly = false,
 }: IAuthInput) => {
   return (
     <div className="flex flex-col">
@@ -21,6 +23,7 @@ const AuthInput = ({
       <input
         type={type}
         name={name}
+        readOnly={isReadOnly}
         {...registerOptions}
         placeholder={placeholder}
         className={`h-[44px] rounded-lg px-3 text-black focus:shadow-md focus:shadow-accent focus:outline-0 ${!errors[name] ? 'mb-[28px]' : 'mb-0'}`}
