@@ -8,6 +8,11 @@ interface WorkInfoProps {
 }
 const WorkInfo: FC<WorkInfoProps> = ({ toggleTerminal }) => {
   const [cancelHovered, setCancelHovered] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState('terminal');
+
+  const handleTabClick = (tabValue: string) => {
+    setActiveTab(tabValue);
+  };
 
   return (
     <div className="border-l-2 border-mdark bg-mdark">
@@ -27,7 +32,7 @@ const WorkInfo: FC<WorkInfoProps> = ({ toggleTerminal }) => {
           topLeft: false,
         }}
       >
-        <Tabs defaultValue="terminal">
+        {/* <Tabs defaultValue="terminal">
           <div className="flex items-center justify-between border-b-2 border-mdark bg-ldark">
             <TabsList>
               <TabsTrigger value="debug">디버그</TabsTrigger>
@@ -54,7 +59,32 @@ const WorkInfo: FC<WorkInfoProps> = ({ toggleTerminal }) => {
             <Terminal />
           </TabsContent>
           <TabsContent value="search">검색 탭입니다.</TabsContent>
-        </Tabs>
+        </Tabs> */}
+        <div className="work-info">
+          <div className="tabs">
+            <button onClick={() => setActiveTab('debug')}>디버그</button>
+            <button onClick={() => setActiveTab('terminal')}>터미널</button>
+            <button onClick={() => setActiveTab('search')}>검색</button>
+          </div>
+          <div
+            className="tab-content"
+            style={{ display: activeTab === 'debug' ? 'block' : 'none' }}
+          >
+            <div>디버그 탭입니다.</div>
+          </div>
+          <div
+            className="tab-content"
+            style={{ display: activeTab === 'terminal' ? 'block' : 'none' }}
+          >
+            <Terminal />
+          </div>
+          <div
+            className="tab-content"
+            style={{ display: activeTab === 'search' ? 'block' : 'none' }}
+          >
+            <div>검색 탭입니다.</div>
+          </div>
+        </div>
       </Resizable>
     </div>
   );
