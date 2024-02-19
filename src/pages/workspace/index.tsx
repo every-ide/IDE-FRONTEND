@@ -17,7 +17,7 @@ const WorkspacePage = () => {
     }),
   );
 
-  const { workid: projectId } = useParams<{ workid: string }>();
+  const { containerId: projectId } = useParams<{ containerId: string }>();
   const accessToken = localStorage.getItem('accessToken');
   const [isOpenWorkInfo, setIsOpenWorkInfo] = useState<boolean>(true);
 

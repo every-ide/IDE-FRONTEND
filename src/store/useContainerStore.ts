@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { IUpdateContainerForm } from '../components/my/ContainerBox';
 
 interface IContainer {
+  id: string;
   name: string;
   description: string;
   active: boolean;
