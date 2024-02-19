@@ -134,6 +134,11 @@ const CodeEditorWindow = ({
 
     // 07. zustand fileStore에 yorkieDoc 저장
     setYorkieDoc(fileId, doc);
+
+    // 이미 다른 유저가 편집 중인 경우, yorkie doc의 backendSaved값에 따라 needSave값 Set
+    if (!doc.getRoot().backendSaved) {
+      setNeedSave(fileId, !doc.getRoot().backendSaved);
+    }
   }, []);
 
   useEffect(() => {
