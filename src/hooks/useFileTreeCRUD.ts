@@ -14,7 +14,11 @@ import {
   findMaxFileNumberByPath,
   findNodeById,
 } from '../utils/fileTree/findNodeUtils';
-import { isDuplicateName, makePath } from '../utils/fileTree/fileTreeUtils';
+import {
+  isCorrectName,
+  isDuplicateName,
+  makePath,
+} from '../utils/fileTree/fileTreeUtils';
 import { v4 as uuidv4 } from 'uuid';
 import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
 import { useDropzone } from 'react-dropzone';
@@ -91,6 +95,9 @@ const useFileTreeCRUD = () => {
   };
 
   const onRename: RenameHandler<FileNodeType> = async ({ id, name, node }) => {
+    if (!isCorrectName(name)) {
+      return;
+    }
     if (isDuplicateName(fileTree, id, name)) {
       console.log('중복된 이름입니다.');
       return;
