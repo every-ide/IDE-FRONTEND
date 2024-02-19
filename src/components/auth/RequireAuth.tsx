@@ -1,9 +1,7 @@
-import { axiosPublic } from '@/src/api/axios';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import useUserStore from '@/src/store/useUserStore';
-import { AxiosError } from 'axios';
 import useLogout from '@/src/hooks/useLogout';
 
 const RequireAuth = () => {
