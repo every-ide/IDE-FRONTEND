@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useFileTreeStore } from '../../store/useFileTreeStore';
-import useFileTreeNodeUtils from './useNodeUtils';
+import useFileTreeNodeUtils, { updatePath } from './useNodeUtils';
 import useFileTreeApi from './useFileTreeApi';
 import {
   CreateHandler,
@@ -33,7 +33,7 @@ const useFileTreeCRUD = () => {
     axiosUploadLocalFile,
   } = useFileTreeApi();
   const { closeFile } = useFileStore();
-  const { workid: containerName } = useParams<{ workid: string }>();
+  const { containerName: projectName } = useParams<{ containerName: string }>();
   const { getRootProps } = useDropzone({
     noClick: true,
     // 파일을 드랍했을 때 실행될 콜백
@@ -89,7 +89,7 @@ const useFileTreeCRUD = () => {
     addNode(newNode, parentId);
 
     try {
-      await axiosCreateIsFile(containerName, newPath, newNode.type);
+      await axiosCreateIsFile(projectName, newPath, newNode.type);
     } catch (error) {
       console.error('File creation error:', error);
       throw error;
@@ -112,7 +112,7 @@ const useFileTreeCRUD = () => {
     const oldPath = node.data.path;
     const newPath = oldPath.substring(0, oldPath.lastIndexOf('/')) + `/${name}`;
     try {
-      await axiosRenameIsFile(containerName, oldPath, newPath, node.data.type);
+      await axiosRenameIsFile(projectName, oldPath, newPath, node.data.type);
     } catch (error) {
       console.error('File renaming error:', error);
       throw error;
@@ -124,7 +124,7 @@ const useFileTreeCRUD = () => {
     const deletingNode = findNodeById(fileTree, ids[0], null).node;
     deleteNode(ids[0]);
     closeFile(ids[0]);
-    axiosDeleteIsFile(containerName, deletingNode.path, deletingNode.type);
+    axiosDeleteIsFile(projectName, deletingNode.path, deletingNode.type);
   };
 
   const onMove: MoveHandler<FileNodeType> = ({

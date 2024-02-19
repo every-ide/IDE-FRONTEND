@@ -1,24 +1,30 @@
 import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 import yorkie, { Document, Indexable } from 'yorkie-js-sdk';
 import useFileTree from '@/src/hooks/filetreeHook/useFileTreeApi';
+import { useParams } from 'react-router-dom';
 const API_KEY = import.meta.env.VITE_YORKIE_API_KEY;
 
 const useYorkieHook = () => {
-  const { setFileTree, setDocument, setContainerId } = useFileTreeStore();
+  const { setFileTree, setDocument, setContainerId, setContainerName } =
+    useFileTreeStore();
   const { axiosFileTree } = useFileTree();
 
-  const initializeYorkieAndSyncWithZustand = async (containerName: string) => {
+  // const {containerId : projectId } = useParams<{containerId: string}>();
+
+  const initializeYorkieAndSyncWithZustand = async (projectName: string) => {
     const client = new yorkie.Client('https://api.yorkie.dev', {
       apiKey: API_KEY,
     });
     await client.activate();
 
-    const axiosFile = await axiosFileTree(containerName);
-    const doc = new yorkie.Document(`${containerName}-${axiosFile.id}`);
+    const axiosFile = await axiosFileTree(projectName);
+    const doc = new yorkie.Document(`${projectName}-${axiosFile.id}`);
 
     // Zustand 스토어에 yorkie 문서와 컨테이너 아이디를 설정
-    await setContainerId(axiosFile.id);
-    await setDocument(doc);
+    // await setContainerId(projectId);
+    setContainerId(axiosFile.id);
+    setDocument(doc);
+    setContainerName(projectName);
     await client.attach(doc);
 
     // 파일트리 변경을 구독하고, 초기화 여부를 확인
@@ -68,8 +74,19 @@ const useYorkieHook = () => {
       return false;
     }
   };
+
+  const detachDocument = async (client, doc) => {
+    try {
+      await client.deactivate(); // 클라이언트 비활성화
+      await client.detach(doc); // 문서를 클라이언트로부터 분리
+      console.log('문서가 성공적으로 분리되었습니다.');
+    } catch (error) {
+      console.error('문서 분리 중 오류 발생:', error);
+    }
+  };
   return {
     initializeYorkieAndSyncWithZustand,
+    detachDocument,
   };
 };
 

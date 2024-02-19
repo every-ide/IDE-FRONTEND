@@ -10,10 +10,9 @@ export interface FileTreeState {
   setFileTree: (fileTree: FileNodeType[]) => void;
   setDocument: (document: any) => void;
   setContainerId: (containerId: string) => void;
-  // UpdateNodeName: (nodeId: string, newName: string) => void;
+  setContainerName: (containerName: string) => void;
   addNode: (newNode: FileNodeType, parentId?: string | null) => void;
   deleteNode: (nodeids: string | null) => void;
-  // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => void;
 }
 
 export const useFileTreeStore = create<FileTreeState>((set) => ({
@@ -29,6 +28,9 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
   },
   setContainerId: (containerId) => {
     set({ containerId });
+  },
+  setContainerName: (containerName) => {
+    set({ containerName });
   },
   addNode: (newNode: FileNodeType, parentId?: string | null) => {
     const fileTree = useFileTreeStore.getState().fileTree;

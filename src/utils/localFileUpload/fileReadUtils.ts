@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export async function createFileTree(files: File[]) {
   const root = [];
-  const content = '';
+  // const content = '';
 
   root.push(fileMetadataToObject(files[0], `/${files[0].name}`));
   console.log('root: ', root);
@@ -47,7 +47,7 @@ export async function createFileTree(files: File[]) {
 }
 
 // fileMetadataToObject 함수 수정. content 인자 추가
-export function fileMetadataToObject(file, filePath?) {
+export function fileMetadataToObject(file: File, filePath?: string) {
   return {
     id: uuidv4(),
     name: file.name,
@@ -57,16 +57,21 @@ export function fileMetadataToObject(file, filePath?) {
   };
 }
 
-export function readFileContent(file) {
+export function readFileContent(file: File) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onload = (event) => {
-      resolve(event.target.result); // 파일 내용을 resolve로 반환
+      if (event.target) {
+        resolve(event.target.result); // 파일 내용을 resolve로 반환
+      } else {
+        reject(new Error('Event target is null.'));
+      }
     };
 
     reader.onerror = (event) => {
-      reject(event.target.error); // 에러가 발생하면 reject
+      const error = event.target?.error; // Add null check here
+      reject(error); // 에러가 발생하면 reject
     };
 
     reader.readAsText(file); // 파일을 텍스트로 읽기 시작

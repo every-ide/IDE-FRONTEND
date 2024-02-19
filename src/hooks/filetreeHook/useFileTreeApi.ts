@@ -25,7 +25,7 @@ const useFileTreeApi = () => {
     }
   };
 
-  const axiosOpenFile = async (containerId: string, path: string) => {
+  const axiosOpenFile = async (path: string) => {
     try {
       const response = axiosPrivate.get(
         `api/containers/${containerId}/files?path=${path}`,
@@ -182,7 +182,8 @@ const useFileTreeApi = () => {
   };
 
   const axiosUploadLocalFile = async (newPath: string, file: File) => {
-    const path = `/${containerName}/${newPath}`;
+    const path = `/${containerName}${newPath}`;
+    console.log('containerName: ', containerName);
     const formData = new FormData();
     formData.append('file', file);
     console.log('file: ', file);

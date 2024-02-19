@@ -15,7 +15,7 @@ const Arborist = () => {
   const { initializeYorkieAndSyncWithZustand } = useYorkieHook();
   const { fileTree, onCreate, onRename, onDelete, onMove, getRootProps } =
     useFileTreeCRUD(); // 수정된 부분
-  const { workid: containerName } = useParams<{ workid: string }>();
+  const { containerName: projectName } = useParams<{ containerName: string }>();
   const { userId } = { ...useUserStore((state) => state.user) };
   useEffect(() => {
     console.log('파일트리 변경됨 : ', fileTree);
@@ -23,10 +23,10 @@ const Arborist = () => {
 
   useEffect(() => {
     async function initializeYorkie() {
-      console.log('containerName: ', containerName);
-      await initializeYorkieAndSyncWithZustand(containerName);
+      console.log('projectName: ', projectName);
+      await initializeYorkieAndSyncWithZustand(projectName);
     }
-    if (containerName && userId) {
+    if (projectName && userId) {
       initializeYorkie();
     }
   }, [userId]);
