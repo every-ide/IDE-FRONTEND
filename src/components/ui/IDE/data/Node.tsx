@@ -12,6 +12,7 @@ import {
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 import { useParams } from 'react-router-dom';
 import useFileTreeApi from '@/src/hooks/filetreeHook/useFileTreeApi';
+import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 // DiC 아이콘을 대신할 적절한 아이콘을 찾아 import하세요.
 
 interface MyNodeData {
@@ -38,7 +39,7 @@ const Node: FC<NodeProps> = ({
   tree,
 }): NodeRendererProps<FileNodeType> => {
   const { axiosOpenFile } = useFileTreeApi();
-  const { workid: containerName } = useParams<{ workid: string }>();
+  const { containerId } = useFileTreeStore();
   const { openFile } = useFileStore();
 
   // 파일 확장자를 기반으로 아이콘 선택
@@ -76,7 +77,7 @@ const Node: FC<NodeProps> = ({
 
     try {
       // 특정 파일 조회 API 요청
-      const selectedFile = await axiosOpenFile(containerName, path);
+      const selectedFile = await axiosOpenFile(containerId, path);
       const { content } = selectedFile?.data ?? {
         content: '',
       };

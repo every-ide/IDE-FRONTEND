@@ -1,8 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useFileTreeStore } from '../../store/useFileTreeStore';
-import useFileTreeNodeUtils, {
-  updatePath,
-} from '../../utils/fileTree/nodeUtils';
+import useFileTreeNodeUtils from './useNodeUtils';
 import useFileTreeApi from './useFileTreeApi';
 import {
   CreateHandler,
@@ -27,7 +25,7 @@ import useFileStore from '../../store/useFileStore';
 
 const useFileTreeCRUD = () => {
   const { fileTree, deleteNode, addNode, doc } = useFileTreeStore();
-  const { updateNodeNameAndPath } = useFileTreeNodeUtils();
+  const { updateNodeNameAndPath, updatePath } = useFileTreeNodeUtils();
   const {
     axiosCreateIsFile,
     axiosRenameIsFile,
@@ -40,6 +38,13 @@ const useFileTreeCRUD = () => {
     noClick: true,
     // 파일을 드랍했을 때 실행될 콜백
     onDrop: async (acceptedFiles) => {
+      // 파일이 두개 이상일때 경고창 띄우기
+
+      if (acceptedFiles.length > 1) {
+        alert('파일은 하나씩만 업로드 가능합니다.');
+        return;
+      }
+
       console.log('acceptedFiles: ', acceptedFiles);
       acceptedFiles.forEach((file) => {
         axiosUploadLocalFile(file.path, file);
