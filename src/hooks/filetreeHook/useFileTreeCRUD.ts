@@ -98,6 +98,7 @@ const useFileTreeCRUD = () => {
   };
 
   const onRename: RenameHandler<FileNodeType> = async ({ id, name, node }) => {
+    console.log('id, name, node: ', id, name, node);
     if (!isCorrectName(name)) {
       return;
     }
@@ -112,7 +113,7 @@ const useFileTreeCRUD = () => {
     const oldPath = node.data.path;
     const newPath = oldPath.substring(0, oldPath.lastIndexOf('/')) + `/${name}`;
     try {
-      await axiosRenameIsFile(projectName, oldPath, newPath, node.data.type);
+      axiosRenameIsFile(projectName, oldPath, newPath, node.data.type);
     } catch (error) {
       console.error('File renaming error:', error);
       throw error;
