@@ -22,6 +22,8 @@ export async function createFileTree(files) {
           content = await readFileContent(file); // 비동기적으로 파일 내용 읽기
           node = fileMetadataToObject(file); // 파일 메타데이터 생성 시 내용 포함
           currentLevel.children.push(node);
+          console.log('node: ', node);
+          console.log('content: ', content);
         }
       } else {
         if (!node) {

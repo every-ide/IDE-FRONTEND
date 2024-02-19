@@ -1,11 +1,14 @@
 import useAxiosPrivate from './useAxiosPrivate';
 import useUserStore from '../store/useUserStore';
+import { useFileTreeStore } from '../store/useFileTreeStore';
 
 const useFileTreeApi = () => {
   const axiosPrivate = useAxiosPrivate();
   const { userId, email } = { ...useUserStore((state) => state.user) };
+  const { containerId, containerName } = useFileTreeStore();
 
   const axiosFileTree = async (containerName: string) => {
+    console.log('containerName: ', containerName);
     try {
       const response = axiosPrivate.get(
         `api/${userId}/filetree/${containerName}`,
@@ -22,12 +25,12 @@ const useFileTreeApi = () => {
     }
   };
 
-  const axiosOpenFile = async (containerName: string, path: string) => {
+  const axiosOpenFile = async (containerId: string, path: string) => {
     try {
       const response = axiosPrivate.get(
-        `api/containers/${containerName}/files?path=${path}`,
+        `api/containers/${containerId}/files?path=${path}`,
       );
-      console.log(`api/containers/${containerName}/files?path=${path}`);
+      console.log(`api/containers/${containerId}/files?path=${path}`);
       const data = await response;
       return data;
     } catch (error) {
@@ -178,12 +181,39 @@ const useFileTreeApi = () => {
     }
   };
 
+  const axiosUploadLocalFile = async (newPath: string, file: File) => {
+    const path = `/${containerName}/${newPath}`;
+    const formData = new FormData();
+    formData.append('file', file);
+    console.log('file: ', file);
+    formData.append('path', path);
+    console.log('path: ', path);
+    formData.append('email', email);
+    console.log('email: ', email);
+
+    console.log('formData: ', formData.get('file'));
+    console.log('formData: ', formData.get('path'));
+    console.log('formData: ', formData.get('email'));
+    try {
+      const response = await axiosPrivate.post(`/api/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('File uploaded successfully', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('File upload error:', error);
+      throw error;
+    }
+  };
   return {
     axiosFileTree,
     axiosOpenFile,
     axiosCreateIsFile,
     axiosRenameIsFile,
     axiosDeleteIsFile,
+    axiosUploadLocalFile,
   };
 };
 

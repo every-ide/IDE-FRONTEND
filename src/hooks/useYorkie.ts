@@ -1,40 +1,54 @@
 import { useFileTreeStore } from '@/src/store/useFileTreeStore';
-import { checkDocumentInitialization } from '@/src/utils/yorkie/yorkieUtils';
 import yorkie, { Document, Indexable } from 'yorkie-js-sdk';
 import useFileTree from '@/src/hooks/useFileTreeApi';
 const API_KEY = import.meta.env.VITE_YORKIE_API_KEY;
 
 const useYorkieHook = () => {
-  const { setFileTree, setDocument } = useFileTreeStore();
+  const { setFileTree, setDocument, setContainerId } = useFileTreeStore();
   const { axiosFileTree } = useFileTree();
 
-  const initializeYorkie = async (containerName: string) => {
+  const initializeYorkieAndSyncWithZustand = async (containerName: string) => {
     const client = new yorkie.Client('https://api.yorkie.dev', {
       apiKey: API_KEY,
     });
     await client.activate();
 
-    const doc = new yorkie.Document(containerName);
+    const axiosFile = await axiosFileTree(containerName);
+    const doc = new yorkie.Document(`${containerName}-${axiosFile.id}`);
+
+    // Zustand 스토어에 yorkie 문서와 컨테이너 아이디를 설정
+    await setContainerId(axiosFile.id);
+    await setDocument(doc);
     await client.attach(doc);
+
+    // 파일트리 변경을 구독하고, 초기화 여부를 확인
+    subscribeToFileTreeChanges(doc);
+    const isInitialized = await checkDocumentInitialization(doc);
+    if (!isInitialized) {
+      await initializeDataToYorkie(doc, axiosFile);
+    }
+    const fileTree = doc.getRoot().yorkieContainer.children.toJS();
+    setFileTree(fileTree); // 초기 상태 설정
 
     return { client, doc };
   };
 
-  const treeInputTest = async (
+  const initializeDataToYorkie = async (
     doc: Document<unknown, Indexable>,
-    containerName,
+    axiosTree: any,
   ) => {
-    const axiosFile = await axiosFileTree(containerName);
-    console.log('axiosFile: ', axiosFile);
-
     doc.update((root) => {
-      root.yorkieContainer = axiosFile;
+      root.yorkieContainer = axiosTree;
     }, 'Initialize file tree');
   };
 
   const subscribeToFileTreeChanges = (doc) => {
     const unsubscribe = doc.subscribe((event) => {
       if (event.type === 'remote-change' || event.type === 'local-change') {
+        console.log(
+          '파일트리 변경됨 : ',
+          doc.getRoot().yorkieContainer.children.toJS(),
+        );
         const fileTree = doc.getRoot().yorkieContainer.children.toJS();
         setFileTree(fileTree); // Zustand 스토어의 setFileTree 함수를 호출
       }
@@ -43,28 +57,32 @@ const useYorkieHook = () => {
     return unsubscribe;
   };
 
-  const initializeYorkieAndSyncWithZustand = async (containerName: string) => {
-    const { client, doc } = await initializeYorkie(containerName);
+  // const initializeYorkieAndSyncWithZustand = async (containerName: string) => {
+  //   const { client, doc } = await initializeYorkie(containerName);
 
-    treeInputTest(doc);
-    setDocument(doc);
-    subscribeToFileTreeChanges(doc);
+  //   const isInitialized = await checkDocumentInitialization(doc);
+  //   if (!isInitialized) {
+  //     // 초기화 로직 구현
+  //   } else {
+  //     const fileTree = doc.getRoot().yorkieContainer.children.toJS();
+  //     setFileTree(fileTree); // 초기 상태 설정
+  //   }
 
-    const isInitialized = await checkDocumentInitialization(doc);
-    if (!isInitialized) {
-      // 초기화 로직 구현
+  //   return { client, doc };
+  // };
+
+  const checkDocumentInitialization = async (doc) => {
+    const root = doc.getRoot();
+    // 문서의 root에 yorkieContainer가 존재하는지 확인
+    if (root.yorkieContainer) {
+      console.log('이 문서는 이미 초기화되었습니다.');
+      return true;
     } else {
-      const fileTree = doc.getRoot().yorkieContainer.children.toJS();
-      setFileTree(fileTree); // 초기 상태 설정
+      console.log('이 문서는 새로 생성되었습니다.');
+      return false;
     }
-
-    return { client, doc };
   };
-
   return {
-    initializeYorkie,
-    treeInputTest,
-    subscribeToFileTreeChanges,
     initializeYorkieAndSyncWithZustand,
   };
 };

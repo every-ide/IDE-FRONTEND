@@ -2,13 +2,14 @@ import { create } from 'zustand';
 import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
 import { addNodeToTree, removeNodeById } from '../utils/fileTree/fileTreeUtils';
 import { data } from '../components/ui/IDE/data/data';
-import useFileTreeNodeUtils from '../utils/fileTree/nodeUtils';
 export interface FileTreeState {
   doc: any;
   containerName: string;
+  containerId: string;
   fileTree: FileNodeType[];
   setFileTree: (fileTree: FileNodeType[]) => void;
   setDocument: (document: any) => void;
+  setContainerId: (containerId: string) => void;
   // UpdateNodeName: (nodeId: string, newName: string) => void;
   addNode: (newNode: FileNodeType, parentId?: string | null) => void;
   deleteNode: (nodeids: string | null) => void;
@@ -18,6 +19,7 @@ export interface FileTreeState {
 export const useFileTreeStore = create<FileTreeState>((set) => ({
   doc: null,
   containerName: data.name,
+  containerId: data.id,
   fileTree: data.children,
   setDocument: (document) => {
     set({ doc: document });
@@ -25,21 +27,9 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
   setFileTree: (fileTree) => {
     set({ fileTree });
   },
-
-  // UpdateNodeName: (nodeId, newName) => {
-  //   {
-  //     const { updateNodeNameAndPath } = useFileTreeNodeUtils();
-  //     const fileTree = useFileTreeStore.getState().fileTree;
-  //     const doc = useFileTreeStore.getState().doc;
-  //     doc.update((root) => {
-  //       root.yorkieContainer.children = updateNodeNameAndPath(
-  //         fileTree,
-  //         nodeId,
-  //         newName,
-  //       );
-  //     }, 'Update node name');
-  //   }
-  // },
+  setContainerId: (containerId) => {
+    set({ containerId });
+  },
   addNode: (newNode: FileNodeType, parentId?: string | null) => {
     const fileTree = useFileTreeStore.getState().fileTree;
     const doc = useFileTreeStore.getState().doc;
@@ -57,10 +47,4 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
       root.yorkieContainer.children = removeNodeById(fileTree, nodeId);
     }, 'Delete node');
   },
-
-  // handleWebSocketFileEvent: (fileData: FileSocketReceivedType) => {
-  //   set((state) => ({
-  //     fileTree: processWebSocketFileEvent(state.fileTree, fileData),
-  //   }));
-  // },
 }));

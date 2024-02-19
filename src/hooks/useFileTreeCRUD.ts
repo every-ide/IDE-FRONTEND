@@ -2,8 +2,6 @@ import { useParams } from 'react-router-dom';
 import { useFileTreeStore } from '../store/useFileTreeStore';
 import useFileTreeNodeUtils, { updatePath } from '../utils/fileTree/nodeUtils';
 import useFileTreeApi from './useFileTreeApi';
-import useYorkieHook from './useYorkie';
-import { useEffect } from 'react';
 import {
   CreateHandler,
   DeleteHandler,
@@ -23,18 +21,28 @@ import { v4 as uuidv4 } from 'uuid';
 import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
 import { useDropzone } from 'react-dropzone';
 import { createFileTree } from '../utils/localFileUpload/fileReadUtils';
+import useFileStore from '../store/useFileStore';
 
 const useFileTreeCRUD = () => {
   const { fileTree, deleteNode, addNode, doc } = useFileTreeStore();
   const { updateNodeNameAndPath } = useFileTreeNodeUtils();
-  const { initializeYorkieAndSyncWithZustand } = useYorkieHook();
-  const { axiosCreateIsFile, axiosRenameIsFile, axiosDeleteIsFile } =
-    useFileTreeApi();
+  const {
+    axiosCreateIsFile,
+    axiosRenameIsFile,
+    axiosDeleteIsFile,
+    axiosUploadLocalFile,
+  } = useFileTreeApi();
+  const { closeFile } = useFileStore();
   const { workid: containerName } = useParams<{ workid: string }>();
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps } = useDropzone({
     noClick: true,
     // 파일을 드랍했을 때 실행될 콜백
     onDrop: async (acceptedFiles) => {
+      console.log('acceptedFiles: ', acceptedFiles);
+      acceptedFiles.forEach((file) => {
+        axiosUploadLocalFile(file.path, file);
+      });
+
       // 여기에서 파일 처리 로직 구현
       const dropData = await createFileTree(acceptedFiles);
       console.log('createFileTree(acceptedFiles);: ', ...dropData);
@@ -53,18 +61,6 @@ const useFileTreeCRUD = () => {
       });
     },
   });
-  useEffect(() => {
-    console.log('파일트리 변경됨 : ', fileTree);
-  }, [fileTree]);
-
-  useEffect(() => {
-    async function initializeYorkie() {
-      await initializeYorkieAndSyncWithZustand(containerName);
-    }
-    if (containerName) {
-      initializeYorkie();
-    }
-  }, []);
 
   //파일 또는 폴더 생성 클릭 시 동작
   const onCreate: CreateHandler<FileNodeType> = async ({ type, parentId }) => {
@@ -120,6 +116,7 @@ const useFileTreeCRUD = () => {
   const onDelete: DeleteHandler<FileNodeType> = ({ ids }) => {
     const deletingNode = findNodeById(fileTree, ids[0], null).node;
     deleteNode(ids[0]);
+    closeFile(ids[0]);
     axiosDeleteIsFile(containerName, deletingNode.path, deletingNode.type);
   };
 
