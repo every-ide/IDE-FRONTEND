@@ -144,12 +144,12 @@ const CodeEditorWindow = ({
   useEffect(() => {
     initializeYorkieEditor();
 
-    return () => {
-      // Unmount시 yorkie client & document detaching
-      if (yorkieClientRef.current && yorkieDocRef.current !== undefined) {
-        yorkieClientRef.current.detach(yorkieDocRef.current);
-      }
-    };
+    // return () => {
+    //   // Unmount시 yorkie client & document detaching
+    //   if (yorkieClientRef.current && yorkieDocRef.current !== undefined) {
+    //     yorkieClientRef.current.detach(yorkieDocRef.current);
+    //   }
+    // };
   }, []);
 
   useEffect(() => {
