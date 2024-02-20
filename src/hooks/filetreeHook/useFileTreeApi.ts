@@ -8,16 +8,16 @@ const useFileTreeApi = () => {
   const { containerId, containerName } = useFileTreeStore();
 
   const axiosFileTree = async (containerName: string) => {
-    console.log('containerName: ', containerName);
+    // console.log('containerName: ', containerName);
     try {
       const response = axiosPrivate.get(
         `api/${userId}/filetree/${containerName}`,
       );
-      console.log(
-        '파일트리 api 호출:',
-        `api/${userId}/filetree/${containerName}`,
-      );
-      console.log('response: ', (await response).data);
+      // console.log(
+      //   '파일트리 api 호출:',
+      //   `api/${userId}/filetree/${containerName}`,
+      // );
+      // console.log('response: ', (await response).data);
       const data = (await response).data;
       return data;
     } catch (error) {
