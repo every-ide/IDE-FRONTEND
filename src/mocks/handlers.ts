@@ -235,6 +235,7 @@ export const handlers = [
   http.get('/api/:userId/filetree/:containerName', async () => {
     return HttpResponse.json({
       name: '1-container',
+      id: 'adfasasd',
       children: [
         {
           id: 'r1d',

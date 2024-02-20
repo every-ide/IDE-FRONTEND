@@ -1,9 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { useFileTreeStore } from '../store/useFileTreeStore';
-import useFileTreeNodeUtils, { updatePath } from '../utils/fileTree/nodeUtils';
+import { useFileTreeStore } from '../../store/useFileTreeStore';
+import useFileTreeNodeUtils, { updatePath } from './useNodeUtils';
 import useFileTreeApi from './useFileTreeApi';
-import useYorkieHook from './useYorkie';
-import { useEffect } from 'react';
 import {
   CreateHandler,
   DeleteHandler,
@@ -13,50 +11,63 @@ import {
 import {
   findMaxFileNumberByPath,
   findNodeById,
-} from '../utils/fileTree/findNodeUtils';
-import { isDuplicateName, makePath } from '../utils/fileTree/fileTreeUtils';
+} from '../../utils/fileTree/findNodeUtils';
+import {
+  isCorrectName,
+  isDuplicateName,
+  makePath,
+} from '../../utils/fileTree/fileTreeUtils';
 import { v4 as uuidv4 } from 'uuid';
-import { FileNodeType } from '../types/IDE/FileTree/FileDataTypes';
+import { FileNodeType } from '../../types/IDE/FileTree/FileDataTypes';
 import { useDropzone } from 'react-dropzone';
-import { createFileTree } from '../utils/localFileUpload/fileReadUtils';
+import { createFileTree } from '../../utils/localFileUpload/fileReadUtils';
+import useFileStore from '../../store/useFileStore';
 
 const useFileTreeCRUD = () => {
   const { fileTree, deleteNode, addNode, doc } = useFileTreeStore();
-  const { updateNodeNameAndPath } = useFileTreeNodeUtils();
-  const { initializeYorkieAndSyncWithZustand } = useYorkieHook();
-  const { axiosCreateIsFile, axiosRenameIsFile, axiosDeleteIsFile } =
-    useFileTreeApi();
-  const { workid: containerName } = useParams<{ workid: string }>();
-  const { getRootProps, getInputProps } = useDropzone({
+  const { updateNodeNameAndPath, updatePath } = useFileTreeNodeUtils();
+  const {
+    axiosCreateIsFile,
+    axiosRenameIsFile,
+    axiosDeleteIsFile,
+    axiosUploadLocalFile,
+  } = useFileTreeApi();
+  const { closeFile } = useFileStore();
+  const { containerName: projectName } = useParams<{ containerName: string }>();
+  const { getRootProps } = useDropzone({
     noClick: true,
     // 파일을 드랍했을 때 실행될 콜백
     onDrop: async (acceptedFiles) => {
+      // 파일이 두개 이상일때 경고창 띄우기
+
+      if (acceptedFiles.length > 1) {
+        alert('파일은 하나씩만 업로드 가능합니다.');
+        return;
+      }
+
+      console.log('acceptedFiles: ', acceptedFiles);
+      acceptedFiles.forEach((file) => {
+        axiosUploadLocalFile(file.path, file);
+      });
+
       // 여기에서 파일 처리 로직 구현
       const dropData = await createFileTree(acceptedFiles);
       console.log('createFileTree(acceptedFiles);: ', ...dropData);
-      dropData.forEach((item) => {
-        if (isDuplicateName(fileTree, item.id, item.name)) {
-          console.log('중복된 이름입니다.');
-          return;
-        }
-      });
+      const isDuplicate = dropData.some((item) =>
+        fileTree.some((node) => node.name === item.name),
+      );
+
+      // 중복된 파일이 있으면 경고 메시지를 출력하고 함수를 종료
+      if (isDuplicate) {
+        alert('중복된 파일이 있어 처리를 중지합니다.');
+        return; // 함수 종료
+      }
+
       doc.update((root) => {
         dropData.forEach((item) => root.yorkieContainer.children.push(item));
       });
     },
   });
-  useEffect(() => {
-    console.log('파일트리 변경됨 : ', fileTree);
-  }, [fileTree]);
-
-  useEffect(() => {
-    async function initializeYorkie() {
-      await initializeYorkieAndSyncWithZustand(containerName);
-    }
-    if (containerName) {
-      initializeYorkie();
-    }
-  }, []);
 
   //파일 또는 폴더 생성 클릭 시 동작
   const onCreate: CreateHandler<FileNodeType> = async ({ type, parentId }) => {
@@ -78,7 +89,7 @@ const useFileTreeCRUD = () => {
     addNode(newNode, parentId);
 
     try {
-      await axiosCreateIsFile(containerName, newPath, newNode.type);
+      await axiosCreateIsFile(projectName, newPath, newNode.type);
     } catch (error) {
       console.error('File creation error:', error);
       throw error;
@@ -87,6 +98,10 @@ const useFileTreeCRUD = () => {
   };
 
   const onRename: RenameHandler<FileNodeType> = async ({ id, name, node }) => {
+    console.log('id, name, node: ', id, name, node);
+    if (!isCorrectName(name)) {
+      return;
+    }
     if (isDuplicateName(fileTree, id, name)) {
       console.log('중복된 이름입니다.');
       return;
@@ -98,7 +113,7 @@ const useFileTreeCRUD = () => {
     const oldPath = node.data.path;
     const newPath = oldPath.substring(0, oldPath.lastIndexOf('/')) + `/${name}`;
     try {
-      await axiosRenameIsFile(containerName, oldPath, newPath, node.data.type);
+      axiosRenameIsFile(projectName, oldPath, newPath, node.data.type);
     } catch (error) {
       console.error('File renaming error:', error);
       throw error;
@@ -109,7 +124,8 @@ const useFileTreeCRUD = () => {
   const onDelete: DeleteHandler<FileNodeType> = ({ ids }) => {
     const deletingNode = findNodeById(fileTree, ids[0], null).node;
     deleteNode(ids[0]);
-    axiosDeleteIsFile(containerName, deletingNode.path, deletingNode.type);
+    closeFile(ids[0]);
+    axiosDeleteIsFile(projectName, deletingNode.path, deletingNode.type);
   };
 
   const onMove: MoveHandler<FileNodeType> = ({

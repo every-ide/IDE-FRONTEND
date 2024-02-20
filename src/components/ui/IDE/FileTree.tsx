@@ -1,26 +1,37 @@
-import { useRef, useState } from 'react';
-import {
-  CreateHandler,
-  DeleteHandler,
-  MoveHandler,
-  NodeRendererProps,
-  RenameHandler,
-  Tree,
-  TreeApi,
-} from 'react-arborist';
+import { useEffect, useRef, useState } from 'react';
+import { NodeRendererProps, Tree, TreeApi } from 'react-arborist';
 import Node from './data/Node';
 import { TbFolderPlus } from 'react-icons/tb';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
-import useFileTreeCRUD from '@/src/hooks/useFileTreeCRUD';
+import useFileTreeCRUD from '@/src/hooks/filetreeHook/useFileTreeCRUD';
+import useYorkieHook from '@/src/hooks/filetreeHook/useYorkie';
+import { useParams } from 'react-router-dom';
+import useUserStore from '@/src/store/useUserStore';
 
 const Arborist = () => {
   const [term, setTerm] = useState<string>('');
   const treeRef = useRef<TreeApi<FileNodeType> | null>(null);
-
+  const { initializeYorkieAndSyncWithZustand } = useYorkieHook();
   const { fileTree, onCreate, onRename, onDelete, onMove, getRootProps } =
     useFileTreeCRUD(); // 수정된 부분
+  const { containerName: projectName } = useParams<{ containerName: string }>();
+  const { userId } = { ...useUserStore((state) => state.user) };
+  useEffect(() => {
+    console.log('파일트리 변경됨 : ', fileTree);
+  }, [fileTree]);
 
+  useEffect(() => {
+    async function initializeYorkie() {
+      console.log('projectName: ', projectName);
+      if (projectName) {
+        await initializeYorkieAndSyncWithZustand(projectName);
+      }
+    }
+    if (projectName && userId) {
+      initializeYorkie();
+    }
+  }, [projectName, userId]);
   return (
     <>
       <div className="border-b-2 border-mdark">
