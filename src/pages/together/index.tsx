@@ -4,69 +4,82 @@ import Header from '@/src/components/my/Header';
 
 const events = [
   {
-    banner: 'https://source.unsplash.com/random/400x200?event',
-    title: '새로운 디자인하는 RSC 2020',
-    dateRange: '2020.09.07 - 2020.11.14',
-    location: '온라인',
-    totalParticipants: 1899,
-    currentlyJoined: 109,
-    likes: 24,
+    roomId: '100c2816-ca8d-4f26-b92a-11c9f7536502',
+    name: '자바가뭐에요?',
+    isLocked: true,
+    type: 'QUESTION',
+    available: true,
   },
   {
-    banner: 'https://source.unsplash.com/random/400x200?conference',
-    title: '실습 새로운 디자인하는 RSC2020',
-    dateRange: '2020.12.09 - 2021.01.16',
-    location: '서울 강남구 삼성동',
-    totalParticipants: 429,
-    currentlyJoined: 201,
-    likes: 10,
+    roomId: '1b6e17c5-a2b8-494e-8cdb-21b14d02c183',
+    name: '내가누군줄아니?',
+    isLocked: true,
+    type: 'QUESTION',
+    available: true,
   },
   {
-    banner: 'https://source.unsplash.com/random/400x200?music',
-    title: '2020 전통 문화 페스티벌',
-    dateRange: '2020.08.08 - 2021.02.26',
-    location: '용 산구',
-    totalParticipants: 1799,
-    currentlyJoined: 361,
-    likes: 7,
+    roomId: '2932298a-2e03-4ca5-ad74-f50e89946145',
+    name: '파이썬이뭐에요?',
+    isLocked: true,
+    type: 'QUESTION',
+    available: true,
   },
   {
-    banner: 'https://source.unsplash.com/random/400x200?music',
-    title: '2020 전통 문화 페스티벌',
-    dateRange: '2020.08.08 - 2021.02.26',
-    location: '용 산구',
-    totalParticipants: 1799,
-    currentlyJoined: 361,
-    likes: 7,
+    roomId: '36b35eac-836e-445d-871a-3434eb9e810d',
+    name: '스프링이뭐에요?',
+    isLocked: true,
+    type: 'QUESTION',
+    available: true,
   },
   {
-    banner: 'https://source.unsplash.com/random/400x200?music',
-    title: '2020 전통 문화 페스티벌',
-    dateRange: '2020.08.08 - 2021.02.26',
-    location: '용 산구',
-    totalParticipants: 1799,
-    currentlyJoined: 361,
-    likes: 7,
+    roomId: '460a7830-ba6d-4689-8d44-a8a4dc3ce1e0',
+    name: 'IDE가뭐에요?',
+    isLocked: true,
+    type: 'TEACH',
+    available: true,
   },
   {
-    banner: 'https://source.unsplash.com/random/400x200?music',
-    title: '2020 전통 문화 페스티벌',
-    dateRange: '2020.08.08 - 2021.02.26',
-    location: '용 산구',
-    totalParticipants: 1799,
-    currentlyJoined: 361,
-    likes: 7,
+    roomId: '7089e8b0-2742-484a-b012-53a1ed8e9707',
+    name: '프론트가뭐에요?',
+    isLocked: true,
+    type: 'QUESTION',
+    available: true,
   },
   {
-    banner: 'https://source.unsplash.com/random/400x200?music',
-    title: '2020 전통 문화 페스티벌',
-    dateRange: '2020.08.08 - 2021.02.26',
-    location: '용 산구',
-    totalParticipants: 1799,
-    currentlyJoined: 361,
-    likes: 7,
+    roomId: '86bf94b9-d666-4cc0-9b9c-7de34bdf13b6',
+    name: 'IDE가뭐에요123?',
+    isLocked: true,
+    type: 'QUESTION',
+    available: true,
   },
-  // ... more event objects
+  {
+    roomId: 'acb31d9f-f211-4e35-b8d6-6520a162ccd2',
+    name: 'IDE가뭐에요?',
+    isLocked: true,
+    type: 'QUESTION',
+    available: true,
+  },
+  {
+    roomId: 'beb17517-bec1-4380-a92f-3a450f392c1b',
+    name: '리엑트가뭐에요?',
+    isLocked: true,
+    type: 'QUESTION',
+    available: true,
+  },
+  {
+    roomId: 'ca3cb0dd-fd18-4a14-97a0-6cb6b3231b69',
+    name: '공부하기싫다',
+    isLocked: true,
+    type: 'QUESTION',
+    available: true,
+  },
+  {
+    roomId: 'd158bb76-c721-4c05-a6a0-87e3a7a67f8f',
+    name: 'IDE가뭐에요?',
+    isLocked: true,
+    type: 'QUESTION',
+    available: false,
+  },
 ];
 
 const TogetherPage = () => {
@@ -75,9 +88,9 @@ const TogetherPage = () => {
       <Header />
       <Navbar />
       <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {events.map((event, index) => (
-          <Card key={index} {...event} />
-        ))}
+        {events.map((event, index) =>
+          event.available ? <Card key={index} {...event} /> : null,
+        )}
       </div>
     </div>
   );

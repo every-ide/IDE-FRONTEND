@@ -1,46 +1,38 @@
 import React, { useState } from 'react';
 import { RiDeleteBack2Line } from 'react-icons/ri';
 import { FaSearch } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 const NavigationBar: React.FC = () => {
   const [searchkey, setSearchKey] = useState<string>('');
-  const [activeLink, setActiveLink] = useState<string>('home');
-
-  const handleLinkClick = (link: string) => {
-    setActiveLink(link);
-  };
-
+  const [activeLink, setActiveLink] = useState<string>('');
   // TODO: a tag 대신에 Link(react-router-dom)사용 해야함
   return (
     <nav className="flex h-16 justify-between bg-ldark px-4">
       <div className="flex items-center">
-        <a
-          href="#home"
-          onClick={() => handleLinkClick('home')}
+        <Link
+          to={'/together'}
           className={`flex h-full items-center border-b-4  px-6 py-2 text-white ${activeLink === 'home' ? 'border-blue-400' : 'border-transparent'}`}
         >
           전체
-        </a>
-        <a
-          href="#about"
-          onClick={() => handleLinkClick('about')}
+        </Link>
+        <Link
+          to={'/together/memtors'}
           className={`flex h-full items-center border-b-4  px-6 py-2 text-white ${activeLink === 'about' ? 'border-blue-400' : 'border-transparent'}`}
         >
-          공개
-        </a>
-        <a
-          href="#services"
-          onClick={() => handleLinkClick('services')}
+          멘토
+        </Link>
+        <Link
+          to={'/together/memtees'}
           className={`flex h-full items-center border-b-4  px-6 py-2 text-white ${activeLink === 'services' ? 'border-blue-400' : 'border-transparent'}`}
         >
-          비공개
-        </a>
-        <a
-          href="#contact"
-          onClick={() => handleLinkClick('contact')}
+          멘티
+        </Link>
+        <Link
+          to={'/together/my'}
           className={`flex h-full items-center border-b-4  px-6 py-2 text-white ${activeLink === 'contact' ? 'border-blue-400' : 'border-transparent'}`}
         >
           참여 프로젝트
-        </a>
+        </Link>
       </div>
       <div className="flex w-1/4 items-center">
         {/* 검색버튼 */}

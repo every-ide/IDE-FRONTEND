@@ -1,61 +1,59 @@
 import React from 'react';
-import {
-  AiOutlineCalendar,
-  AiOutlineUser,
-  AiOutlineLike,
-} from 'react-icons/ai';
-import { MdLocationOn, MdPeople } from 'react-icons/md';
+import { GiTeacher } from 'react-icons/gi';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '../button';
+import { TbUserQuestion } from 'react-icons/tb';
+import { FaLock, FaLockOpen } from 'react-icons/fa6';
 
 interface CardProps {
-  banner: string;
-  title: string;
-  dateRange: string;
-  location: string;
+  name: string;
+  type: string;
+  isLocked: boolean;
   totalParticipants: number;
   currentlyJoined: number;
-  likes: number;
 }
 
-const CardContainer: React.FC<CardProps> = ({
-  banner,
-  title,
-  dateRange,
-  location,
-  totalParticipants,
-  currentlyJoined,
-  likes,
-}) => {
+const CardContainer: React.FC<CardProps> = ({ name, type, isLocked }) => {
   return (
     <Card variant="container">
       <img
-        src={banner}
+        src="src/assets/images/placeholder.jpg"
         alt="Event Banner"
-        className="h-48 w-full object-cover p-4"
+        className="h-auto w-full object-cover p-4"
       />
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl">{title}</CardTitle>
+        <CardTitle className="ml-1 text-xl">{name}</CardTitle>
       </CardHeader>
       <CardContent className="text-sm">
-        <div className="flex items-center pt-4 text-sm text-white dark:text-white">
-          <AiOutlineCalendar />
-          <span className="ml-1">{dateRange}</span>
+        <div className="flex items-center justify-between text-sm text-white dark:text-white ">
+          {type === 'QUESTION' ? (
+            <div className="flex flex-col">
+              <TbUserQuestion className="mr-2 size-11" />
+              <span className="size-5 pt-3">QUESTION</span>
+            </div>
+          ) : (
+            <div className="flex flex-col">
+              <GiTeacher className="mr-2 size-11" />
+              <span className="size-5 pt-3">TEACH</span>
+            </div>
+          )}
+
+          {isLocked ? (
+            <FaLock className="mr-2 size-7" />
+          ) : (
+            <FaLockOpen className="mr-2 size-7" />
+          )}
         </div>
-        <div className="flex items-center pt-4 text-sm text-white dark:text-white">
-          <MdLocationOn />
-          <span className="ml-1">{location}</span>
-        </div>
+        <div className="flex items-center pt-4 text-sm text-white dark:text-white"></div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">참가하기</Button>
+        <Button className="w-full">가입하기</Button>
       </CardFooter>
     </Card>
   );
