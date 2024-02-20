@@ -14,17 +14,17 @@ const useWebSocketStore = create<WebSocketState>((set) => ({
   isConnected: false,
   connect: (options) => {
     const webSocketService = new WebSocketService(options);
-
     webSocketService.client.onConnect = () => {
-      console.log('zustand - WebSocket 연결 성공!!!');
+      console.log('연결성공하였습니다.');
       set({ isConnected: true });
+      webSocketService.subscriptions.forEach((sub) => {
+        webSocketService.client.subscribe(sub.destination, sub.callback);
+      });
     };
     webSocketService.client.onDisconnect = () => {
-      console.log('zustand - WebSocket 연결 해제됨');
       set({ isConnected: false });
     };
 
-    console.log('connect zustand', webSocketService);
     set({ webSocketService, isConnected: false }); // 초기 상태
 
     webSocketService.activate(); // 연결 활성화
