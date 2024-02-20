@@ -36,7 +36,7 @@ const useFileAPI = () => {
     } catch (error) {
       console.error(error);
 
-      toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
+      toast.error('코드 저장 중 문제가 발생했습니다. 다시 시도해주세요.', {
         position: 'top-right',
         autoClose: 2000,
         hideProgressBar: false,
