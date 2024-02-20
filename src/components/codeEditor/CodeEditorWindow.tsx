@@ -43,7 +43,7 @@ const CodeEditorWindow = ({
     yorkieClientRef.current = client;
 
     // 02. Create new yorkie document
-    const doc = new yorkie.Document<YorkieDoc>(`${fileId}-${fileName}`); // Document key: [containerName]-[fileName]
+    const doc = new yorkie.Document<YorkieDoc>(`${fileId}`); // Document key: [fileId]
     yorkieDocRef.current = doc;
 
     await client.attach(doc); // 생성한 doc을 client에 attach : 로컬 Document의 변경사항이 원격지의 Document와 동기화됨
@@ -143,13 +143,6 @@ const CodeEditorWindow = ({
 
   useEffect(() => {
     initializeYorkieEditor();
-
-    // return () => {
-    //   // Unmount시 yorkie client & document detaching
-    //   if (yorkieClientRef.current && yorkieDocRef.current !== undefined) {
-    //     yorkieClientRef.current.detach(yorkieDocRef.current);
-    //   }
-    // };
   }, []);
 
   useEffect(() => {

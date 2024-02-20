@@ -10,7 +10,11 @@ import RequireAuth from './auth/RequireAuth';
 import CheckAuth from './auth/CheckAuth';
 import NotFoundPage from './ui/NotFound';
 import PersonalInfoForm from '@/components/ui/PersonalInfoForm.tsx';
-import TogetherPage from '@/src/pages/together';
+import TogetherPage from '@/pages/together';
+import MenteesPage from '@/src/pages/together/MenteesPage';
+import MentorsPage from '@/src/pages/together/MentorsPage';
+import MyRoomsPage from '@/src/pages/together/MyRooms';
+import RoomDetailPage from '@/pages/together/Room';
 import Oauth2RedirectHandler from '@/src/pages/login/oauthRedirect';
 
 export default function Router() {
@@ -34,8 +38,17 @@ export default function Router() {
           element={<WorkspacePage />}
         />
         <Route path="/my/info" element={<PersonalInfoForm />} />
-        <Route path="/together" element={<TogetherPage />} />
-        <Route path="/teamspace/:containerName" element={<TeamSpacePage />} />
+        <Route path="/together">
+          <Route index element={<TogetherPage />} />
+          <Route path="mentees" element={<MenteesPage />} />
+          <Route path="mentors" element={<MentorsPage />} />
+          <Route path="my" element={<MyRoomsPage />} />
+          <Route path=":roomId" element={<RoomDetailPage />} />
+        </Route>
+        <Route
+          path="/teamspace/:containerName/:containerId"
+          element={<TeamSpacePage />}
+        />
       </Route>
       {/* catch all */}
       <Route path="*" element={<NotFoundPage />} />
