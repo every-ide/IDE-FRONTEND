@@ -182,7 +182,7 @@ const useFileTreeApi = () => {
   };
 
   const axiosUploadLocalFile = async (newPath: string, file: File) => {
-    const path = `/${containerName}${newPath}`;
+    const path = `/${containerName}/${newPath}`;
     console.log('containerName: ', containerName);
     const formData = new FormData();
     formData.append('file', file);

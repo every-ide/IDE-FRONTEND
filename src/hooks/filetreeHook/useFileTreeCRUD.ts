@@ -39,29 +39,27 @@ const useFileTreeCRUD = () => {
     // 파일을 드랍했을 때 실행될 콜백
     onDrop: async (acceptedFiles) => {
       // 파일이 두개 이상일때 경고창 띄우기
-
       if (acceptedFiles.length > 1) {
         alert('파일은 하나씩만 업로드 가능합니다.');
         return;
+      }
+      // 여기에서 파일 처리 로직 구현
+      const dropData = await createFileTree(acceptedFiles);
+      console.log('createFileTree(acceptedFiles);: ', dropData);
+      const fileId = dropData[0].id;
+      const isDuplicate = dropData.some((item) =>
+        fileTree.some((node) => node.name === item.name),
+      );
+      // 중복된 파일이 있으면 경고 메시지를 출력하고 함수를 종료
+      if (isDuplicate) {
+        alert('중복된 파일이 있어 처리를 중지합니다.');
+        return; // 함수 종료
       }
 
       console.log('acceptedFiles: ', acceptedFiles);
       acceptedFiles.forEach((file) => {
         axiosUploadLocalFile(file.path, file);
       });
-
-      // 여기에서 파일 처리 로직 구현
-      const dropData = await createFileTree(acceptedFiles);
-      console.log('createFileTree(acceptedFiles);: ', ...dropData);
-      const isDuplicate = dropData.some((item) =>
-        fileTree.some((node) => node.name === item.name),
-      );
-
-      // 중복된 파일이 있으면 경고 메시지를 출력하고 함수를 종료
-      if (isDuplicate) {
-        alert('중복된 파일이 있어 처리를 중지합니다.');
-        return; // 함수 종료
-      }
 
       doc.update((root) => {
         dropData.forEach((item) => root.yorkieContainer.children.push(item));
