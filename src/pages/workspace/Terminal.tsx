@@ -1,55 +1,19 @@
 import useWebSocketStore from '@/src/store/useWebSocketStore';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Terminal as Xterm } from 'xterm';
-import { StompSubscription } from '@stomp/stompjs';
 import { useParams } from 'react-router-dom';
 import type { PublishTermial } from '@/src/services/webSocketService';
 import 'xterm/css/xterm.css';
 
 const Terminal = () => {
-  const { workid: projectId } = useParams<{ workid: string }>();
+  const { containerId } = useParams<{ containerId: string }>();
   const { webSocketService, isConnected } = useWebSocketStore();
   const [currentPath, setCurrentPath] = useState<string>('/');
   const currentCommandRef = useRef<string>('');
   const xtermRef = useRef<Xterm | null>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
 
-  const sendCommand = useCallback(
-    (body: PublishTermial) => {
-      console.log('sendCommand', projectId, body);
-      if (webSocketService && isConnected && projectId) {
-        webSocketService.client.publish({
-          destination: `/app/container/${projectId}/terminal`,
-          body: JSON.stringify(body),
-        });
-      }
-    },
-    [webSocketService, projectId, isConnected],
-  );
-  useEffect(() => {
-    if (webSocketService && projectId && isConnected) {
-      console.log(
-        'terminal! webSocketService',
-        webSocketService,
-        projectId,
-        isConnected,
-      );
-      const subscription: StompSubscription = webSocketService.client.subscribe(
-        `/user/queue/container/${projectId}/terminal`,
-        (message) => {
-          console.log('터미널 구독 message', message);
-          const { success, content, path } = JSON.parse(message.body);
-          if (success && content) {
-            xtermRef.current?.write(content + '\r\n' + '\r\n');
-          }
-          xtermRef.current?.write(path + ': ');
-          setCurrentPath(path);
-        },
-      );
-      return () => subscription.unsubscribe();
-    }
-  }, [webSocketService, projectId, isConnected]);
-
+  // 초기터미널 세팅
   useEffect(() => {
     if (!xtermRef.current) {
       xtermRef.current = new Xterm({
@@ -62,7 +26,45 @@ const Terminal = () => {
 
     xtermRef.current.write(`${currentPath}: `);
 
-    const handleInput = (data: string) => {
+    return () => {
+      xtermRef.current?.dispose();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (webSocketService && containerId && isConnected) {
+      webSocketService.client.subscribe(
+        `/user/queue/container/${containerId}/terminal`,
+        (message) => {
+          const { success, content, path } = JSON.parse(message.body);
+          if (success && content) {
+            xtermRef.current?.write(content + '\r\n' + '\r\n');
+          }
+          xtermRef.current?.write(path + ': ');
+          setCurrentPath(path);
+        },
+      );
+
+      xtermRef.current?.onData(handleInput);
+
+      // stomp disconnect시, 자동 구독해제
+    }
+  }, [webSocketService, containerId, isConnected]);
+
+  const sendCommand = useCallback(
+    (body: PublishTermial) => {
+      if (webSocketService && isConnected && containerId) {
+        webSocketService.client.publish({
+          destination: `/app/container/${containerId}/terminal`,
+          body: JSON.stringify(body),
+        });
+      }
+    },
+    [webSocketService, containerId, isConnected],
+  );
+
+  const handleInput = (data: string) => {
+    if (webSocketService && isConnected) {
       if (data === '\r') {
         // Enter Key
         processCommand();
@@ -72,13 +74,8 @@ const Terminal = () => {
       } else {
         appendData(data);
       }
-    };
-    xtermRef.current.onData(handleInput);
-
-    return () => {
-      xtermRef.current?.dispose();
-    };
-  }, [currentPath]);
+    }
+  };
 
   const processCommand = () => {
     const command = currentCommandRef.current.trim();
