@@ -22,11 +22,11 @@ interface CardProps {
 const CardContainer: React.FC<CardProps> = ({ name, type, isLocked }) => {
   return (
     <Card variant="container">
-      <img
+      {/* <img
         src="src/assets/images/placeholder.jpg"
         alt="Event Banner"
         className="h-auto w-full object-cover p-4"
-      />
+      /> */}
       <CardHeader className="pb-4">
         <CardTitle className="ml-1 text-xl">{name}</CardTitle>
       </CardHeader>

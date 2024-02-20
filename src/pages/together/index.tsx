@@ -1,6 +1,9 @@
 import Navbar from '@/src/components/ui/community/Navbar';
 import Card from '@/src/components/ui/community/Card';
 import Header from '@/src/components/my/Header';
+import { set } from 'react-hook-form';
+import useFileTreeApi from '@/src/hooks/filetreeHook/useFileTreeApi';
+import { useEffect, useState } from 'react';
 
 const events = [
   {
@@ -83,13 +86,25 @@ const events = [
 ];
 
 const TogetherPage = () => {
+  const [rooms, setRooms] = useState(events);
+  const { axiosRooms } = useFileTreeApi();
+
+  useEffect(() => {
+    async function fetchData() {
+      const roomData = await axiosRooms();
+      console.log('roomData: ', roomData);
+      setRooms(roomData);
+    }
+    fetchData();
+  }, []);
+
   return (
     <div className="bg-mdark">
       <Header />
       <Navbar />
       <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {events.map((event, index) =>
-          event.available ? <Card key={index} {...event} /> : null,
+        {rooms.map((room, index) =>
+          room.available ? <Card key={index} {...room} /> : null,
         )}
       </div>
     </div>
