@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { type Document, Indexable } from 'yorkie-js-sdk';
 import { YorkieDoc } from '@/components/codeEditor/CodeEditorWindow';
 
-interface IFile {
+export interface IFile {
   id: string;
   path: string;
   name: string;
