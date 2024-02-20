@@ -50,10 +50,11 @@ const CodeEditorWindow = ({
 
     // 03. 해당 key의 Yorkie document에 content가 없으면 새로운 Text 생성, 기존에 저장된 코드 삽입
     doc.update((root) => {
-      if (!root.content) {
+      if (!root.content || root.content.toString() === '') {
         root.content = new yorkie.Text();
         // Backend 서버에 저장된 코드 삽입
         root.content.edit(0, 0, content);
+        root.backendSaved = true;
       }
     }, 'create content if not exists');
 

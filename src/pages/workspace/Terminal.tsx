@@ -117,7 +117,7 @@ const Terminal = () => {
     // 컴파일 명령어 수행
     if (/^(javac|node|python)\b/.test(command)) {
       // TODO: axios 400 error 해결 후 주석제거 예정
-      // await needToSave();
+      await needToSave();
     }
     if (command.length > 0) {
       sendCommand({ path: currentPath, command });
