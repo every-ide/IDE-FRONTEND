@@ -43,6 +43,7 @@ const useRoomStore = create<RoomStoreState>((set) => ({
   rooms: [],
   enteredRoom: null,
   setRooms: (rooms) => {
+    console.log('rooms: ', rooms);
     set({ rooms });
   },
   setEnteredRoom: (room) => set({ enteredRoom: room }),

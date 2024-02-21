@@ -13,9 +13,15 @@ interface IcreateNewRoomProps {
   reset: () => void;
 }
 
+interface IUpdateRoomData {
+  name: string;
+  isLocked: boolean;
+  password: string;
+}
+
 const useRoomAPI = () => {
   const axiosPrivate = useAxiosPrivate();
-  const { setRooms, addNewRoom } = useRoomStore();
+  const { setRooms } = useRoomStore();
 
   const createNewRoom = async ({
     name,
@@ -36,15 +42,19 @@ const useRoomAPI = () => {
     );
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    const response = await axiosPrivate.post(`/api/community`, {
-      name,
-      isLocked,
-      password,
-      roomType,
-      maxPeople,
-    });
+    const response = await axiosPrivate.post(
+      `/api/community`,
+      JSON.stringify({
+        name,
+        isLocked,
+        password,
+        roomType,
+        maxPeople,
+      }),
+    );
+    console.log('response: 룸을 만들었습니다 :', response);
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       toast('새로운 방 생성되었습니다.', {
         position: 'top-right',
         autoClose: 2000,
@@ -57,8 +67,7 @@ const useRoomAPI = () => {
       setOpenModal(false);
       reset();
 
-      addNewRoom(response.data);
-
+      setRooms(response.data);
       //   // 새 창에서 컨테이너 열기
       //   window.open(
       //     `http://localhost:5173/workspace/${containerName}`,
@@ -79,14 +88,27 @@ const useRoomAPI = () => {
     }
   };
 
-  const updateRoomData = async (data: IUpdateContainerForm) => {
-    // Test용!!!! (추후 삭제)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
+  const searchRooms = async (name?: string, type?: string, group?: boolean) => {
+    try {
+      const response = await axiosPrivate.get(
+        `/api/communities/search?name=${name}&type=${type}&group=${group}`,
+      );
+      console.log(
+        '`/api/communities/search?name=${name}&type=${type}&group=${group}`: ',
+        `/api/communities/search?name=${name}&type=${type}&group=${group}`,
+      );
+      console.log('response: ', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Rooms 오류:', error);
+    }
+  };
+  const updateRoomData = async (data: IUpdateRoomData, roomId: string) => {
     const response = await axiosPrivate.patch(
-      '/api/api/community/:roomId/settings',
+      `/api/community/${roomId}/settings`,
       data,
     );
+    console.log('response: 방을 수정했습니다 ', response);
 
     return response;
   };
