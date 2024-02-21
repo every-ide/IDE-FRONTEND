@@ -20,6 +20,7 @@ export interface RoomStoreState {
 const useRoomStore = create<RoomStoreState>((set) => ({
   rooms: [],
   setRooms: (rooms) => {
+    console.log('rooms: ', rooms);
     set({ rooms });
   },
   addNewRoom: (room) => {

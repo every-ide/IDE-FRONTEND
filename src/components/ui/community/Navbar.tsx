@@ -25,6 +25,7 @@ import { FaJava, FaPython } from 'react-icons/fa6';
 import { MdAddCircleOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import useRoomAPI from '@/src/hooks/useRoomApi';
+import useRoomStore from '@/src/store/useRoomStore';
 
 type TNewRoomForm = {
   name: string;
@@ -37,6 +38,8 @@ type TNewRoomForm = {
 const NavigationBar: React.FC = () => {
   const [searchkey, setSearchKey] = useState<string>('');
   const location = useLocation(); // 현재 위치 정보를 가져옵니다.
+  const { getRooms } = useRoomAPI();
+  const { setRooms } = useRoomStore();
   const [openModal, setOpenModal] = useState(false);
   const { createNewRoom } = useRoomAPI();
   const [isLocked, setIsLocked] = useState(false);
@@ -51,14 +54,14 @@ const NavigationBar: React.FC = () => {
   useEffect(() => {
     if (openModal) {
       reset();
+      setIsLocked(false);
     }
   }, [openModal]);
   const newRoomAction = async ({
     name,
-    isLocked,
-    password,
+    isLocked = false,
+    password = '',
     roomType,
-
     maxPeople,
   }: TNewRoomForm) => {
     console.log('name: ', name);
@@ -69,6 +72,9 @@ const NavigationBar: React.FC = () => {
       roomType,
       maxPeople,
     );
+    if (!isLocked) {
+      password = '';
+    }
     try {
       await createNewRoom({
         name,
@@ -79,6 +85,8 @@ const NavigationBar: React.FC = () => {
         setOpenModal,
         reset,
       });
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setRooms(await getRooms());
     } catch (error) {
       console.error(error);
 
@@ -178,11 +186,6 @@ const NavigationBar: React.FC = () => {
                       value: 20,
                       message: '방 이름은 20자 이내로 작성해주세요.',
                     },
-                    pattern: {
-                      value: /^[a-zA-Z0-9-_\s]+$/,
-                      message:
-                        '알파벳, 숫자, 하이픈(-), 언더스코어(_)만 포함할 수 있습니다.',
-                    },
                     validate: {
                       noSpace: (v) =>
                         !/\s/.test(v) || '방 이름에 공백을 포함할 수 없습니다.',
@@ -249,13 +252,13 @@ const NavigationBar: React.FC = () => {
                         <SelectValue id="roomType" placeholder="방 종류" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="study">
+                        <SelectItem value="QUESTION">
                           <div className="inline-flex items-center gap-2">
                             <FaPython />
                             멘티
                           </div>
                         </SelectItem>
-                        <SelectItem value="project">
+                        <SelectItem value="ANSWER">
                           <div className="inline-flex items-center gap-2">
                             <FaJava />
                             멘토
