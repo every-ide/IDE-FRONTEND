@@ -24,9 +24,6 @@ const useContainerAPI = () => {
     setOpenModal,
     reset,
   }: IcreateNewContainerProps) => {
-    // Test용!!!! (추후 삭제)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
     const response = await axiosPrivate.post(
       `/api/containers`,
       JSON.stringify({
@@ -83,9 +80,6 @@ const useContainerAPI = () => {
   };
 
   const updateContainerData = async (data: IUpdateContainerForm) => {
-    // Test용!!!! (추후 삭제)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
     const response = await axiosPrivate.patch('/api/containers', data);
 
     return response;
