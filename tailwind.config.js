@@ -18,11 +18,19 @@ export const theme = {
   },
   extend: {
     colors: {
+      background: 'hsl(var(--background))',
+      border: 'hsl(var(--border))',
+      input: 'hsl(var(--input))',
+      ring: 'hsl(var(--ring))',
       mdark: '#1C1C1C',
       ldark: '#242424',
       accent: '#05ACEE',
       error: '#C13515',
       accentPurple: '#9269C3',
+      muted: {
+        DEFAULT: 'hsl(var(--muted))',
+        foreground: 'hsl(var(--muted-foreground))',
+      },
     },
     keyframes: {
       'accordion-down': {

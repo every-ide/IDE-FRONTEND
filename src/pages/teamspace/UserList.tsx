@@ -9,9 +9,9 @@ const UserList = () => {
   useEffect(() => {
     if (webSocketService && isConnected) {
       webSocketService.subscribeToDestination(
-        `/topic/room/${containerId}/state`,
+        `/topic/container/${containerId}/state`,
         (message) => {
-          console.log('현재유저정보 message', message);
+          console.log('현재유저정보 리스트 message', JSON.parse(message.body));
         },
       );
     }
