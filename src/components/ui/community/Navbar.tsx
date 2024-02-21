@@ -162,7 +162,7 @@ const NavigationBar: React.FC = () => {
           <Button
             variant="outline"
             size="lg"
-            className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95"
+            className="mt-2 gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95"
           >
             <MdAddCircleOutline size={20} className="text-accent" />방 생성하기
           </Button>
