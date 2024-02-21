@@ -37,6 +37,7 @@ export interface RoomStoreState {
   setRooms: (rooms: RoomType[]) => void;
   setEnteredRoom: (room: IEnteredRoomDetail) => void;
   addNewRoom: (room: RoomType) => void;
+  addContainerToRoom: (container: IContainer) => void;
 }
 
 const useRoomStore = create<RoomStoreState>((set) => ({
@@ -51,6 +52,19 @@ const useRoomStore = create<RoomStoreState>((set) => ({
     set((state) => ({
       rooms: [...state.rooms, room],
     }));
+  },
+  addContainerToRoom: (container) => {
+    set((state) => {
+      return {
+        enteredRoom: {
+          ...state.enteredRoom!,
+          room: {
+            ...state.enteredRoom!.room,
+            containers: [...state.enteredRoom!.room.containers, container],
+          },
+        },
+      };
+    });
   },
 }));
 

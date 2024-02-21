@@ -1,62 +1,56 @@
-import { toast } from 'react-toastify';
 import useContainerStore from '../store/useContainerStore';
 import useAxiosPrivate from './useAxiosPrivate';
 import useUserStore from '../store/useUserStore';
 import { IUpdateContainerForm } from '../components/my/ContainerBox';
+import useRoomStore from '../store/useRoomStore';
 
 interface IcreateNewContainerProps {
   containerName: string;
   language: string;
   description: string;
-  setOpenModal: (arg: boolean) => void;
-  reset: () => void;
+  roomId?: string;
 }
 
 const useContainerAPI = () => {
   const axiosPrivate = useAxiosPrivate();
   const { email, userId } = { ...useUserStore((state) => state.user) };
   const { setContainerList, addContainer } = useContainerStore();
+  const { addContainerToRoom } = useRoomStore();
 
   const createNewContainer = async ({
     containerName,
     language,
     description,
-    setOpenModal,
-    reset,
+    roomId,
   }: IcreateNewContainerProps) => {
+    const requestBody = {
+      email,
+      name: containerName,
+      description,
+      language,
+    };
+
+    if (roomId !== undefined) {
+      requestBody.email = roomId;
+    } else {
+      requestBody.email = email;
+    }
+
     const response = await axiosPrivate.post(
       `/api/containers`,
-      JSON.stringify({
-        email,
-        name: containerName,
-        description,
-        language,
-      }),
+      JSON.stringify(requestBody),
     );
 
+    // Zustand store : containerList에 추가
     if (response.status === 200) {
-      toast('새로운 컨테이너가 생성되었습니다.', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        theme: 'dark',
-      });
-
-      // Modal Close & reset
-      setOpenModal(false);
-      reset();
-
-      // Zustand store : containerList에 추가
-      addContainer(response.data);
-
-      // 새 창에서 컨테이너 열기
-      window.open(
-        `http://localhost:5173/workspace/${response.data.name}/${response.data.id}`,
-        '_blank',
-        'noopener,noreferrer',
-      );
+      if (roomId !== undefined) {
+        addContainerToRoom(response.data);
+      } else {
+        addContainer(response.data);
+      }
     }
+
+    return response;
   };
 
   const getContainersData = async () => {
