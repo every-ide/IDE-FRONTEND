@@ -18,6 +18,7 @@ const TeamSpacePage = () => {
   const accessToken = localStorage.getItem('accessToken');
 
   const [isOpenWorkInfo, setIsOpenWorkInfo] = useActionWithKeyboard('j', true);
+  const [isOpenChat, setIsOpenChat] = useActionWithKeyboard('c', false);
 
   // websocket connection
   useEffect(() => {
@@ -50,7 +51,11 @@ const TeamSpacePage = () => {
   return (
     <div className="flex h-screen text-xs">
       <div className="flex flex-1 flex-col">
-        <Navigation />
+        <Navigation
+          isTeamspace
+          setIsOpenChat={setIsOpenChat}
+          isOpenChat={isOpenChat}
+        />
         <Header />
         <div className="flex flex-1 overflow-hidden">
           <Sidebar />
@@ -63,7 +68,7 @@ const TeamSpacePage = () => {
         </div>
         <Footer setIsOpen={setIsOpenWorkInfo} isOpen={isOpenWorkInfo} />
       </div>
-      <Chat />
+      {isOpenChat && <Chat setIsOpenChat={setIsOpenChat} />}
     </div>
   );
 };
