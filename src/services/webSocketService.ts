@@ -1,4 +1,4 @@
-import { Client } from '@stomp/stompjs';
+import { Client, IMessage } from '@stomp/stompjs';
 
 export interface WebSocketConnectOptions {
   token: string;
@@ -12,12 +12,17 @@ export interface PublishTermial {
 
 export class WebSocketService {
   client: Client;
+  subscriptions: Array<{
+    destination: string;
+    callback: (message: IMessage) => void;
+  }> = [];
 
   constructor(options: WebSocketConnectOptions) {
     const { token, projectId } = options;
 
     this.client = new Client({
-      brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
+      // brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
+      brokerURL: 'wss://kf88999ca9f71a.user-app.krampoline.com/ws/websocket',
       connectHeaders: {
         Authorization: token,
         ProjectId: projectId,
@@ -26,13 +31,13 @@ export class WebSocketService {
         // console.log('websocket debug->', str);
       },
       onConnect: () => {
-        // console.log('성공!!!');
+        console.log('stomp 연결성공');
       },
       onDisconnect: () => {
-        // console.log('WebSocket 연결 해제됨');
+        console.log('WebSocket 연결 해제됨');
       },
       onStompError: () => {
-        // console.log('STOMP Error 발생');
+        console.log('STOMP Error 발생');
       },
     });
   }
@@ -45,23 +50,20 @@ export class WebSocketService {
     this.client.deactivate();
   }
 
-  // subscribe example
-  // subscribeToTopic(topic: string, callback: (message: IMessage) => void) {
-  //   this.client.subscribe(topic, (message) => {
-  //     callback(message);
-  //   });
-  // }
-
-  // subscribeToTerminal(
-  //   queue: string,
-  //   callback: (message: IMessage) => void,
-  // ): StompSubscription {
-  //   return this.client.subscribe(queue, callback);
-  // }
-
-  // publish(destination: string, body: PublishTermial) {
-  //   if (this.client && this.client.active) {
-  //     this.client.publish({ destination, body: JSON.stringify(body) });
-  //   }
-  // }
+  subscribeToDestination(
+    destination: string,
+    callback: (message: IMessage) => void,
+    accessToken?: string,
+    projectId?: string,
+  ) {
+    this.subscriptions.push({ destination, callback });
+    // accessToken이 제공되면, 구독 헤더에 추가
+    this.client.subscribe(
+      destination,
+      callback,
+      accessToken && projectId
+        ? { Authorization: `${accessToken}`, projectId }
+        : {},
+    );
+  }
 }

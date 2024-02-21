@@ -127,6 +127,20 @@ const SearchBar = () => {
                       className="col-span-3 text-black"
                       {...register('containerName', {
                         required: '컨테이너 이름은 필수 입력입니다.',
+                        maxLength: {
+                          value: 20,
+                          message: '컨테이너 이름은 20자 이내로 작성해주세요.',
+                        },
+                        pattern: {
+                          value: /^[a-zA-Z0-9-_\s]+$/,
+                          message:
+                            '알파벳, 숫자, 하이픈(-), 언더스코어(_)만 포함할 수 있습니다.',
+                        },
+                        validate: {
+                          noSpace: (v) =>
+                            !/\s/.test(v) ||
+                            '컨테이너 이름에 공백을 포함할 수 없습니다.',
+                        },
                       })}
                     />
                   </div>

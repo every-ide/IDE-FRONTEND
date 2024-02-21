@@ -1,9 +1,19 @@
-import useUserStore from '@/src/store/useUserStore';
+import { FC } from 'react';
+import { IoChatbubble } from 'react-icons/io5';
 
-const Navigation = () => {
-  const { name } = { ...useUserStore((state) => state.user) };
+interface NavigationProps {
+  isTeamspace: boolean;
+  setIsOpenChat?: (isOpenChat: boolean) => void;
+  isOpenChat?: boolean;
+}
+
+const Navigation: FC<NavigationProps> = ({
+  isTeamspace = false,
+  setIsOpenChat,
+  isOpenChat,
+}) => {
   return (
-    <nav className="flex h-8 items-center border-b-2 border-mdark bg-ldark px-1">
+    <nav className="flex h-8  border-b-2 border-mdark bg-ldark px-1">
       <div className="flex grow items-center">
         <h2 className="cursor-pointer text-base">EveryIDE</h2>
         <ul className="ml-4 flex cursor-pointer items-center gap-2">
@@ -14,9 +24,15 @@ const Navigation = () => {
           <li className="px-2 py-1 hover:bg-gray-700">창</li>
         </ul>
       </div>
-      <div className="ml-auto cursor-pointer">
-        <h2>{name} 님</h2>
-      </div>
+      {isTeamspace && (
+        <div className="flex cursor-pointer items-center">
+          {/* TODO: message 오면 red label */}
+          <IoChatbubble
+            className="size-5 cursor-pointer transition-all hover:text-gray-400"
+            onClick={() => setIsOpenChat?.(!isOpenChat)}
+          />
+        </div>
+      )}
     </nav>
   );
 };

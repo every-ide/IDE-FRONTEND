@@ -4,7 +4,7 @@ import { FaXmark } from 'react-icons/fa6';
 import { Resizable } from 're-resizable';
 import Terminal from './Terminal';
 interface WorkInfoProps {
-  toggleTerminal: () => void;
+  toggleTerminal?: () => void;
 }
 const WorkInfo: FC<WorkInfoProps> = ({ toggleTerminal }) => {
   const [cancelHovered, setCancelHovered] = useState<boolean>(false);
@@ -32,7 +32,7 @@ const WorkInfo: FC<WorkInfoProps> = ({ toggleTerminal }) => {
           topLeft: false,
         }}
       >
-        {/* <Tabs defaultValue="terminal">
+        <Tabs defaultValue="terminal">
           <div className="flex items-center justify-between border-b-2 border-mdark bg-ldark">
             <TabsList>
               <TabsTrigger value="debug">디버그</TabsTrigger>
@@ -59,7 +59,7 @@ const WorkInfo: FC<WorkInfoProps> = ({ toggleTerminal }) => {
             <Terminal />
           </TabsContent>
           <TabsContent value="search">검색 탭입니다.</TabsContent>
-        </Tabs> */}
+        </Tabs>
         <div className="work-info">
           <div className="tabs">
             <button onClick={() => setActiveTab('debug')}>디버그</button>

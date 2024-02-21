@@ -22,7 +22,7 @@ const useYorkieHook = () => {
 
     // Zustand 스토어에 yorkie 문서와 컨테이너 아이디를 설정
     setContainerId(projectId);
-    console.log('projectId: ', projectId);
+    // console.log('projectId: ', projectId);
     // setContainerId(axiosFile.id);
     setDocument(doc);
     setContainerName(projectName);

@@ -8,16 +8,16 @@ const useFileTreeApi = () => {
   const { containerId, containerName } = useFileTreeStore();
 
   const axiosFileTree = async (containerName: string) => {
-    console.log('containerName: ', containerName);
+    // console.log('containerName: ', containerName);
     try {
       const response = axiosPrivate.get(
         `api/${userId}/filetree/${containerName}`,
       );
-      console.log(
-        '파일트리 api 호출:',
-        `api/${userId}/filetree/${containerName}`,
-      );
-      console.log('response: ', (await response).data);
+      // console.log(
+      //   '파일트리 api 호출:',
+      //   `api/${userId}/filetree/${containerName}`,
+      // );
+      // console.log('response: ', (await response).data);
       const data = (await response).data;
       return data;
     } catch (error) {
@@ -40,6 +40,7 @@ const useFileTreeApi = () => {
 
   const axiosCreateDir = async (containerName: string, name: string) => {
     const path = `/${containerName}${name}`;
+    console.log('파일 생성 보내기직전 점검 : ', email, path);
     try {
       const response = await axiosPrivate.post(`/api/directories`, {
         email,
@@ -92,6 +93,12 @@ const useFileTreeApi = () => {
     const path = `/${containerName}${name}`;
     const content = '';
     try {
+      console.log(
+        '/api/files : 파일 생성 email,path,content,: ',
+        email,
+        path,
+        content,
+      );
       const response = await axiosPrivate.post(`/api/files`, {
         email,
         path,
@@ -127,15 +134,12 @@ const useFileTreeApi = () => {
   const axiosDeleteFile = async (containerName: string, deletePath: string) => {
     const path = `/${containerName}${deletePath}`;
     try {
-      const response = await axiosPrivate.delete(
-        `/api/containers/${containerName}/files`,
-        {
-          data: {
-            email,
-            path,
-          },
+      const response = await axiosPrivate.delete(`/api/files`, {
+        data: {
+          email,
+          path,
         },
-      );
+      });
       console.log('File deleted successfully', response.data);
       return response.data;
     } catch (error) {
@@ -182,14 +186,14 @@ const useFileTreeApi = () => {
   };
 
   const axiosUploadLocalFile = async (newPath: string, file: File) => {
-    const path = `/${containerName}${newPath}`;
+    const path = `/${containerName}/`;
     console.log('containerName: ', containerName);
     const formData = new FormData();
     formData.append('file', file);
-    console.log('file: ', file);
     formData.append('path', path);
-    console.log('path: ', path);
     formData.append('email', email);
+    console.log('file: ', file);
+    console.log('path: ', path);
     console.log('email: ', email);
 
     console.log('formData: ', formData.get('file'));
@@ -208,6 +212,7 @@ const useFileTreeApi = () => {
       throw error;
     }
   };
+
   return {
     axiosFileTree,
     axiosOpenFile,

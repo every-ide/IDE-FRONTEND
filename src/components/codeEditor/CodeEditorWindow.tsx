@@ -43,17 +43,18 @@ const CodeEditorWindow = ({
     yorkieClientRef.current = client;
 
     // 02. Create new yorkie document
-    const doc = new yorkie.Document<YorkieDoc>(`${fileId}-${fileName}`); // Document key: [containerName]-[fileName]
+    const doc = new yorkie.Document<YorkieDoc>(`${fileId}`); // Document key: [fileId]
     yorkieDocRef.current = doc;
 
     await client.attach(doc); // 생성한 doc을 client에 attach : 로컬 Document의 변경사항이 원격지의 Document와 동기화됨
 
     // 03. 해당 key의 Yorkie document에 content가 없으면 새로운 Text 생성, 기존에 저장된 코드 삽입
     doc.update((root) => {
-      if (!root.content) {
+      if (!root.content || root.content.toString() === '') {
         root.content = new yorkie.Text();
         // Backend 서버에 저장된 코드 삽입
         root.content.edit(0, 0, content);
+        root.backendSaved = true;
       }
     }, 'create content if not exists');
 
@@ -143,13 +144,6 @@ const CodeEditorWindow = ({
 
   useEffect(() => {
     initializeYorkieEditor();
-
-    return () => {
-      // Unmount시 yorkie client & document detaching
-      if (yorkieClientRef.current && yorkieDocRef.current !== undefined) {
-        yorkieClientRef.current.detach(yorkieDocRef.current);
-      }
-    };
   }, []);
 
   useEffect(() => {

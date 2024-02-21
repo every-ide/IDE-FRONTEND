@@ -17,7 +17,7 @@ const useFileTreeNodeUtils = () => {
         const newPath = `${parentPath}/${newName}`.replace(/\/\//, '/');
 
         // 대상 노드와 그 자식 노드들의 경로 업데이트
-        return updatePath({ ...node, name: newName }, newPath);
+        return updatePath({ ...node, name: newName }, newPath, newName);
       } else if (node.children) {
         // 대상 노드가 아닐 경우, 자식 노드들에서 재귀적으로 처리
         return {
@@ -29,10 +29,15 @@ const useFileTreeNodeUtils = () => {
     });
   };
 
-  const updatePath = (node: FileNodeType, newPath: string): FileNodeType => {
+  const updatePath = (
+    node: FileNodeType,
+    newPath: string,
+    name?: string,
+  ): FileNodeType => {
+    console.log('name: ', name);
     if (node.type === 'file') {
       console.log('이것은 파일이여!');
-      updateFileNameAndPath(node.id, newPath);
+      updateFileNameAndPath(node.id, newPath, name);
     } else {
       console.log('이것은 디렉토리이여!');
       updateFileNameAndPath(node.id, newPath);

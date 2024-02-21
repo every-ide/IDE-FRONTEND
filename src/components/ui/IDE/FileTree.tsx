@@ -18,12 +18,12 @@ const Arborist = () => {
   const { containerName: projectName } = useParams<{ containerName: string }>();
   const { userId } = { ...useUserStore((state) => state.user) };
   useEffect(() => {
-    console.log('파일트리 변경됨 : ', fileTree);
+    // console.log('파일트리 변경됨 : ', fileTree);
   }, [fileTree]);
 
   useEffect(() => {
     async function initializeYorkie() {
-      console.log('projectName: ', projectName);
+      // console.log('projectName: ', projectName);
       if (projectName) {
         await initializeYorkieAndSyncWithZustand(projectName);
       }

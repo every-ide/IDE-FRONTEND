@@ -4,21 +4,25 @@ import Header from '@/src/components/my/Header';
 import { useEffect, useState } from 'react';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
-import { set } from 'react-hook-form';
 
-const TogetherPage = () => {
-  const { rooms, isLoading } = useRoomStore();
-  const { getRooms, fetchData } = useRoomAPI();
+const MenteesPage = () => {
+  const { rooms, setRooms } = useRoomStore();
+  const { getRooms } = useRoomAPI();
+  const [isLoading, setIsLoading] = useState(true); // Add this line
 
   useEffect(() => {
+    async function fetchData() {
+      const roomData = await getRooms();
+      console.log('roomData: ', roomData);
+      setRooms(roomData.filter((room: any) => room.type === 'QUESTION'));
+      setIsLoading(false); // Add this line
+    }
     fetchData();
   }, []);
 
   if (isLoading) {
-    console.log('isLoading: ', isLoading);
     return <div className="loading-indicator">Loading...</div>; // Modify this as needed
   }
-
   return (
     <div className="bg-mdark">
       <Header />
@@ -32,4 +36,4 @@ const TogetherPage = () => {
   );
 };
 
-export default TogetherPage;
+export default MenteesPage;

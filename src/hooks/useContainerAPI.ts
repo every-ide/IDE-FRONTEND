@@ -37,7 +37,7 @@ const useContainerAPI = () => {
       }),
     );
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       toast('새로운 컨테이너가 생성되었습니다.', {
         position: 'top-right',
         autoClose: 2000,
@@ -51,12 +51,11 @@ const useContainerAPI = () => {
       reset();
 
       // Zustand store : containerList에 추가
-      // -> backend 응답값으로 대체하기!!
       addContainer(response.data);
 
       // 새 창에서 컨테이너 열기
       window.open(
-        `http://localhost:5173/workspace/${containerName}`,
+        `http://localhost:5173/workspace/${response.data.name}/${response.data.id}`,
         '_blank',
         'noopener,noreferrer',
       );

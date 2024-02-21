@@ -4,9 +4,8 @@ import Header from '@/src/components/my/Header';
 import { useEffect, useState } from 'react';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
-import { set } from 'react-hook-form';
 
-const TogetherPage = () => {
+const MentorsPage = () => {
   const { rooms, isLoading } = useRoomStore();
   const { getRooms, fetchData } = useRoomAPI();
 
@@ -18,18 +17,19 @@ const TogetherPage = () => {
     console.log('isLoading: ', isLoading);
     return <div className="loading-indicator">Loading...</div>; // Modify this as needed
   }
-
   return (
     <div className="bg-mdark">
       <Header />
       <Navbar />
       <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {rooms.map((room, index) =>
-          room.available ? <Card key={index} {...room} /> : null,
-        )}
+        {rooms
+          .filter((room: any) => room.type === 'ANSWER')
+          .map((room, index) =>
+            room.available ? <Card key={index} {...room} /> : null,
+          )}
       </div>
     </div>
   );
 };
 
-export default TogetherPage;
+export default MentorsPage;
