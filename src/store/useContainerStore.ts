@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { IUpdateContainerForm } from '../components/my/ContainerBox';
 
-interface IContainer {
+export interface IContainer {
   id: string;
   name: string;
   description: string;

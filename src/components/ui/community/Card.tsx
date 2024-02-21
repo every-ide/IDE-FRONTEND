@@ -113,6 +113,7 @@ const CardContainer: React.FC<CardProps> = ({
 
         setOpenModal(false);
         const getData = await getRooms();
+        console.log('getData: ', getData);
         setRooms(getData);
       }
     } catch (error) {
@@ -271,7 +272,7 @@ const CardContainer: React.FC<CardProps> = ({
         </div>
         <div className="flex items-center justify-between pt-4 text-sm text-white dark:text-white">
           <span>Owner: {ownerName}</span>
-          <span className="">
+          <span className="mr-1">
             {usersCount || 1} / {maxPeople}
           </span>
         </div>
