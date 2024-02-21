@@ -15,11 +15,19 @@ interface CardProps {
   name: string;
   type: string;
   isLocked: boolean;
-  totalParticipants: number;
-  currentlyJoined: number;
+  usersCount: number;
+  maxPeople: number;
+  ownerName: string;
 }
 
-const CardContainer: React.FC<CardProps> = ({ name, type, isLocked }) => {
+const CardContainer: React.FC<CardProps> = ({
+  name,
+  type,
+  isLocked,
+  usersCount,
+  maxPeople,
+  ownerName,
+}) => {
   return (
     <Card variant="container">
       {/* <img
@@ -40,17 +48,21 @@ const CardContainer: React.FC<CardProps> = ({ name, type, isLocked }) => {
           ) : (
             <div className="flex flex-col">
               <GiTeacher className="mr-2 size-11" />
-              <span className="size-5 pt-3">TEACH</span>
+              <span className="size-5 pt-3">ANSWER</span>
             </div>
           )}
-
+          <span>
+            {usersCount} / {maxPeople}
+          </span>
           {isLocked ? (
             <FaLock className="mr-2 size-7" />
           ) : (
             <FaLockOpen className="mr-2 size-7" />
           )}
         </div>
-        <div className="flex items-center pt-4 text-sm text-white dark:text-white"></div>
+        <div className="flex items-center pt-4 text-sm text-white dark:text-white">
+          <span>Owner: {ownerName}</span>
+        </div>
       </CardContent>
       <CardFooter>
         <Button className="w-full">가입하기</Button>
