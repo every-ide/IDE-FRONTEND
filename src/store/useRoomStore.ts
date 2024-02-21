@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { IContainer } from './useContainerStore';
+import { IUpdateContainerForm } from '../components/my/ContainerBox';
 
 export interface RoomType {
   roomId: string;
@@ -38,6 +39,8 @@ export interface RoomStoreState {
   setEnteredRoom: (room: IEnteredRoomDetail) => void;
   addNewRoom: (room: RoomType) => void;
   addContainerToRoom: (container: IContainer) => void;
+  updateContainerInRoom: (updatedContainer: IUpdateContainerForm) => void;
+  removeContainerFromRoom: (name: string) => void;
 }
 
 const useRoomStore = create<RoomStoreState>((set) => ({
@@ -61,6 +64,47 @@ const useRoomStore = create<RoomStoreState>((set) => ({
           room: {
             ...state.enteredRoom!.room,
             containers: [...state.enteredRoom!.room.containers, container],
+          },
+        },
+      };
+    });
+  },
+  updateContainerInRoom: (updatedContainer) => {
+    set((state) => {
+      const updatedList = state.enteredRoom?.room.containers.map((prevC) => {
+        if (prevC.name === updatedContainer.oldName) {
+          return {
+            ...prevC,
+            name: updatedContainer.newName,
+            description: updatedContainer.newDescription,
+            active: updatedContainer.active,
+          };
+        } else return prevC;
+      });
+
+      return {
+        enteredRoom: {
+          ...state.enteredRoom!,
+          room: {
+            ...state.enteredRoom!.room,
+            containers: updatedList!,
+          },
+        },
+      };
+    });
+  },
+  removeContainerFromRoom: (name) => {
+    set((state) => {
+      const updatedList = state.enteredRoom?.room.containers.filter(
+        (c) => c.name !== name,
+      );
+
+      return {
+        enteredRoom: {
+          ...state.enteredRoom!,
+          room: {
+            ...state.enteredRoom!.room,
+            containers: updatedList!,
           },
         },
       };

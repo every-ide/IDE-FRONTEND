@@ -1,4 +1,5 @@
 import ContainerBox from '@/src/components/my/ContainerBox';
+import CreateContainerForm from '@/src/components/my/CreateContainerForm';
 import EmptyState from '@/src/components/my/EmptyState';
 import Header from '@/src/components/my/Header';
 import { Button } from '@/src/components/ui/button';
@@ -162,29 +163,40 @@ const RoomDetailPage = () => {
                 </p>
               </h1>
               <div className="flex flex-row justify-end gap-2 border-b-2 border-ldark pb-3">
-                <Button onClick={() => {}} variant="outline">
-                  + 컨테이너 생성
-                </Button>
-                <Button onClick={() => {}} variant="outline">
+                <CreateContainerForm
+                  buttonVariant="outline"
+                  buttonSize="default"
+                  buttonClassName="gap-1 active:scale-95 bg-mdark"
+                  roomId={roomId}
+                />
+                <Button
+                  onClick={() => {}}
+                  variant="outline"
+                  className="bg-mdark active:scale-95"
+                >
                   내 컨테이너 불러오기
                 </Button>
               </div>
-              {enteredRoom?.room.containers.length ? (
-                enteredRoom.room.containers.map((c) => (
-                  <ContainerBox
-                    key={c.id}
-                    containerId={c.id}
-                    containerName={c.name}
-                    description={c.description}
-                    language={c.language}
-                    active={c.active}
-                    createDate={c.createDate}
-                    lastModifiedDate={c.lastModifiedDate}
-                  />
-                ))
-              ) : (
-                <EmptyState />
-              )}
+              <div className="h-full overflow-x-hidden overflow-y-scroll">
+                {enteredRoom?.room.containers.length ? (
+                  <div className="grid grid-cols-1 gap-x-5 gap-y-10 pt-4 sm:grid-cols-2">
+                    {enteredRoom.room.containers.map((c) => (
+                      <ContainerBox
+                        key={c.id}
+                        containerId={c.id}
+                        containerName={c.name}
+                        description={c.description}
+                        language={c.language}
+                        active={c.active}
+                        createDate={c.createDate}
+                        lastModifiedDate={c.lastModifiedDate}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <EmptyState />
+                )}
+              </div>
             </div>
           </div>
         </div>

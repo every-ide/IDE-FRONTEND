@@ -3,6 +3,7 @@ import useAxiosPrivate from './useAxiosPrivate';
 import useUserStore from '../store/useUserStore';
 import { IUpdateContainerForm } from '../components/my/ContainerBox';
 import useRoomStore from '../store/useRoomStore';
+import { useParams } from 'react-router-dom';
 
 interface IcreateNewContainerProps {
   containerName: string;
@@ -14,8 +15,11 @@ interface IcreateNewContainerProps {
 const useContainerAPI = () => {
   const axiosPrivate = useAxiosPrivate();
   const { email, userId } = { ...useUserStore((state) => state.user) };
-  const { setContainerList, addContainer } = useContainerStore();
-  const { addContainerToRoom } = useRoomStore();
+  const { setContainerList, addContainer, removeContainer, updateContainer } =
+    useContainerStore();
+  const { addContainerToRoom, updateContainerInRoom, removeContainerFromRoom } =
+    useRoomStore();
+  const { roomId } = useParams<{ roomId: string }>();
 
   const createNewContainer = async ({
     containerName,
@@ -63,18 +67,45 @@ const useContainerAPI = () => {
   };
 
   const deleteContainerData = async (containerName: string) => {
+    const requestBody = {
+      email,
+      name: containerName,
+    };
+
+    if (roomId !== undefined) {
+      requestBody.email = roomId;
+    }
+
     const response = await axiosPrivate.delete('/api/containers', {
-      data: {
-        email,
-        name: containerName,
-      },
+      data: requestBody,
     });
+
+    if (response.status === 200) {
+      if (roomId !== undefined) {
+        removeContainerFromRoom(containerName);
+      } else {
+        removeContainer(containerName);
+      }
+    }
 
     return response;
   };
 
   const updateContainerData = async (data: IUpdateContainerForm) => {
+    if (roomId !== undefined) {
+      data.email = roomId;
+    }
+
     const response = await axiosPrivate.patch('/api/containers', data);
+
+    if (response.status === 200) {
+      // zustand store update
+      if (roomId !== undefined) {
+        updateContainerInRoom(data);
+      } else {
+        updateContainer(data);
+      }
+    }
 
     return response;
   };
