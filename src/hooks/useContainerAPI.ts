@@ -110,11 +110,31 @@ const useContainerAPI = () => {
     return response;
   };
 
+  const bringContainerToRoom = async (containerId: string) => {
+    if (roomId) {
+      const response = await axiosPrivate.post(
+        `/api/containers/${containerId}`,
+        {
+          roomId,
+        },
+      );
+
+      if (response.status === 200) {
+        addContainerToRoom(response.data);
+      }
+
+      return response;
+    } else {
+      throw new Error('roomId not found');
+    }
+  };
+
   return {
     createNewContainer,
     getContainersData,
     deleteContainerData,
     updateContainerData,
+    bringContainerToRoom,
   };
 };
 

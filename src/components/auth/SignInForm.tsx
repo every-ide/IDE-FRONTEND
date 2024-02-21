@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { axiosPublic } from '@/src/api/axios';
 import Oauth from './Oauth';
 import useUserStore from '@/src/store/useUserStore';
+import { AxiosError } from 'axios';
 
 const LOGIN_URL = '/auth';
 
@@ -54,10 +55,11 @@ const SignInForm = () => {
         closeOnClick: true,
         theme: 'dark',
       });
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as AxiosError;
       // 로그인 에러
       console.log('error :>> ', error);
-      if (!error?.response) {
+      if (!err?.response) {
         toast.error('No Server Response', {
           position: 'top-right',
           autoClose: 2000,
@@ -65,7 +67,7 @@ const SignInForm = () => {
           closeOnClick: true,
           theme: 'dark',
         });
-      } else if (error.response?.status === 401) {
+      } else if (err.response?.status === 401) {
         toast.error('일치하는 유저 정보가 없습니다.', {
           position: 'top-right',
           autoClose: 2000,

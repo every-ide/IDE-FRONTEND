@@ -24,6 +24,7 @@ import { MdAddCircleOutline } from 'react-icons/md';
 import useContainerAPI from '@/src/hooks/useContainerAPI';
 import { toast } from 'react-toastify';
 import useUserStore from '@/src/store/useUserStore';
+import { AxiosError } from 'axios';
 
 type TCreateContainerFormProps = {
   buttonVariant: TButtonVariant;
@@ -97,14 +98,24 @@ const CreateContainerForm = ({
         }
       } catch (error) {
         console.error(error);
-
-        toast.error('문제가 발생했습니다.다시 시도해주세요.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        const err = error as AxiosError;
+        if (err.response?.status === 400) {
+          toast.error(`이미 사용중인 컨테이너 이름입니다.`, {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            theme: 'dark',
+          });
+        } else {
+          toast.error('문제가 발생했습니다.다시 시도해주세요.', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            theme: 'dark',
+          });
+        }
       }
     },
     [roomId, user],
