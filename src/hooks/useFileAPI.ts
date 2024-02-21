@@ -1,6 +1,7 @@
 import useAxiosPrivate from './useAxiosPrivate';
 import useUserStore from '../store/useUserStore';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
 
 interface ISaveFileContent {
   filePath: string;
@@ -10,6 +11,7 @@ interface ISaveFileContent {
 const useFileAPI = () => {
   const axiosPrivate = useAxiosPrivate();
   const { email } = { ...useUserStore((state) => state.user) };
+  const { containerName } = useParams<{ containerName: string }>();
 
   const saveFileContent = async ({
     filePath,
@@ -18,7 +20,7 @@ const useFileAPI = () => {
     try {
       const response = await axiosPrivate.patch('/api/files', {
         email,
-        fromPath: filePath,
+        fromPath: `/${containerName}${filePath}`,
         newContent,
       });
 
