@@ -29,6 +29,7 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@replit/codemirror-minimap": "^0.5.2",
+    "@splinetool/react-spline": "^2.2.6",
     "@stomp/stompjs": "^7.0.0",
     "@uiw/codemirror-theme-material": "^4.21.21",
     "@uiw/codemirror-theme-vscode": "^4.21.21",
