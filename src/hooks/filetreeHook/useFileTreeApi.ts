@@ -93,6 +93,12 @@ const useFileTreeApi = () => {
     const path = `/${containerName}${name}`;
     const content = '';
     try {
+      console.log(
+        '/api/files : 파일 생성 email,path,content,: ',
+        email,
+        path,
+        content,
+      );
       const response = await axiosPrivate.post(`/api/files`, {
         email,
         path,
@@ -128,15 +134,12 @@ const useFileTreeApi = () => {
   const axiosDeleteFile = async (containerName: string, deletePath: string) => {
     const path = `/${containerName}${deletePath}`;
     try {
-      const response = await axiosPrivate.delete(
-        `/api/containers/${containerName}/files`,
-        {
-          data: {
-            email,
-            path,
-          },
+      const response = await axiosPrivate.delete(`/api/files`, {
+        data: {
+          email,
+          path,
         },
-      );
+      });
       console.log('File deleted successfully', response.data);
       return response.data;
     } catch (error) {
