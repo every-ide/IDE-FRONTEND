@@ -21,11 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../select';
-import { FaJava, FaPython } from 'react-icons/fa6';
+import { FaJava, FaPython, FaQuestion } from 'react-icons/fa6';
 import { MdAddCircleOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
+import { GiTeacher } from 'react-icons/gi';
+import { TbUserQuestion } from 'react-icons/tb';
 
 type TNewRoomForm = {
   name: string;
@@ -256,13 +258,13 @@ const NavigationBar: React.FC = () => {
                       <SelectContent>
                         <SelectItem value="QUESTION">
                           <div className="inline-flex items-center gap-2">
-                            <FaPython />
+                            <TbUserQuestion />
                             멘티
                           </div>
                         </SelectItem>
                         <SelectItem value="ANSWER">
                           <div className="inline-flex items-center gap-2">
-                            <FaJava />
+                            <GiTeacher />
                             멘토
                           </div>
                         </SelectItem>

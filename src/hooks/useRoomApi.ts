@@ -77,7 +77,9 @@ const useRoomAPI = () => {
     }
   };
 
-  const searchRooms = async (name?: string, type?: string, group?: boolean) => {
+  const searchRooms = async (name: string, type?: string, group?: boolean) => {
+    // if (!name) name = 'false';
+    // if (!type) type = 'false';
     try {
       const response = await axiosPrivate.get(
         `/api/communities/search?name=${name}&type=${type}&group=${group}`,
@@ -109,12 +111,20 @@ const useRoomAPI = () => {
     setIsLoading(false); // Add this line
   };
 
+  const fetchMyRooms = async () => {
+    const roomData = await searchRooms(null, null, true);
+    console.log('roomData: ', roomData);
+    setRooms(roomData);
+    setIsLoading(false); // Add this line
+  };
+
   return {
     createNewRoom,
     getRooms,
     updateRoomData,
     searchRooms,
     fetchData,
+    fetchMyRooms,
   };
 };
 
