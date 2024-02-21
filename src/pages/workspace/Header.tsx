@@ -104,29 +104,32 @@ const Header = () => {
   }, [files, selectedFileId, webSocketService, containerId, isConnected]);
 
   return (
-    <header className="inline-flex h-8 justify-end border-b-2 border-mdark bg-ldark px-2">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <FiSave size={16} onClick={handleSave} />
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            <p>저장</p>
-          </TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger>
-            <PiPlayDuotone
-              className="ml-4 text-accent"
-              size={16}
-              onClick={handleCompile}
-            />
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            <p>컴파일 및 실행</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+    <header className="inline-flex h-8 items-center justify-between border-b-2 border-mdark bg-ldark px-2">
+      <div>유저이름 - 컨테이너 이름</div>
+      <div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <FiSave size={16} onClick={handleSave} />
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p>저장</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger>
+              <PiPlayDuotone
+                className="ml-4 text-accent"
+                size={16}
+                onClick={handleCompile}
+              />
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p>컴파일 및 실행</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </header>
   );
 };

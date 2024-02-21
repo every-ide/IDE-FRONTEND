@@ -28,7 +28,7 @@ export class WebSocketService {
         ProjectId: projectId,
       },
       debug: function (str) {
-        console.log('websocket debug->', str);
+        // console.log('websocket debug->', str);
       },
       onConnect: () => {
         console.log('stomp 연결성공');
