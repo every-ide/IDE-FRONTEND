@@ -1,32 +1,31 @@
-import { useEffect, useRef, useState } from 'react';
-import type { Message, UserData } from './data';
-import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
+import { useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/src/utils/style';
 import ChatBottombar from './ChatBottombar';
 import useWebSocketStore from '@/src/store/useWebSocketStore';
 import { useParams } from 'react-router-dom';
+import useUserStore from '@/src/store/useUserStore';
+import { messageListProps } from '.';
+import { getColorForUserId } from '@/src/utils/helper';
 
 interface ChatProps {
-  messages?: Message[];
-  selectedUser: UserData;
+  messageList?: messageListProps[];
 }
 
-const ChatList = ({ messages, selectedUser }: ChatProps) => {
+const ChatList = ({ messageList }: ChatProps) => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const [messagesState, setMessages] = useState<Message[]>(messages ?? []);
+
   const { webSocketService, isConnected } = useWebSocketStore();
   const { containerId } = useParams<{ containerId: string }>();
+  const { user } = useUserStore();
 
-  const sendMessage = (newMessage: Message) => {
-    setMessages([...messagesState, newMessage]);
+  const sendMessage = (newMessage: string) => {
     if (webSocketService && isConnected) {
-      console.log('메시지 publish', webSocketService, isConnected);
       webSocketService.client.publish({
         destination: `/app/container/${containerId}/chat`,
         body: JSON.stringify({
-          email: 'testmail@example.com',
-          content: '임시용 content입니다.',
+          userId: user?.userId,
+          content: newMessage,
         }),
       });
     }
@@ -37,9 +36,7 @@ const ChatList = ({ messages, selectedUser }: ChatProps) => {
       messagesContainerRef.current.scrollTop =
         messagesContainerRef.current.scrollHeight;
     }
-    // dependencies -> messages
-  }, []);
-  console.log('message state: ', messagesState);
+  }, [messageList]);
   return (
     <div className="flex h-[calc(100%-4rem)] w-full flex-col overflow-y-auto overflow-x-hidden">
       <div
@@ -47,7 +44,7 @@ const ChatList = ({ messages, selectedUser }: ChatProps) => {
         className="flex size-full flex-col overflow-y-auto overflow-x-hidden p-1"
       >
         <AnimatePresence>
-          {messages?.map((message, index) => (
+          {messageList?.map((message, index) => (
             <motion.div
               key={index}
               layout
@@ -59,7 +56,7 @@ const ChatList = ({ messages, selectedUser }: ChatProps) => {
                 layout: {
                   type: 'spring',
                   bounce: 0.3,
-                  duration: messages.indexOf(message) * 0.05 + 0.2,
+                  duration: messageList.indexOf(message) * 0.05 + 0.2,
                 },
               }}
               style={{
@@ -68,35 +65,36 @@ const ChatList = ({ messages, selectedUser }: ChatProps) => {
               }}
               className={cn(
                 'flex flex-col gap-2 whitespace-pre-wrap p-4',
-                message.name !== selectedUser.name
-                  ? 'items-end'
-                  : 'items-start',
+                message.userId === user?.userId ? 'items-end' : 'items-start',
               )}
             >
-              <div className="flex items-center gap-3">
-                {message.name === selectedUser.name && (
-                  <Avatar className="flex items-center justify-center">
-                    <AvatarImage
-                      src={message.avatar}
-                      alt={message.name}
-                      width={6}
-                      height={6}
-                    />
-                  </Avatar>
+              <div className="flex items-end gap-1">
+                {message.userId !== user?.userId && (
+                  <div
+                    className={cn(
+                      'flex size-8 -translate-y-1 items-center justify-center rounded-full text-xl font-medium  text-black',
+                      getColorForUserId(message.userId),
+                    )}
+                  >
+                    {message.name[0]}
+                  </div>
                 )}
+                <div className="flex flex-col">
+                  <small className="text-gray-400">{message.name}</small>
+                  <span className="max-w-xs rounded-md bg-mdark p-3">
+                    {message.content}
+                  </span>
+                </div>
 
-                <span className=" max-w-xs rounded-md bg-accent p-3">
-                  {message.message}
-                </span>
-                {message.name !== selectedUser.name && (
-                  <Avatar className="flex items-center justify-center">
-                    <AvatarImage
-                      src={message.avatar}
-                      alt={message.name}
-                      width={6}
-                      height={6}
-                    />
-                  </Avatar>
+                {message.userId === user?.userId && (
+                  <div
+                    className={cn(
+                      'flex size-8 -translate-y-1 items-center justify-center rounded-full text-xl font-medium  text-black',
+                      getColorForUserId(message.userId),
+                    )}
+                  >
+                    {message.name[0]}
+                  </div>
                 )}
               </div>
             </motion.div>

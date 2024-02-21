@@ -1,19 +1,18 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import ChatTopbar from './ChatTopbar';
 import ChatList from './ChatList';
-import { Message, userData } from './data';
+import type { messageListProps } from '.';
 
 export interface ChatProps {
   setIsOpenChat: (isOpenChat: boolean) => void;
+  messageList?: messageListProps[];
 }
 
-const Chat: FC<ChatProps> = ({ setIsOpenChat }) => {
-  const [selectedUser, setSelectedUser] = useState(userData[0]);
-  console.log('selectedUser', selectedUser);
+const Chat: FC<ChatProps> = ({ setIsOpenChat, messageList }) => {
   return (
     <section className="h-[100%] w-80 rounded-s-2xl border-l-2  border-mdark bg-ldark ">
       <ChatTopbar setIsOpenChat={setIsOpenChat} />
-      <ChatList messages={selectedUser.messages} selectedUser={selectedUser} />
+      <ChatList messageList={messageList} />
     </section>
   );
 };
