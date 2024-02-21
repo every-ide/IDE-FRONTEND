@@ -7,6 +7,7 @@ import 'xterm/css/xterm.css';
 import useFileStore from '@/src/store/useFileStore';
 import useFileAPI from '@/src/hooks/useFileAPI';
 import type { IFile } from '@/src/store/useFileStore';
+import useUserStore from '@/src/store/useUserStore';
 
 const Terminal = () => {
   const { containerId } = useParams<{ containerId: string }>();
@@ -19,6 +20,7 @@ const Terminal = () => {
   const { saveFileContent } = useFileAPI();
   const selectedIdRef = useRef<string | undefined>('');
   const filesRef = useRef<IFile[]>();
+  const { user } = useUserStore();
 
   useEffect(() => {
     selectedIdRef.current = selectedFileId;
@@ -48,7 +50,7 @@ const Terminal = () => {
 
   // 구독
   useEffect(() => {
-    if (webSocketService && containerId && isConnected) {
+    if (webSocketService && containerId && isConnected && user) {
       webSocketService.subscribeToDestination(
         `/user/queue/container/${containerId}/terminal`,
         (message) => {
@@ -67,7 +69,7 @@ const Terminal = () => {
       xtermRef.current?.onData(handleInput);
       // stomp disconnect시, 자동 구독해제
     }
-  }, [containerId, webSocketService, isConnected]);
+  }, [containerId, webSocketService, isConnected, user]);
 
   const sendCommand = useCallback(
     (body: PublishTermial) => {
@@ -110,14 +112,14 @@ const Terminal = () => {
         setNeedSave(selectedFileId!, false);
       }
     }
-  }, []);
+  }, [user]);
 
   const processCommand = useCallback(async () => {
     const command = currentCommandRef.current.trim();
     // 컴파일 명령어 수행
     if (/^(javac|node|python)\b/.test(command)) {
       // TODO: axios 400 error 해결 후 주석제거 예정
-      // await needToSave();
+      await needToSave();
     }
     if (command.length > 0) {
       sendCommand({ path: currentPath, command });

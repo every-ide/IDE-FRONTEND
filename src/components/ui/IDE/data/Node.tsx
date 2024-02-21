@@ -76,7 +76,7 @@ const Node: FC<NodeProps> = ({
 
     try {
       // 특정 파일 조회 API 요청
-      const selectedFile = await axiosOpenFile(containerId, path);
+      const selectedFile = await axiosOpenFile(path);
       const { content } = selectedFile?.data ?? {
         content: '',
       };
