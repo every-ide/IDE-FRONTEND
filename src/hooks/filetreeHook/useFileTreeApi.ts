@@ -40,6 +40,7 @@ const useFileTreeApi = () => {
 
   const axiosCreateDir = async (containerName: string, name: string) => {
     const path = `/${containerName}${name}`;
+    console.log('파일 생성 보내기직전 점검 : ', email, path);
     try {
       const response = await axiosPrivate.post(`/api/directories`, {
         email,
@@ -209,16 +210,6 @@ const useFileTreeApi = () => {
     }
   };
 
-  const axiosRooms = async () => {
-    try {
-      const response = await axiosPrivate.get(`/api/communities`);
-      console.log('Rooms api 호출:', `/api/communities`);
-      console.log('response: ', response.data);
-      return response.data;
-    } catch (error) {
-      console.error('Rooms 오류:', error);
-    }
-  };
   return {
     axiosFileTree,
     axiosOpenFile,
@@ -226,7 +217,6 @@ const useFileTreeApi = () => {
     axiosRenameIsFile,
     axiosDeleteIsFile,
     axiosUploadLocalFile,
-    axiosRooms,
   };
 };
 

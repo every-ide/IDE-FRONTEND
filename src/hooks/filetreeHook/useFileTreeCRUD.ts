@@ -71,6 +71,9 @@ const useFileTreeCRUD = () => {
   const onCreate: CreateHandler<FileNodeType> = async ({ type, parentId }) => {
     const baseFilename = type === 'internal' ? 'newFolder' : 'newFile';
 
+    if (findNodeById(fileTree, parentId, null)?.node?.type === 'file') {
+      parentId = null;
+    }
     const maxNumber = findMaxFileNumberByPath(fileTree, parentId, baseFilename);
     const newName =
       maxNumber > 0 ? `${baseFilename}(${maxNumber})` : baseFilename;
