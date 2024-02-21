@@ -1,4 +1,4 @@
-import { create } from 'domain';
+import create from 'zustand';
 
 export interface RoomType {
   roomId: string;
@@ -6,19 +6,27 @@ export interface RoomType {
   isLocked: boolean;
   type: string;
   available: boolean;
+  usersCount: number;
+  maxPeople: number;
+  ownerName: string;
 }
+
 export interface RoomStoreState {
   rooms: RoomType[];
-  memteesRooms: RoomType[];
-  mentorsRooms: RoomType[];
-  myRooms: RoomType[];
   setRooms: (rooms: RoomType[]) => void;
-  setMemteesRooms: (rooms: RoomType[]) => void;
-  setMentorsRooms: (rooms: RoomType[]) => void;
+  addNewRoom: (room: RoomType) => void;
 }
-export const useRoomStore = create<RoomStoreState>((set) => ({
+
+const useRoomStore = create<RoomStoreState>((set) => ({
   rooms: [],
   setRooms: (rooms) => {
     set({ rooms });
   },
+  addNewRoom: (room) => {
+    set((state) => ({
+      rooms: [...state.rooms, room],
+    }));
+  },
 }));
+
+export default useRoomStore;
