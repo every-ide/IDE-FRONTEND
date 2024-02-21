@@ -21,14 +21,14 @@ export class WebSocketService {
     const { token, projectId } = options;
 
     this.client = new Client({
-      brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
-      // brokerURL: 'wss://kf88999ca9f71a.user-app.krampoline.com/ws/websocket',
+      // brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
+      brokerURL: 'wss://kf88999ca9f71a.user-app.krampoline.com/ws/websocket',
       connectHeaders: {
         Authorization: token,
         ProjectId: projectId,
       },
       debug: function (str) {
-        console.log('websocket debug->', str);
+        // console.log('websocket debug->', str);
       },
       onConnect: () => {
         console.log('stomp 연결성공');
