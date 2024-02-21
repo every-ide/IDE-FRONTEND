@@ -5,12 +5,14 @@ interface NavigationProps {
   isTeamspace: boolean;
   setIsOpenChat?: (isOpenChat: boolean) => void;
   isOpenChat?: boolean;
+  isNewChat?: boolean;
 }
 
 const Navigation: FC<NavigationProps> = ({
   isTeamspace = false,
   setIsOpenChat,
   isOpenChat,
+  isNewChat,
 }) => {
   return (
     <nav className="flex h-8  border-b-2 border-mdark bg-ldark px-1">
@@ -25,8 +27,10 @@ const Navigation: FC<NavigationProps> = ({
         </ul>
       </div>
       {isTeamspace && (
-        <div className="flex cursor-pointer items-center">
-          {/* TODO: message 오면 red label */}
+        <div className="relative flex cursor-pointer items-center pr-2">
+          {isNewChat && (
+            <div className="absolute right-1.5 top-1.5 size-2.5 rounded-full bg-error" />
+          )}
           <IoChatbubble
             className="size-5 cursor-pointer transition-all hover:text-gray-400"
             onClick={() => setIsOpenChat?.(!isOpenChat)}
