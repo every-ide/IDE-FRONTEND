@@ -39,10 +39,21 @@ const TeamSpacePage = () => {
 
   useEffect(() => {
     if (webSocketService && isConnected) {
+      // 유저입장 구독
       webSocketService.subscribeToDestination(
-        `/topic/room/${containerId}/enter`,
+        `/app/container/${containerId}/enter`,
         (message) => {
-          console.log('방입장으로 부터의 message', message);
+          console.log('방입장으로 부터의 message', JSON.parse(message.body));
+        },
+        accessToken!,
+        containerId,
+      );
+
+      // 채팅 구독
+      webSocketService.subscribeToDestination(
+        `/topic/container/${containerId}/chat`,
+        (message) => {
+          console.log('채팅으로 부터 구독', JSON.parse(message.body));
         },
       );
     }
