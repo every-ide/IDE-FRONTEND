@@ -35,6 +35,8 @@ export interface IEnteredRoomDetail {
 export interface RoomStoreState {
   rooms: RoomType[];
   enteredRoom: IEnteredRoomDetail | null;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
   setRooms: (rooms: RoomType[]) => void;
   setEnteredRoom: (room: IEnteredRoomDetail) => void;
   addNewRoom: (room: RoomType) => void;
@@ -46,6 +48,7 @@ export interface RoomStoreState {
 const useRoomStore = create<RoomStoreState>((set) => ({
   rooms: [],
   enteredRoom: null,
+  isLoading: true,
   setRooms: (rooms) => {
     console.log('rooms: ', rooms);
     set({ rooms });
@@ -109,6 +112,9 @@ const useRoomStore = create<RoomStoreState>((set) => ({
         },
       };
     });
+  },
+  setIsLoading: (isLoading) => {
+    set({ isLoading });
   },
 }));
 

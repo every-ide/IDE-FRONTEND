@@ -8,16 +8,21 @@ import useRoomStore from '@/src/store/useRoomStore';
 const MenteesPage = () => {
   const { rooms, setRooms } = useRoomStore();
   const { getRooms } = useRoomAPI();
+  const [isLoading, setIsLoading] = useState(true); // Add this line
+
   useEffect(() => {
     async function fetchData() {
       const roomData = await getRooms();
       console.log('roomData: ', roomData);
-
       setRooms(roomData.filter((room: any) => room.type === 'QUESTION'));
+      setIsLoading(false); // Add this line
     }
     fetchData();
   }, []);
 
+  if (isLoading) {
+    return <div className="loading-indicator">Loading...</div>; // Modify this as needed
+  }
   return (
     <div className="bg-mdark">
       <Header />

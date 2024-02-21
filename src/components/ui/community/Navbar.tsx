@@ -21,11 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../select';
-import { FaJava, FaPython } from 'react-icons/fa6';
+import { FaJava, FaPython, FaQuestion } from 'react-icons/fa6';
 import { MdAddCircleOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
+import { GiTeacher } from 'react-icons/gi';
+import { TbUserQuestion } from 'react-icons/tb';
 
 type TNewRoomForm = {
   name: string;
@@ -39,7 +41,7 @@ const NavigationBar: React.FC = () => {
   const [searchkey, setSearchKey] = useState<string>('');
   const location = useLocation(); // 현재 위치 정보를 가져옵니다.
   const { getRooms } = useRoomAPI();
-  const { setRooms } = useRoomStore();
+  const { setRooms, setIsLoading } = useRoomStore();
   const [openModal, setOpenModal] = useState(false);
   const { createNewRoom } = useRoomAPI();
   const [isLocked, setIsLocked] = useState(false);
@@ -85,8 +87,10 @@ const NavigationBar: React.FC = () => {
         setOpenModal,
         reset,
       });
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setRooms(await getRooms());
+      setIsLoading(true);
+      const roomData = await getRooms();
+      setRooms(roomData);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
 
@@ -160,7 +164,7 @@ const NavigationBar: React.FC = () => {
           <Button
             variant="outline"
             size="lg"
-            className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95"
+            className="mt-2 gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95"
           >
             <MdAddCircleOutline size={20} className="text-accent" />방 생성하기
           </Button>
@@ -254,13 +258,13 @@ const NavigationBar: React.FC = () => {
                       <SelectContent>
                         <SelectItem value="QUESTION">
                           <div className="inline-flex items-center gap-2">
-                            <FaPython />
+                            <TbUserQuestion />
                             멘티
                           </div>
                         </SelectItem>
                         <SelectItem value="ANSWER">
                           <div className="inline-flex items-center gap-2">
-                            <FaJava />
+                            <GiTeacher />
                             멘토
                           </div>
                         </SelectItem>
