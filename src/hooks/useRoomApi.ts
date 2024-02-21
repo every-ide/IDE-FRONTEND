@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import useAxiosPrivate from './useAxiosPrivate';
 import { IUpdateContainerForm } from '../components/my/ContainerBox';
 import useRoomStore from '../store/useRoomStore';
+import { set } from 'react-hook-form';
 
 interface IcreateNewRoomProps {
   name: string;
@@ -21,7 +22,7 @@ interface IUpdateRoomData {
 
 const useRoomAPI = () => {
   const axiosPrivate = useAxiosPrivate();
-  const { setRooms } = useRoomStore();
+  const { setRooms, setIsLoading } = useRoomStore();
 
   const createNewRoom = async ({
     name,
@@ -32,16 +33,6 @@ const useRoomAPI = () => {
     setOpenModal,
     reset,
   }: IcreateNewRoomProps) => {
-    // Test용!!!! (추후 삭제)
-    console.log(
-      'isLocked,password,roomType,maxPeople,: ',
-      isLocked,
-      password,
-      roomType,
-      maxPeople,
-    );
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
     const response = await axiosPrivate.post(
       `/api/community`,
       JSON.stringify({
@@ -67,7 +58,6 @@ const useRoomAPI = () => {
       setOpenModal(false);
       reset();
 
-      setRooms(response.data);
       //   // 새 창에서 컨테이너 열기
       //   window.open(
       //     `http://localhost:5173/workspace/${containerName}`,
@@ -80,8 +70,7 @@ const useRoomAPI = () => {
   const getRooms = async () => {
     try {
       const response = await axiosPrivate.get(`/api/communities`);
-      console.log('Rooms api 호출:', `/api/communities`);
-      console.log('response: ', response.data);
+      console.log('api호출 response: ', response.data);
       return response.data;
     } catch (error) {
       console.error('Rooms 오류:', error);
@@ -113,10 +102,19 @@ const useRoomAPI = () => {
     return response;
   };
 
+  const fetchData = async () => {
+    const roomData = await getRooms();
+    console.log('roomData: ', roomData);
+    setRooms(roomData);
+    setIsLoading(false); // Add this line
+  };
+
   return {
     createNewRoom,
     getRooms,
     updateRoomData,
+    searchRooms,
+    fetchData,
   };
 };
 

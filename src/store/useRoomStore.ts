@@ -13,12 +13,15 @@ export interface RoomType {
 
 export interface RoomStoreState {
   rooms: RoomType[];
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
   setRooms: (rooms: RoomType[]) => void;
   addNewRoom: (room: RoomType) => void;
 }
 
 const useRoomStore = create<RoomStoreState>((set) => ({
   rooms: [],
+  isLoading: true,
   setRooms: (rooms) => {
     console.log('rooms: ', rooms);
     set({ rooms });
@@ -27,6 +30,9 @@ const useRoomStore = create<RoomStoreState>((set) => ({
     set((state) => ({
       rooms: [...state.rooms, room],
     }));
+  },
+  setIsLoading: (isLoading) => {
+    set({ isLoading });
   },
 }));
 

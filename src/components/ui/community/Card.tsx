@@ -113,6 +113,7 @@ const CardContainer: React.FC<CardProps> = ({
 
         setOpenModal(false);
         const getData = await getRooms();
+        console.log('getData: ', getData);
         setRooms(getData);
       }
     } catch (error) {

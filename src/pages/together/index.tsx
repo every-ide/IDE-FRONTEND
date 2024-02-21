@@ -1,21 +1,23 @@
 import Navbar from '@/src/components/ui/community/Navbar';
 import Card from '@/src/components/ui/community/Card';
 import Header from '@/src/components/my/Header';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
+import { set } from 'react-hook-form';
 
 const TogetherPage = () => {
-  const { rooms, setRooms } = useRoomStore();
-  const { getRooms } = useRoomAPI();
+  const { rooms, isLoading } = useRoomStore();
+  const { getRooms, fetchData } = useRoomAPI();
+
   useEffect(() => {
-    async function fetchData() {
-      const roomData = await getRooms();
-      console.log('roomData: ', roomData);
-      setRooms(roomData);
-    }
     fetchData();
   }, []);
+
+  if (isLoading) {
+    console.log('isLoading: ', isLoading);
+    return <div className="loading-indicator">Loading...</div>; // Modify this as needed
+  }
 
   return (
     <div className="bg-mdark">

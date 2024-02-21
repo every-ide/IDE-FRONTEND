@@ -39,7 +39,7 @@ const NavigationBar: React.FC = () => {
   const [searchkey, setSearchKey] = useState<string>('');
   const location = useLocation(); // 현재 위치 정보를 가져옵니다.
   const { getRooms } = useRoomAPI();
-  const { setRooms } = useRoomStore();
+  const { setRooms, setIsLoading } = useRoomStore();
   const [openModal, setOpenModal] = useState(false);
   const { createNewRoom } = useRoomAPI();
   const [isLocked, setIsLocked] = useState(false);
@@ -85,8 +85,10 @@ const NavigationBar: React.FC = () => {
         setOpenModal,
         reset,
       });
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setRooms(await getRooms());
+      setIsLoading(true);
+      const roomData = await getRooms();
+      setRooms(roomData);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
 
