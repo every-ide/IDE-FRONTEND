@@ -40,6 +40,7 @@ const useFileTreeApi = () => {
 
   const axiosCreateDir = async (containerName: string, name: string) => {
     const path = `/${containerName}${name}`;
+    console.log('파일 생성 보내기직전 점검 : ', email, path);
     try {
       const response = await axiosPrivate.post(`/api/directories`, {
         email,
@@ -182,14 +183,14 @@ const useFileTreeApi = () => {
   };
 
   const axiosUploadLocalFile = async (newPath: string, file: File) => {
-    const path = `/${containerName}${newPath}`;
+    const path = `/${containerName}/`;
     console.log('containerName: ', containerName);
     const formData = new FormData();
     formData.append('file', file);
-    console.log('file: ', file);
     formData.append('path', path);
-    console.log('path: ', path);
     formData.append('email', email);
+    console.log('file: ', file);
+    console.log('path: ', path);
     console.log('email: ', email);
 
     console.log('formData: ', formData.get('file'));
@@ -208,6 +209,7 @@ const useFileTreeApi = () => {
       throw error;
     }
   };
+
   return {
     axiosFileTree,
     axiosOpenFile,
