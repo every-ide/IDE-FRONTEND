@@ -7,11 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '../button';
 import { TbUserQuestion } from 'react-icons/tb';
 import { FaLock, FaLockOpen } from 'react-icons/fa6';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Button } from '../button';
 
 interface CardProps {
+  roomId: string;
   name: string;
   type: string;
   isLocked: boolean;
@@ -21,6 +23,7 @@ interface CardProps {
 }
 
 const CardContainer: React.FC<CardProps> = ({
+  roomId,
   name,
   type,
   isLocked,
@@ -28,6 +31,7 @@ const CardContainer: React.FC<CardProps> = ({
   maxPeople,
   ownerName,
 }) => {
+  const navigate = useNavigate();
   return (
     <Card variant="container">
       {/* <img
@@ -51,21 +55,28 @@ const CardContainer: React.FC<CardProps> = ({
               <span className="size-5 pt-3">ANSWER</span>
             </div>
           )}
-          <span>
-            {usersCount} / {maxPeople}
-          </span>
-          {isLocked ? (
-            <FaLock className="mr-2 size-7" />
-          ) : (
-            <FaLockOpen className="mr-2 size-7" />
-          )}
+          <div className="flex flex-col">
+            {isLocked ? (
+              <FaLock className="mr-2 size-7" />
+            ) : (
+              <FaLockOpen className="mr-2 size-7" />
+            )}
+          </div>
         </div>
-        <div className="flex items-center pt-4 text-sm text-white dark:text-white">
+        <div className="flex items-center justify-between pt-4 text-sm text-white dark:text-white">
           <span>Owner: {ownerName}</span>
+          <span className="">
+            {usersCount || 1} / {maxPeople}
+          </span>
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">가입하기</Button>
+        <Button
+          className="w-full"
+          onClick={() => navigate(`/together/${roomId}`)}
+        >
+          가입하기
+        </Button>
       </CardFooter>
     </Card>
   );

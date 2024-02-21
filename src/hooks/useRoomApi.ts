@@ -36,13 +36,26 @@ const useRoomAPI = () => {
     );
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    const response = await axiosPrivate.post(`/api/community`, {
-      name,
-      isLocked,
-      password,
-      roomType,
-      maxPeople,
-    });
+    const response = await axiosPrivate.post(
+      `/api/community`,
+      JSON.stringify({
+        name,
+        isLocked,
+        password,
+        roomType,
+        maxPeople,
+      }),
+    );
+    console.log(
+      'JSON.stringify({name,isLocked,password,roomType,maxPeople,}): ',
+      JSON.stringify({
+        name,
+        isLocked,
+        password,
+        roomType,
+        maxPeople,
+      }),
+    );
 
     if (response.status === 201) {
       toast('새로운 방 생성되었습니다.', {
@@ -57,8 +70,7 @@ const useRoomAPI = () => {
       setOpenModal(false);
       reset();
 
-      addNewRoom(response.data);
-
+      setRooms(response.data);
       //   // 새 창에서 컨테이너 열기
       //   window.open(
       //     `http://localhost:5173/workspace/${containerName}`,
@@ -79,6 +91,21 @@ const useRoomAPI = () => {
     }
   };
 
+  const searchRooms = async (name?: string, type?: string, group?: boolean) => {
+    try {
+      const response = await axiosPrivate.get(
+        `/api/communities/search?name=${name}&type=${type}&group=${group}`,
+      );
+      console.log(
+        '`/api/communities/search?name=${name}&type=${type}&group=${group}`: ',
+        `/api/communities/search?name=${name}&type=${type}&group=${group}`,
+      );
+      console.log('response: ', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Rooms 오류:', error);
+    }
+  };
   const updateRoomData = async (data: IUpdateContainerForm) => {
     // Test용!!!! (추후 삭제)
     await new Promise((resolve) => setTimeout(resolve, 2000));
