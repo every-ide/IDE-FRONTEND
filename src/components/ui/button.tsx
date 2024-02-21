@@ -15,7 +15,7 @@ const buttonVariants = cva(
           'bg-red-500 text-gray-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-gray-50 dark:hover:bg-red-900/90',
         outline: 'border-2 border-[#555] bg-ldark hover:bg-accent/25',
         secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-100/80 ',
-        ghost: 'hover:bg-mdark',
+        ghost: 'hover:bg-gray-600',
         link: 'text-gray-900 underline-offset-4 hover:underline dark:text-gray-50',
         icon: ' hover:text-accent',
       },
@@ -23,7 +23,7 @@ const buttonVariants = cva(
         default: 'h-10 px-4 py-2',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
-        icon: 'p-2',
+        icon: 'size-9',
       },
     },
     defaultVariants: {
