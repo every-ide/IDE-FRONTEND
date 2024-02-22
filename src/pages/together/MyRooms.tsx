@@ -4,6 +4,8 @@ import Header from '@/src/components/my/Header';
 import { useEffect } from 'react';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
+import EmptyStateCommunity from '@/src/components/my/EmptyStateCommunity';
+import LoadingEnterRoom from './Room/LoadingEnterRoom';
 
 const MyRooms = () => {
   const { rooms, isLoading, searchKey } = useRoomStore();
@@ -15,7 +17,7 @@ const MyRooms = () => {
 
   if (isLoading) {
     console.log('isLoading: ', isLoading);
-    return <div className="loading-indicator">Loading...</div>; // Modify this as needed
+    return <LoadingEnterRoom />; // Modify this as needed
   }
 
   return (
@@ -23,11 +25,15 @@ const MyRooms = () => {
       <Header />
       <Navbar />
       <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {rooms
-          .filter((room: any) => room.isJoined === true)
-          .map((room, index) =>
-            room.available ? <Card key={index} {...room} /> : null,
-          )}
+        {rooms ? (
+          rooms
+            .filter((room: any) => room.isJoined === true)
+            .map((room, index) =>
+              room.available ? <Card key={index} {...room} /> : null,
+            )
+        ) : (
+          <EmptyStateCommunity />
+        )}
       </div>
     </div>
   );

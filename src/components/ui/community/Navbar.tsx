@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { RiDeleteBack2Line } from 'react-icons/ri';
 import { FaSearch } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom'; // useLocation 추가
 import {
@@ -27,6 +26,7 @@ import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
 import { GiTeacher } from 'react-icons/gi';
 import { TbUserQuestion } from 'react-icons/tb';
+import { Switch } from '../switch';
 
 type TNewRoomForm = {
   name: string;
@@ -73,6 +73,7 @@ const NavigationBar: React.FC = () => {
       password,
       roomType,
       maxPeople,
+      description,
     );
     if (!isLocked) {
       password = '';
@@ -84,7 +85,7 @@ const NavigationBar: React.FC = () => {
         password,
         roomType,
         maxPeople,
-        description: '',
+        description,
         setOpenModal,
         reset,
       });
@@ -143,7 +144,7 @@ const NavigationBar: React.FC = () => {
       </div>
       <div className="flex items-center">
         <div className="mr-8 flex items-center">
-          <div className="none flex flex-1 items-center justify-between rounded-lg bg-mdark">
+          <div className="flex flex-1 items-center justify-between rounded-lg bg-mdark">
             <input
               type="text"
               value={searchKey}
@@ -191,11 +192,11 @@ const NavigationBar: React.FC = () => {
                         value: 20,
                         message: '방 이름은 20자 이내로 작성해주세요.',
                       },
-                      validate: {
-                        noSpace: (v) =>
-                          !/\s/.test(v) ||
-                          '방 이름에 공백을 포함할 수 없습니다.',
-                      },
+                      // validate: {
+                      //   noSpace: (v) =>
+                      //     !/\s/.test(v) ||
+                      //     '방 이름에 공백을 포함할 수 없습니다.',
+                      // },
                     })}
                   />
                 </div>
@@ -226,14 +227,14 @@ const NavigationBar: React.FC = () => {
                     name="isLocked"
                     control={control}
                     render={({ field }) => (
-                      <Input
-                        type="checkbox"
-                        {...field}
-                        checked={isLocked}
-                        onChange={(e) => {
-                          setIsLocked(e.target.checked);
-                          field.onChange(e.target.checked); // Controller에 값 전달
+                      <Switch
+                        id="isLocked"
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          setIsLocked(checked); // 로컬 상태 업데이트
+                          field.onChange(checked); // 폼 상태 업데이트
                         }}
+                        onBlur={field.onBlur}
                       />
                     )}
                   />
@@ -304,11 +305,16 @@ const NavigationBar: React.FC = () => {
                     type="number"
                     placeholder="최대 인원을 입력해주세요."
                     className="col-span-3 text-black"
+                    min="2" // HTML validation to not allow numbers less than 2
                     {...register('maxPeople', {
                       valueAsNumber: true,
                       min: {
                         value: 2,
-                        message: '최소 2명 이상이어야 합니다.',
+                        message: '최소 2명 이상이어야 합니다.', // Validation message for numbers less than 2
+                      },
+                      max: {
+                        value: 30,
+                        message: '최대 100명까지 가능합니다.', // Validation message for numbers more than 100
                       },
                     })}
                   />

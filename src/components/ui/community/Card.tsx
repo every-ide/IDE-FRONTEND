@@ -36,6 +36,7 @@ interface CardProps {
   personCnt: number;
   maxPeople: number;
   ownerName: string;
+  description: string;
 }
 
 interface IUpdateCardProps {
@@ -43,6 +44,7 @@ interface IUpdateCardProps {
   newName: string;
   isLocked: boolean;
   password: string;
+  description: string;
 }
 
 const CardContainer: React.FC<CardProps> = ({
@@ -53,6 +55,7 @@ const CardContainer: React.FC<CardProps> = ({
   personCnt,
   maxPeople,
   ownerName,
+  description,
 }) => {
   const navigate = useNavigate();
   const { updateRoomData } = useRoomAPI();
@@ -72,9 +75,11 @@ const CardContainer: React.FC<CardProps> = ({
       oldName: name,
       newName: name,
       isLocked,
+      description,
       password: '',
     },
   });
+  console.log('description: ', description);
   useEffect(() => {
     if (openModal) {
       reset();
@@ -92,6 +97,7 @@ const CardContainer: React.FC<CardProps> = ({
         name: data.newName,
         isLocked: data.isLocked,
         password: data.password,
+        description: data.description,
       };
       const response = await updateRoomData(
         {
@@ -100,6 +106,7 @@ const CardContainer: React.FC<CardProps> = ({
         roomId,
       );
 
+      console.log('response: ', response);
       if (response.status === 204) {
         // zustand store update;
 
@@ -171,6 +178,28 @@ const CardContainer: React.FC<CardProps> = ({
                       placeholder="새 방 이름을 입력하세요"
                       className="col-span-3 text-black"
                       {...register('newName', {
+                        required: '새 방 이름은 필수 입력 사항입니다.',
+                      })}
+                    />
+                    {errors.newName && (
+                      <p className="mt-1 text-xs text-error">
+                        {errors.newName.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label
+                      htmlFor="description"
+                      className="text-right text-black"
+                    >
+                      설명
+                    </Label>
+                    <Input
+                      id="description"
+                      placeholder="설명을 입력하세요"
+                      className="col-span-3 text-black"
+                      defaultValue={description}
+                      {...register('description', {
                         required: '새 방 이름은 필수 입력 사항입니다.',
                       })}
                     />

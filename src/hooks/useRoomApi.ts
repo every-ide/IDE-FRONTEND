@@ -34,6 +34,15 @@ const useRoomAPI = () => {
     setOpenModal,
     reset,
   }: IcreateNewRoomProps) => {
+    console.log(
+      'name,isLocked,password,roomType,maxPeople,description,: ',
+      name,
+      isLocked,
+      password,
+      roomType,
+      maxPeople,
+      description,
+    );
     const response = await axiosPrivate.post(
       `/api/community`,
       JSON.stringify({
@@ -79,11 +88,13 @@ const useRoomAPI = () => {
   };
 
   const updateRoomData = async (data: IUpdateRoomData, roomId: string) => {
+    console.log('data: ', data);
     const response = await axiosPrivate.patch(
       `/api/community/${roomId}/settings`,
       data,
     );
     console.log('response: 방을 수정했습니다 ', response);
+    return response;
   };
   const fetchSearchRooms = async (name = '') => {
     setIsLoading(true); // Assuming you want to indicate loading before the request
