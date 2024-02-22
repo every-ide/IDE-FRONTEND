@@ -361,7 +361,8 @@ export const handlers = [
   http.get('/api/communities', async () => {
     return HttpResponse.json([
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: '100c2816-ca8d-4f26-b92a-11c9f7536502',
@@ -371,7 +372,8 @@ export const handlers = [
         available: true,
       },
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: '1b6e17c5-a2b8-494e-8cdb-21b14d02c183',
@@ -381,7 +383,8 @@ export const handlers = [
         available: true,
       },
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: '2932298a-2e03-4ca5-ad74-f50e89946145',
@@ -391,7 +394,8 @@ export const handlers = [
         available: true,
       },
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: '36b35eac-836e-445d-871a-3434eb9e810d',
@@ -401,7 +405,8 @@ export const handlers = [
         available: true,
       },
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: '460a7830-ba6d-4689-8d44-a8a4dc3ce1e0',
@@ -411,7 +416,8 @@ export const handlers = [
         available: true,
       },
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: '7089e8b0-2742-484a-b012-53a1ed8e9707',
@@ -421,7 +427,8 @@ export const handlers = [
         available: true,
       },
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: '86bf94b9-d666-4cc0-9b9c-7de34bdf13b6',
@@ -431,7 +438,8 @@ export const handlers = [
         available: true,
       },
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: 'acb31d9f-f211-4e35-b8d6-6520a162ccd2',
@@ -441,7 +449,8 @@ export const handlers = [
         available: true,
       },
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: 'beb17517-bec1-4380-a92f-3a450f392c1b',
@@ -451,7 +460,8 @@ export const handlers = [
         available: true,
       },
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: 'ca3cb0dd-fd18-4a14-97a0-6cb6b3231b69',
@@ -461,7 +471,8 @@ export const handlers = [
         available: true,
       },
       {
-        usersCount: 4,
+        fullRoom: true,
+        personCnt: 4,
         ownerName: 'Steve',
         maxPeople: 10,
         roomId: 'd158bb76-c721-4c05-a6a0-87e3a7a67f8f',

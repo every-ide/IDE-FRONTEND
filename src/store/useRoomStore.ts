@@ -8,9 +8,10 @@ export interface RoomType {
   isLocked: boolean;
   type: string;
   available: boolean;
-  usersCount: number;
+  personCnt: number;
   maxPeople: number;
   ownerName: string;
+  fullRoom: boolean;
 }
 
 export interface IEnteredRoomDetail {

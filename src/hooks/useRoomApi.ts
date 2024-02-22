@@ -77,7 +77,7 @@ const useRoomAPI = () => {
     }
   };
 
-  const searchRooms = async (name: string, type?: string, group?: boolean) => {
+  const searchRooms = async (name: string, type?: string, group: boolean) => {
     // if (!name) name = 'false';
     // if (!type) type = 'false';
     try {
