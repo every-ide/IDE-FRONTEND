@@ -33,7 +33,7 @@ interface CardProps {
   name: string;
   type: string;
   isLocked: boolean;
-  usersCount: number;
+  personCnt: number;
   maxPeople: number;
   ownerName: string;
 }
@@ -50,7 +50,7 @@ const CardContainer: React.FC<CardProps> = ({
   name,
   type,
   isLocked,
-  usersCount,
+  personCnt,
   maxPeople,
   ownerName,
 }) => {
@@ -273,14 +273,14 @@ const CardContainer: React.FC<CardProps> = ({
         <div className="flex items-center justify-between pt-4 text-sm text-white dark:text-white">
           <span>Owner: {ownerName}</span>
           <span className="mr-1">
-            {usersCount || 1} / {maxPeople}
+            {personCnt || 1} / {maxPeople}
           </span>
         </div>
       </CardContent>
       <CardFooter>
         <Button
           className="w-full"
-          onClick={() => navigate(`/together/${roomId}`)}
+          onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}}`)}
         >
           가입하기
         </Button>

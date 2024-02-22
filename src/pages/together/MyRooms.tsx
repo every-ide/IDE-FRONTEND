@@ -9,16 +9,16 @@ const MyRooms = () => {
   const { rooms, isLoading } = useRoomStore();
   const { getRooms, fetchData, fetchMyRooms } = useRoomAPI();
 
-  // useEffect(() => {
-  //   async function fetchRooms() {
-  //     await fetchMyRooms();
-  //   }
-  //   fetchRooms();
-  // }, []);
-
   useEffect(() => {
-    fetchData();
+    async function fetchRooms() {
+      await fetchMyRooms();
+    }
+    fetchRooms();
   }, []);
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   if (isLoading) {
     console.log('isLoading: ', isLoading);

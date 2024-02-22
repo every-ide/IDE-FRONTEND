@@ -144,7 +144,7 @@ const NavigationBar: React.FC = () => {
             value={searchkey}
             onChange={(e) => setSearchKey(e.target.value)}
             placeholder="Enter to search..."
-            className="flex-1 rounded-xl bg-mdark p-3 pr-16 text-accent caret-accent focus:border-[0.5px] focus:border-accent/65 focus:shadow-sm focus:shadow-accent focus:outline-none"
+            className="rounded-xl bg-mdark p-3 pr-16 text-accent caret-accent focus:border-[0.5px] focus:border-accent/65 focus:shadow-sm focus:shadow-accent focus:outline-none"
           />
           <button
             onClick={() => setSearchKey('')}
@@ -155,6 +155,54 @@ const NavigationBar: React.FC = () => {
           <button className="translate-x-[-55px] text-accent hover:text-accent/65 active:scale-90">
             <FaSearch size={18} />
           </button>
+          <Select
+            onValueChange={(value) => {
+              console.log('value: ', value);
+              // setRoomType(value);
+            }}
+          >
+            <SelectTrigger className="col-span-3 mt-1 w-24 bg-mdark">
+              <SelectValue id="roomType" placeholder="방 종류" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="QUESTION">
+                <div className="inline-flex items-center gap-2">
+                  <TbUserQuestion />
+                  멘티
+                </div>
+              </SelectItem>
+              <SelectItem value="ANSWER">
+                <div className="inline-flex items-center gap-2">
+                  <GiTeacher />
+                  멘토
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          <Select
+            onValueChange={(value) => {
+              console.log('value: ', value);
+              // setRoomType(value);
+            }}
+          >
+            <SelectTrigger className="col-span-3 mt-1 w-24 bg-mdark">
+              <SelectValue id="roomType" placeholder="자기 " />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="QUESTION">
+                <div className="inline-flex items-center gap-2">
+                  <TbUserQuestion />
+                  멘티
+                </div>
+              </SelectItem>
+              <SelectItem value="ANSWER">
+                <div className="inline-flex items-center gap-2">
+                  <GiTeacher />
+                  멘토
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         {/* Other icons */}
         {/* ... */}
