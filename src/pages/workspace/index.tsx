@@ -54,7 +54,7 @@ const WorkspacePage = () => {
 
   return (
     <div className="flex h-screen flex-col text-xs">
-      <Navigation />
+      <Navigation isTeamspace={false} />
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
