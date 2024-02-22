@@ -14,7 +14,6 @@ const PersonalInfoForm = () => {
     handleSubmit,
     setError,
     formState: { errors },
-    setValue, // Add this to use setValue
   } = useForm({
     defaultValues: {
       name: user?.name || '',
@@ -56,7 +55,7 @@ const PersonalInfoForm = () => {
       <div className="mx-auto max-w-md pt-5">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <AuthInput
-            label="Name"
+            label="이름"
             name="name"
             type="text"
             isReadOnly={true}
@@ -67,7 +66,7 @@ const PersonalInfoForm = () => {
             errors={errors}
           />
           <AuthInput
-            label="Email"
+            label="이메일"
             name="email"
             type="email"
             isReadOnly={true}
@@ -82,36 +81,36 @@ const PersonalInfoForm = () => {
             errors={errors}
           />
           <AuthInput
-            label="Old Password"
+            label="현재 비밀번호"
             name="oldPassword"
             type="password"
-            placeholder="Your current password"
+            placeholder="현재 비밀번호를 입력해 주세요."
             registerOptions={register('oldPassword', {
-              required: 'Current password is required',
+              required: '현재 비밀번호를 입력해 주세요.',
             })}
             errors={errors}
           />
           <AuthInput
-            label="New Password"
+            label="변경할 비밀번호"
             name="newPassword"
             type="password"
-            placeholder="New password"
+            placeholder="변경할 비밀번호를 입력해 주세요."
             registerOptions={register('newPassword', {
-              required: 'New password is required',
+              required: '현재 비밀번호를 입력해 주세요.',
               minLength: {
                 value: 8,
-                message: 'Password must be at least 8 characters long',
+                message: '비밀번호는 최소 8자이상이어야 합니다.',
               },
             })}
             errors={errors}
           />
           <AuthInput
-            label="Confirm Password"
+            label="변경할 비밀번호확인"
             name="confirmPassword"
             type="password"
-            placeholder="Confirm new password"
+            placeholder="변경할 비밀번호를 한번 더 입력해 주세요."
             registerOptions={register('confirmPassword', {
-              required: 'Please confirm your new password',
+              required: '비밀번호가 일치하지 않습니다.',
             })}
             errors={errors}
           />
@@ -119,7 +118,7 @@ const PersonalInfoForm = () => {
             type="submit"
             className="rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
-            Update Info
+            비밀번호 변경하기
           </button>
         </form>
       </div>

@@ -86,7 +86,7 @@ export const handlers = [
       },
     );
   }),
-  http.post('/users', async ({ request }) => {
+  http.post('/users', async () => {
     console.log('회원가입');
     // return HttpResponse.text(JSON.stringify("user_exists"), {
     //   status: 403,

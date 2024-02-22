@@ -12,7 +12,6 @@ import useWebSocketStore from '@/src/store/useWebSocketStore';
 import { useParams } from 'react-router-dom';
 import { useCallback } from 'react';
 import { toast } from 'react-toastify';
-import useUserStore from '@/src/store/useUserStore';
 
 const createFileRunCommand = (filePath: string) => {
   const language = filePath.split('.').pop()?.toLowerCase();

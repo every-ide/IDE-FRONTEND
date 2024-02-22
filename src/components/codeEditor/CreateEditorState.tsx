@@ -43,7 +43,7 @@ const createEditorState = ({
     }
   };
 
-  const create = (v: EditorView) => {
+  const create = () => {
     const dom = document.createElement('div');
     return { dom };
   };
@@ -56,7 +56,7 @@ const createEditorState = ({
       vscodeDark, // theme
       keymap.of([indentWithTab]),
       // minimap scrollbar
-      showMinimap.compute(['doc'], (state) => {
+      showMinimap.compute(['doc'], () => {
         return {
           create,
           displayText: 'blocks',

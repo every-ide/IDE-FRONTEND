@@ -27,7 +27,7 @@ export class WebSocketService {
         Authorization: token,
         ProjectId: projectId,
       },
-      debug: function (str) {
+      debug: function () {
         // console.log('websocket debug->', str);
       },
       onConnect: () => {
