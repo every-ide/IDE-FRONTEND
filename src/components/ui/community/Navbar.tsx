@@ -27,6 +27,7 @@ import useRoomStore from '@/src/store/useRoomStore';
 import { GiTeacher } from 'react-icons/gi';
 import { TbUserQuestion } from 'react-icons/tb';
 import { Switch } from '../switch';
+import { FaRotate } from 'react-icons/fa6';
 
 type TNewRoomForm = {
   name: string;
@@ -109,6 +110,10 @@ const NavigationBar: React.FC = () => {
   const handleSearch = () => {
     fetchSearchRooms(searchKey);
   };
+  const handleReset = () => {
+    fetchSearchRooms('');
+    setSearchKey('');
+  };
   // 경로가 활성 링크인지 확인하는 함수
   const isActiveLink = (path: string): boolean => {
     return location.pathname === path;
@@ -152,12 +157,22 @@ const NavigationBar: React.FC = () => {
               placeholder="Enter to search..."
               className="rounded-xl bg-mdark p-3 outline-none "
             />
-            <button
-              className="pr-4 text-accent hover:text-accent/65 active:scale-90"
+            {searchKey && (
+              <Button
+                className="border-none pr-4 text-accent hover:text-accent/65 active:scale-90"
+                onClick={() => {
+                  handleReset();
+                }}
+              >
+                <FaRotate size={18} />
+              </Button>
+            )}
+            <Button
+              className="border-none pr-4 text-accent hover:text-accent/65 active:scale-90"
               onClick={handleSearch}
             >
               <FaSearch size={18} />
-            </button>
+            </Button>
           </div>
         </div>
         <Dialog open={openModal} onOpenChange={setOpenModal}>
