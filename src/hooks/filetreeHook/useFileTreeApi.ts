@@ -12,14 +12,22 @@ const useFileTreeApi = () => {
   const location = useLocation();
   const path = location.pathname;
   const { containerId: projectId } = useParams<{ containerId: string }>();
+  const { roomId } = useParams<{ roomId: string }>();
 
-  const hasTeamspace = path.includes('/teamspace/');
+  const hasTeamspace = path.includes('teamspace');
 
   const axiosFileTree = async (containerName: string) => {
     // console.log('containerName: ', containerName);
     try {
+      if (hasTeamspace) {
+        const response = axiosPrivate.get(
+          `api/${roomId}/filetree/${containerName}`,
+        );
+        const data = (await response).data;
+        return data;
+      }
       const response = axiosPrivate.get(
-        `api/${hasTeamspace ? projectId : userId}/filetree/${containerName}`,
+        `api/${userId}/filetree/${containerName}`,
       );
       const data = (await response).data;
       return data;
