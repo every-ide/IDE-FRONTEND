@@ -20,18 +20,21 @@ interface ChatBottombarProps {
 const ChatBottombar = ({ sendMessage }: ChatBottombarProps) => {
   const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [isComposing, setIsComposing] = useState<boolean>(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
   };
 
   const handleThumbsUp = () => {
-    sendMessage('👍');
-    setMessage('');
+    if (!isComposing) {
+      sendMessage('👍');
+      setMessage('');
+    }
   };
 
   const handleSend = () => {
-    if (message.trim()) {
+    if (!isComposing && message.trim()) {
       sendMessage(message.trim());
       setMessage('');
 
@@ -51,6 +54,14 @@ const ChatBottombar = ({ sendMessage }: ChatBottombarProps) => {
       event.preventDefault();
       setMessage((prev) => prev + '\n');
     }
+  };
+
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
   };
 
   return (
@@ -101,6 +112,8 @@ const ChatBottombar = ({ sendMessage }: ChatBottombarProps) => {
             ref={inputRef}
             onKeyDown={handleKeyPress}
             onChange={handleInputChange}
+            onCompositionStart={handleCompositionStart}
+            onCompositionEnd={handleCompositionEnd}
             name="message"
             placeholder="Aa"
             className="flex h-9 w-full resize-none items-center overflow-hidden rounded-full border bg-background text-mdark"

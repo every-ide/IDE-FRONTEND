@@ -17,6 +17,14 @@ export interface messageListProps {
   content: string;
 }
 
+export interface userListProps {
+  userId: number;
+  name: string;
+  email: string;
+  containerId: string;
+}
+
+
 const TeamSpacePage = () => {
   const { connect, disconnect, webSocketService, isConnected } =
     useWebSocketStore();
@@ -28,6 +36,8 @@ const TeamSpacePage = () => {
 
   const [messageList, setMessageList] = useState<messageListProps[]>([]);
   const [isNewChat, setIsNewChat] = useState<boolean>(false);
+
+  const [userList, setUserList] = useState<userListProps[]>([]);
 
   // websocket connection
   useEffect(() => {
@@ -62,9 +72,9 @@ const TeamSpacePage = () => {
         `/topic/container/${containerId}/state`,
         (message) => {
           console.log('현재유저정보 리스트 message', JSON.parse(message.body));
-          const { messages } = JSON.parse(message.body);
-          // TODO: array server측에서 미리 뒤집기
-          setMessageList(messages.reverse());
+          const { messages, userSessions } = JSON.parse(message.body);
+          setMessageList(messages);
+          setUserList(userSessions);
         },
       );
 
@@ -104,7 +114,7 @@ const TeamSpacePage = () => {
         />
         <Header />
         <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
+          <Sidebar userList={userList} />
           <div className="no-scrollbar relative flex flex-1 flex-col ">
             <Editor />
             <div className={cn(isOpenWorkInfo ? 'block' : 'hidden')}>
