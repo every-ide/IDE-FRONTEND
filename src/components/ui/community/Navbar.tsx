@@ -182,14 +182,16 @@ const NavigationBar: React.FC = () => {
               size="lg"
               className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95"
             >
-              <MdAddCircleOutline size={20} className="text-accent" />방
-              생성하기
+              <MdAddCircleOutline size={20} className="text-accent" />
+              커뮤니티 생성하기
             </Button>
           </DialogTrigger>
 
           <DialogContent className="text-black">
             <DialogHeader>
-              <DialogTitle className="text-black">방 생성하기</DialogTitle>
+              <DialogTitle className="text-black">
+                커뮤니티 생성하기
+              </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit(newRoomAction)}>
               <div className="grid gap-4 py-4">
@@ -202,10 +204,10 @@ const NavigationBar: React.FC = () => {
                     placeholder="알파벳, 숫자, -, _만 포함, 20자 이내"
                     className="col-span-3 text-black"
                     {...register('name', {
-                      required: '방 이름은 필수 입력입니다.',
+                      required: '커뮤니티 이름은 필수 입력입니다.',
                       maxLength: {
                         value: 20,
-                        message: '방 이름은 20자 이내로 작성해주세요.',
+                        message: '커뮤니티 이름은 20자 이내로 작성해주세요.',
                       },
                     })}
                   />
@@ -276,8 +278,8 @@ const NavigationBar: React.FC = () => {
                   <Controller
                     name="roomType"
                     control={control}
-                    rules={{ required: '방 종류 선택은 필수입니다.' }}
-                    render={({ field: { ref, ...restField } }) => (
+                    rules={{ required: '커뮤니티 종류 선택은 필수입니다.' }}
+                    render={({ field: { ...restField } }) => (
                       <Select
                         {...restField}
                         onValueChange={(value) => {
@@ -285,7 +287,10 @@ const NavigationBar: React.FC = () => {
                         }}
                       >
                         <SelectTrigger className="col-span-3 text-black">
-                          <SelectValue id="roomType" placeholder="방 종류" />
+                          <SelectValue
+                            id="roomType"
+                            placeholder="커뮤니티 종류"
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="QUESTION">
@@ -360,7 +365,7 @@ const NavigationBar: React.FC = () => {
                   className="border-none"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? '방 생성 중입니다...' : '생성하기'}
+                  {isSubmitting ? '커뮤니티 생성 중입니다...' : '생성하기'}
                 </Button>
               </DialogFooter>
             </form>

@@ -1,5 +1,4 @@
 import { axiosPublic } from '@/src/api/axios';
-import { AxiosError } from 'axios';
 import {} from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';

@@ -8,7 +8,7 @@ export interface RoomType {
   isLocked: boolean;
   type: string;
   available: boolean;
-  personCnt: number;
+  usersCnt: number;
   maxPeople: number;
   ownerName: string;
   description: string;

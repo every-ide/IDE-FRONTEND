@@ -55,13 +55,16 @@ const RoomDetailPage = () => {
         });
         isLocked.current = true;
       } else if (err.response!.status === 408) {
-        toast.error('그룹 방 정보를 불러올 수 없습니다. 다시 접속해주세요.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error(
+          '그룹 커뮤니티 정보를 불러올 수 없습니다. 다시 접속해주세요.',
+          {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            theme: 'dark',
+          },
+        );
         navigate('/together');
       }
     }
@@ -70,7 +73,7 @@ const RoomDetailPage = () => {
     setIsLoading(false);
   }, [password, roomId]);
 
-  // Private 방 : password submit event
+  // Private 커뮤니티 : password submit event
   const enterPassword = (e: FormEvent) => {
     e.preventDefault();
 
@@ -144,8 +147,8 @@ const RoomDetailPage = () => {
                   <p className="text-xl font-bold">그룹 정보</p>
                   <div className="flex flex-col gap-2 p-3 text-sm font-light">
                     <div className="inline-flex items-center gap-3">
-                      <Badge variant="custom1">방장</Badge>
-                      <p>방장 이름</p>
+                      <Badge variant="custom1">커뮤니티장</Badge>
+                      <p>커뮤니티장 이름</p>
                     </div>
                     <div className="inline-flex items-center gap-3">
                       <Badge variant="custom1">생성일</Badge>

@@ -35,7 +35,7 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
   addNode: (newNode: FileNodeType, parentId?: string | null) => {
     const fileTree = useFileTreeStore.getState().fileTree;
     const doc = useFileTreeStore.getState().doc;
-    doc.update((root) => {
+    doc.update((root: any) => {
       root.yorkieContainer.children = parentId
         ? addNodeToTree(fileTree, newNode, parentId)
         : [...fileTree, newNode];
@@ -45,7 +45,7 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
   deleteNode: (nodeId) => {
     const fileTree = useFileTreeStore.getState().fileTree;
     const doc = useFileTreeStore.getState().doc;
-    doc.update((root) => {
+    doc.update((root: any) => {
       root.yorkieContainer.children = removeNodeById(fileTree, nodeId);
     }, 'Delete node');
   },

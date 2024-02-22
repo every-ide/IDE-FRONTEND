@@ -33,10 +33,11 @@ interface CardProps {
   name: string;
   type: string;
   isLocked: boolean;
-  personCnt: number;
+  usersCnt: number;
   maxPeople: number;
   ownerName: string;
   description: string;
+  isJoined: boolean;
 }
 
 interface IUpdateCardProps {
@@ -52,10 +53,11 @@ const CardContainer: React.FC<CardProps> = ({
   name,
   type,
   isLocked,
-  personCnt,
+  usersCnt,
   maxPeople,
   ownerName,
   description,
+  isJoined,
 }) => {
   const navigate = useNavigate();
   const { updateRoomData } = useRoomAPI();
@@ -83,6 +85,7 @@ const CardContainer: React.FC<CardProps> = ({
     if (openModal) {
       reset();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openModal]);
 
   const handleUpdateContainer = async (data: IUpdateCardProps) => {
@@ -138,12 +141,15 @@ const CardContainer: React.FC<CardProps> = ({
   return (
     <Card variant="container" className="h-72">
       <CardHeader className="pb-4">
-        <CardTitle className="ml-1 text-xl">{name}</CardTitle>
-        <div className="flex flex-row items-center gap-1">
+        <div className="flex flex-row items-center justify-between gap-1">
+          <CardTitle className="ml-1 text-xl">{name}</CardTitle>
           {/* 컨테이너 수정 Button & Modal */}
           <Dialog open={openModal} onOpenChange={setOpenModal}>
             <DialogTrigger asChild>
-              <Button variant="icon" className="p-0 text-[#888]">
+              <Button
+                variant="icon"
+                className={`p-0 text-[#888] ${isJoined ? '' : 'hidden'} mr-3 `}
+              >
                 <MdOutlineSettings size={20} />
               </Button>
             </DialogTrigger>
@@ -299,17 +305,26 @@ const CardContainer: React.FC<CardProps> = ({
         <div className="flex items-center justify-between pt-4 text-sm text-white dark:text-white">
           <span>Owner: {ownerName}</span>
           <span className="mr-1">
-            {personCnt || 1} / {maxPeople}
+            {usersCnt || 1} / {maxPeople}
           </span>
         </div>
       </CardContent>
       <CardFooter>
-        <Button
-          className="w-full"
-          onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}`)}
-        >
-          가입하기
-        </Button>
+        {isJoined ? (
+          <Button
+            className="w-full"
+            onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}`)}
+          >
+            입장하기
+          </Button>
+        ) : (
+          <Button
+            className="w-full"
+            onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}`)}
+          >
+            가입하기
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

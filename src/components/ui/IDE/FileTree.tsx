@@ -17,7 +17,6 @@ const Arborist = () => {
     useFileTreeCRUD(); // 수정된 부분
   const { containerName: projectName } = useParams<{ containerName: string }>();
   const { userId } = { ...useUserStore((state) => state.user) };
-  console.log('userId: ', userId);
   useEffect(() => {
     // console.log('파일트리 변경됨 : ', fileTree);
   }, [fileTree]);

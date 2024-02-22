@@ -1,5 +1,3 @@
-import React from 'react';
-
 const LoadingEnterRoom = () => {
   return (
     <div className="flex h-[calc(100vh-87px)] flex-row border-t-2 border-ldark">

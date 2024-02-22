@@ -22,6 +22,8 @@ import { FileNodeType } from '../../types/IDE/FileTree/FileDataTypes';
 import { useDropzone } from 'react-dropzone';
 import { createFileTree } from '../../utils/localFileUpload/fileReadUtils';
 import useFileStore from '../../store/useFileStore';
+import { YorkieContainer } from './useYorkie';
+import { JSONObject } from 'yorkie-js-sdk';
 
 const useFileTreeCRUD = () => {
   const { fileTree, deleteNode, addNode, doc } = useFileTreeStore();
@@ -59,7 +61,7 @@ const useFileTreeCRUD = () => {
         axiosUploadLocalFile(file.path, file);
       });
 
-      doc.update((root: any) => {
+      doc.update((root: JSONObject<YorkieContainer>) => {
         dropData.forEach((item) => root.yorkieContainer.children.push(item));
       });
     },
@@ -142,9 +144,7 @@ const useFileTreeCRUD = () => {
     parentId,
     parentNode,
     dragNodes,
-    index,
   }) => {
-    console.log('index: ', index);
     let newDragNodeData: FileNodeType = {} as FileNodeType;
     const dragNodeData = dragNodes[0].data;
     const parentNodeData = parentNode?.data;
@@ -152,7 +152,7 @@ const useFileTreeCRUD = () => {
     if (parentNodeData?.type === 'file') return;
     const newPath = parentNode
       ? `${parentNode.data.path}/${dragNodeData.name}`
-      : '';
+      : `/${dragNodeData.name}`;
 
     if (dragNodeData.children) {
       newDragNodeData = updatePath(dragNodeData, newPath);
