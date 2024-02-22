@@ -4,23 +4,18 @@ import Header from '@/src/components/my/Header';
 import { useEffect, useState } from 'react';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
+import { set } from 'react-hook-form';
 
 const MenteesPage = () => {
-  const { rooms, setRooms } = useRoomStore();
-  const { getRooms } = useRoomAPI();
-  const [isLoading, setIsLoading] = useState(true); // Add this line
+  const { rooms, isLoading, searchKey } = useRoomStore();
+  const { fetchSearchRooms } = useRoomAPI();
 
   useEffect(() => {
-    async function fetchData() {
-      const roomData = await getRooms();
-      console.log('roomData: ', roomData);
-      setRooms(roomData.filter((room: any) => room.type === 'QUESTION'));
-      setIsLoading(false); // Add this line
-    }
-    fetchData();
+    fetchSearchRooms(searchKey);
   }, []);
 
   if (isLoading) {
+    console.log('isLoading: ', isLoading);
     return <div className="loading-indicator">Loading...</div>; // Modify this as needed
   }
   return (

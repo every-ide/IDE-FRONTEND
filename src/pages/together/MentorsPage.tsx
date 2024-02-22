@@ -6,11 +6,11 @@ import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
 
 const MentorsPage = () => {
-  const { rooms, isLoading } = useRoomStore();
-  const { getRooms, fetchData } = useRoomAPI();
+  const { rooms, isLoading, searchKey } = useRoomStore();
+  const { fetchSearchRooms } = useRoomAPI();
 
   useEffect(() => {
-    fetchData();
+    fetchSearchRooms(searchKey);
   }, []);
 
   if (isLoading) {

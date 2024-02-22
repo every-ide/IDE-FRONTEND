@@ -130,12 +130,7 @@ const CardContainer: React.FC<CardProps> = ({
   };
 
   return (
-    <Card variant="container">
-      {/* <img
-        src="src/assets/images/placeholder.jpg"
-        alt="Event Banner"
-        className="h-auto w-full object-cover p-4"
-      /> */}
+    <Card variant="container" className="h-72">
       <CardHeader className="pb-4">
         <CardTitle className="ml-1 text-xl">{name}</CardTitle>
         <div className="flex flex-row items-center gap-1">

@@ -6,19 +6,12 @@ import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
 
 const MyRooms = () => {
-  const { rooms, isLoading } = useRoomStore();
-  const { getRooms, fetchData, fetchMyRooms } = useRoomAPI();
+  const { rooms, isLoading, searchKey } = useRoomStore();
+  const { fetchSearchRooms } = useRoomAPI();
 
   useEffect(() => {
-    async function fetchRooms() {
-      await fetchMyRooms();
-    }
-    fetchRooms();
+    fetchSearchRooms(searchKey);
   }, []);
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
 
   if (isLoading) {
     console.log('isLoading: ', isLoading);
@@ -30,9 +23,11 @@ const MyRooms = () => {
       <Header />
       <Navbar />
       <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {rooms.map((room, index) =>
-          room.available ? <Card key={index} {...room} /> : null,
-        )}
+        {rooms
+          .filter((room: any) => room.isJoined === true)
+          .map((room, index) =>
+            room.available ? <Card key={index} {...room} /> : null,
+          )}
       </div>
     </div>
   );
