@@ -9,9 +9,8 @@ import {
 import { Button } from '../ui/button';
 import { MdOutlineDelete, MdOutlineSettings } from 'react-icons/md';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import useContainerAPI from '@/src/hooks/useContainerAPI';
-import useContainerStore from '@/src/store/useContainerStore';
 import {
   Dialog,
   DialogContent,
@@ -26,6 +25,7 @@ import { Switch } from '@/components/ui/switch';
 import { useForm, Controller } from 'react-hook-form';
 import useUserStore from '@/src/store/useUserStore';
 import { formatDate } from '@/src/utils/formatDate';
+import { useParams } from 'react-router-dom';
 
 interface IContainerBoxProps {
   containerId: string;
@@ -58,7 +58,7 @@ const ContainerBox = ({
   const [openModal, setOpenModal] = useState(false);
   const user = useUserStore((state) => state.user);
   const { deleteContainerData, updateContainerData } = useContainerAPI();
-  const { removeContainer, updateContainer } = useContainerStore();
+  const { roomId } = useParams<{ roomId: string }>();
 
   // 컨테이너 수정 request를 위한 form
   const {
@@ -78,52 +78,60 @@ const ContainerBox = ({
   });
 
   // 컨테이너 열기 버튼 onClick action
-  const navigateToUrlInNewTab = (
-    containerName: string,
-    containerId: string,
-  ) => {
-    window.open(
-      `http://localhost:5173/workspace/${containerName}/${containerId}`,
-      '_blank',
-      'noopener,noreferrer',
-    );
-  };
+  const navigateToUrlInNewTab = useCallback(
+    (containerName: string, containerId: string) => {
+      if (!roomId) {
+        window.open(
+          `${import.meta.env.VITE_CLIENT_URI}/workspace/${containerName}/${containerId}`,
+          '_blank',
+          'noopener,noreferrer',
+        );
+      } else {
+        window.open(
+          `${import.meta.env.VITE_CLIENT_URI}/teamspace/${containerName}/${containerId}`,
+          '_blank',
+          'noopener,noreferrer',
+        );
+      }
+    },
+    [roomId],
+  );
 
   // 컨테이너 수정 버튼 onClick action
-  const handleUpdateContainer = async (data: IUpdateContainerForm) => {
-    try {
-      if (data.email === undefined) {
-        data.email = user!.email;
-      }
+  const handleUpdateContainer = useCallback(
+    async (data: IUpdateContainerForm) => {
+      try {
+        if (data.email === undefined) {
+          data.email = user!.email;
+        }
 
-      const response = await updateContainerData(data);
+        const response = await updateContainerData(data);
 
-      if (response.status === 200) {
-        // zustand store update
-        updateContainer(data);
+        if (response.status === 200) {
+          toast('컨테이너가 성공적으로 수정되었습니다.', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            theme: 'dark',
+          });
 
-        toast('컨테이너가 성공적으로 수정되었습니다.', {
+          setOpenModal(false);
+        }
+      } catch (error) {
+        console.error(error);
+
+        toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           theme: 'dark',
         });
-
-        setOpenModal(false);
       }
-    } catch (error) {
-      console.error(error);
-
-      toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        theme: 'dark',
-      });
-    }
-  };
+    },
+    [],
+  );
 
   // 컨테이너 삭제 버튼 onClick action
   const handleDeleteContainer = async () => {
@@ -140,8 +148,6 @@ const ContainerBox = ({
             closeOnClick: true,
             theme: 'dark',
           });
-
-          removeContainer(containerName);
         }
       } catch (error) {
         console.error(error);

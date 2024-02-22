@@ -21,10 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../select';
-import { FaJava, FaPython } from 'react-icons/fa6';
+import { FaJava, FaPython, FaQuestion } from 'react-icons/fa6';
 import { MdAddCircleOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import useRoomAPI from '@/src/hooks/useRoomApi';
+import useRoomStore from '@/src/store/useRoomStore';
+import { GiTeacher } from 'react-icons/gi';
+import { TbUserQuestion } from 'react-icons/tb';
 
 type TNewRoomForm = {
   name: string;
@@ -37,6 +40,8 @@ type TNewRoomForm = {
 const NavigationBar: React.FC = () => {
   const [searchkey, setSearchKey] = useState<string>('');
   const location = useLocation(); // 현재 위치 정보를 가져옵니다.
+  const { getRooms } = useRoomAPI();
+  const { setRooms, setIsLoading } = useRoomStore();
   const [openModal, setOpenModal] = useState(false);
   const { createNewRoom } = useRoomAPI();
   const [isLocked, setIsLocked] = useState(false);
@@ -51,14 +56,14 @@ const NavigationBar: React.FC = () => {
   useEffect(() => {
     if (openModal) {
       reset();
+      setIsLocked(false);
     }
   }, [openModal]);
   const newRoomAction = async ({
     name,
-    isLocked,
-    password,
+    isLocked = false,
+    password = '',
     roomType,
-
     maxPeople,
   }: TNewRoomForm) => {
     console.log('name: ', name);
@@ -69,6 +74,9 @@ const NavigationBar: React.FC = () => {
       roomType,
       maxPeople,
     );
+    if (!isLocked) {
+      password = '';
+    }
     try {
       await createNewRoom({
         name,
@@ -79,6 +87,10 @@ const NavigationBar: React.FC = () => {
         setOpenModal,
         reset,
       });
+      setIsLoading(true);
+      const roomData = await getRooms();
+      setRooms(roomData);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
 
@@ -132,7 +144,7 @@ const NavigationBar: React.FC = () => {
             value={searchkey}
             onChange={(e) => setSearchKey(e.target.value)}
             placeholder="Enter to search..."
-            className="flex-1 rounded-xl bg-mdark p-3 pr-16 text-accent caret-accent focus:border-[0.5px] focus:border-accent/65 focus:shadow-sm focus:shadow-accent focus:outline-none"
+            className="rounded-xl bg-mdark p-3 pr-16 text-accent caret-accent focus:border-[0.5px] focus:border-accent/65 focus:shadow-sm focus:shadow-accent focus:outline-none"
           />
           <button
             onClick={() => setSearchKey('')}
@@ -143,6 +155,54 @@ const NavigationBar: React.FC = () => {
           <button className="translate-x-[-55px] text-accent hover:text-accent/65 active:scale-90">
             <FaSearch size={18} />
           </button>
+          <Select
+            onValueChange={(value) => {
+              console.log('value: ', value);
+              // setRoomType(value);
+            }}
+          >
+            <SelectTrigger className="col-span-3 mt-1 w-24 bg-mdark">
+              <SelectValue id="roomType" placeholder="방 종류" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="QUESTION">
+                <div className="inline-flex items-center gap-2">
+                  <TbUserQuestion />
+                  멘티
+                </div>
+              </SelectItem>
+              <SelectItem value="ANSWER">
+                <div className="inline-flex items-center gap-2">
+                  <GiTeacher />
+                  멘토
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          <Select
+            onValueChange={(value) => {
+              console.log('value: ', value);
+              // setRoomType(value);
+            }}
+          >
+            <SelectTrigger className="col-span-3 mt-1 w-24 bg-mdark">
+              <SelectValue id="roomType" placeholder="자기 " />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="QUESTION">
+                <div className="inline-flex items-center gap-2">
+                  <TbUserQuestion />
+                  멘티
+                </div>
+              </SelectItem>
+              <SelectItem value="ANSWER">
+                <div className="inline-flex items-center gap-2">
+                  <GiTeacher />
+                  멘토
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         {/* Other icons */}
         {/* ... */}
@@ -152,7 +212,7 @@ const NavigationBar: React.FC = () => {
           <Button
             variant="outline"
             size="lg"
-            className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95"
+            className="mt-2 gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95"
           >
             <MdAddCircleOutline size={20} className="text-accent" />방 생성하기
           </Button>
@@ -177,11 +237,6 @@ const NavigationBar: React.FC = () => {
                     maxLength: {
                       value: 20,
                       message: '방 이름은 20자 이내로 작성해주세요.',
-                    },
-                    pattern: {
-                      value: /^[a-zA-Z0-9-_\s]+$/,
-                      message:
-                        '알파벳, 숫자, 하이픈(-), 언더스코어(_)만 포함할 수 있습니다.',
                     },
                     validate: {
                       noSpace: (v) =>
@@ -249,15 +304,15 @@ const NavigationBar: React.FC = () => {
                         <SelectValue id="roomType" placeholder="방 종류" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="study">
+                        <SelectItem value="QUESTION">
                           <div className="inline-flex items-center gap-2">
-                            <FaPython />
+                            <TbUserQuestion />
                             멘티
                           </div>
                         </SelectItem>
-                        <SelectItem value="project">
+                        <SelectItem value="ANSWER">
                           <div className="inline-flex items-center gap-2">
-                            <FaJava />
+                            <GiTeacher />
                             멘토
                           </div>
                         </SelectItem>

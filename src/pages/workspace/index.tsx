@@ -10,13 +10,7 @@ import WorkInfo from './WorkInfo';
 import { cn } from '@/src/utils/style';
 
 const WorkspacePage = () => {
-  const { connect, disconnect, webSocketService } = useWebSocketStore(
-    (state) => ({
-      connect: state.connect,
-      disconnect: state.disconnect,
-      webSocketService: state.webSocketService,
-    }),
-  );
+  const { connect, disconnect, webSocketService } = useWebSocketStore();
 
   const { containerId: projectId } = useParams<{ containerId: string }>();
   const accessToken = localStorage.getItem('accessToken');

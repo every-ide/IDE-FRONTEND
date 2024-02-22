@@ -4,7 +4,7 @@ import { FaXmark } from 'react-icons/fa6';
 import { Resizable } from 're-resizable';
 import Terminal from './Terminal';
 interface WorkInfoProps {
-  toggleTerminal: () => void;
+  toggleTerminal?: () => void;
 }
 const WorkInfo: FC<WorkInfoProps> = ({ toggleTerminal }) => {
   const [cancelHovered, setCancelHovered] = useState<boolean>(false);
@@ -32,7 +32,7 @@ const WorkInfo: FC<WorkInfoProps> = ({ toggleTerminal }) => {
           topLeft: false,
         }}
       >
-        {/* <Tabs defaultValue="terminal">
+        <Tabs defaultValue="terminal">
           <div className="flex items-center justify-between border-b-2 border-mdark bg-ldark">
             <TabsList>
               <TabsTrigger value="debug">디버그</TabsTrigger>
@@ -59,29 +59,20 @@ const WorkInfo: FC<WorkInfoProps> = ({ toggleTerminal }) => {
             <Terminal />
           </TabsContent>
           <TabsContent value="search">검색 탭입니다.</TabsContent>
-        </Tabs> */}
-        <div className="work-info">
-          <div className="tabs">
+        </Tabs>
+        <div>
+          <div>
             <button onClick={() => setActiveTab('debug')}>디버그</button>
             <button onClick={() => setActiveTab('terminal')}>터미널</button>
             <button onClick={() => setActiveTab('search')}>검색</button>
           </div>
-          <div
-            className="tab-content"
-            style={{ display: activeTab === 'debug' ? 'block' : 'none' }}
-          >
+          <div style={{ display: activeTab === 'debug' ? 'block' : 'none' }}>
             <div>디버그 탭입니다.</div>
           </div>
-          <div
-            className="tab-content"
-            style={{ display: activeTab === 'terminal' ? 'block' : 'none' }}
-          >
+          <div style={{ display: activeTab === 'terminal' ? 'block' : 'none' }}>
             <Terminal />
           </div>
-          <div
-            className="tab-content"
-            style={{ display: activeTab === 'search' ? 'block' : 'none' }}
-          >
+          <div style={{ display: activeTab === 'search' ? 'block' : 'none' }}>
             <div>검색 탭입니다.</div>
           </div>
         </div>
