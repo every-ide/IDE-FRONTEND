@@ -60,28 +60,19 @@ const WorkInfo: FC<WorkInfoProps> = ({ toggleTerminal }) => {
           </TabsContent>
           <TabsContent value="search">검색 탭입니다.</TabsContent>
         </Tabs>
-        <div className="work-info">
-          <div className="tabs">
+        <div>
+          <div>
             <button onClick={() => setActiveTab('debug')}>디버그</button>
             <button onClick={() => setActiveTab('terminal')}>터미널</button>
             <button onClick={() => setActiveTab('search')}>검색</button>
           </div>
-          <div
-            className="tab-content"
-            style={{ display: activeTab === 'debug' ? 'block' : 'none' }}
-          >
+          <div style={{ display: activeTab === 'debug' ? 'block' : 'none' }}>
             <div>디버그 탭입니다.</div>
           </div>
-          <div
-            className="tab-content"
-            style={{ display: activeTab === 'terminal' ? 'block' : 'none' }}
-          >
+          <div style={{ display: activeTab === 'terminal' ? 'block' : 'none' }}>
             <Terminal />
           </div>
-          <div
-            className="tab-content"
-            style={{ display: activeTab === 'search' ? 'block' : 'none' }}
-          >
+          <div style={{ display: activeTab === 'search' ? 'block' : 'none' }}>
             <div>검색 탭입니다.</div>
           </div>
         </div>
