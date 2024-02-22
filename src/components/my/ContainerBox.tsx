@@ -54,7 +54,6 @@ const ContainerBox = ({
   active,
   createDate,
   lastModifiedDate,
-  roomName,
 }: IContainerBoxProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [openModal, setOpenModal] = useState(false);
