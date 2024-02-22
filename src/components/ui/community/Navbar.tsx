@@ -21,7 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../select';
-import { FaJava, FaPython, FaQuestion } from 'react-icons/fa6';
 import { MdAddCircleOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import useRoomAPI from '@/src/hooks/useRoomApi';
@@ -40,11 +39,13 @@ type TNewRoomForm = {
 const NavigationBar: React.FC = () => {
   const [searchkey, setSearchKey] = useState<string>('');
   const location = useLocation(); // 현재 위치 정보를 가져옵니다.
-  const { getRooms } = useRoomAPI();
+  const { getRooms, fetchSearchRooms } = useRoomAPI();
   const { setRooms, setIsLoading } = useRoomStore();
   const [openModal, setOpenModal] = useState(false);
   const { createNewRoom } = useRoomAPI();
   const [isLocked, setIsLocked] = useState(false);
+  const [searchType, setSearchType] = useState<string>('');
+  const [searchGroup, setSearchGroup] = useState('true');
   const {
     control,
     reset,
@@ -103,7 +104,10 @@ const NavigationBar: React.FC = () => {
       });
     }
   };
-
+  ``;
+  const handleSearch = () => {
+    fetchSearchRooms(searchkey, searchType, searchGroup);
+  };
   // 경로가 활성 링크인지 확인하는 함수
   const isActiveLink = (path: string): boolean => {
     return location.pathname === path;
@@ -152,17 +156,21 @@ const NavigationBar: React.FC = () => {
           >
             <RiDeleteBack2Line size={22} />
           </button>
-          <button className="translate-x-[-55px] text-accent hover:text-accent/65 active:scale-90">
+          <button
+            className="translate-x-[-55px] text-accent hover:text-accent/65 active:scale-90"
+            onClick={handleSearch}
+          >
             <FaSearch size={18} />
           </button>
           <Select
             onValueChange={(value) => {
               console.log('value: ', value);
-              // setRoomType(value);
+              setSearchType(value);
             }}
+            defaultValue={searchType} // 여기서 기본값을 설정합니다."
           >
             <SelectTrigger className="col-span-3 mt-1 w-24 bg-mdark">
-              <SelectValue id="roomType" placeholder="방 종류" />
+              <SelectValue id="searchRoomType" placeholder="방 종류" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="QUESTION">
@@ -180,25 +188,26 @@ const NavigationBar: React.FC = () => {
             </SelectContent>
           </Select>
           <Select
+            defaultValue={searchGroup} // 여기서 기본값을 설정합니다.
             onValueChange={(value) => {
               console.log('value: ', value);
-              // setRoomType(value);
+              setSearchGroup(value);
             }}
           >
-            <SelectTrigger className="col-span-3 mt-1 w-24 bg-mdark">
-              <SelectValue id="roomType" placeholder="자기 " />
+            <SelectTrigger className="col-span-3 mt-1 w-28 bg-mdark">
+              <SelectValue id="searchGroup" placeholder="커뮤니티 종류" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="QUESTION">
+              <SelectItem value="true">
                 <div className="inline-flex items-center gap-2">
                   <TbUserQuestion />
-                  멘티
+                  참여
                 </div>
               </SelectItem>
-              <SelectItem value="ANSWER">
+              <SelectItem value="false">
                 <div className="inline-flex items-center gap-2">
                   <GiTeacher />
-                  멘토
+                  미참여
                 </div>
               </SelectItem>
             </SelectContent>

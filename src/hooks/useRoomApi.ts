@@ -77,7 +77,7 @@ const useRoomAPI = () => {
     }
   };
 
-  const searchRooms = async (name: string, type?: string, group: boolean) => {
+  const searchRooms = async (name: string, type?: string, group: string) => {
     // if (!name) name = 'false';
     // if (!type) type = 'false';
     try {
@@ -103,6 +103,18 @@ const useRoomAPI = () => {
 
     return response;
   };
+  const fetchSearchRooms = async (
+    name: string,
+    type: string,
+    group: boolean,
+  ) => {
+    if (!name) name = 'null';
+    if (!type) type = 'null';
+    const roomData = await searchRooms(name, type, group);
+    console.log('roomData: ', roomData);
+    setRooms(roomData);
+    setIsLoading(false); // Add this line
+  };
 
   const fetchData = async () => {
     const roomData = await getRooms();
@@ -112,7 +124,7 @@ const useRoomAPI = () => {
   };
 
   const fetchMyRooms = async () => {
-    const roomData = await searchRooms(null, null, true);
+    const roomData = await searchRooms(null, null, 'true');
     console.log('roomData: ', roomData);
     setRooms(roomData);
     setIsLoading(false); // Add this line
@@ -124,6 +136,7 @@ const useRoomAPI = () => {
     updateRoomData,
     searchRooms,
     fetchData,
+    fetchSearchRooms,
     fetchMyRooms,
   };
 };
