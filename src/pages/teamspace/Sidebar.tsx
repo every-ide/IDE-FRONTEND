@@ -1,5 +1,5 @@
 import Arborist from '@/src/components/ui/IDE/FileTree';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { IoBagSharp } from 'react-icons/io5';
 import { FaRegUser } from 'react-icons/fa';
 import { cn } from '@/utils/style';
@@ -11,13 +11,14 @@ import {
 } from '@/components/ui/tooltip';
 import UserList from './UserList';
 import { userListProps } from '.';
+import useActionWithKeyboard from '@/src/hooks/eventHook/actionWithKeyboard';
 
 export interface sidebarProps {
   userList?: userListProps[];
 }
 
 const Sidebar: FC<sidebarProps> = ({ userList }) => {
-  const [projectOpen, setProjectOpen] = useState(true);
+  const [projectOpen, setProjectOpen] = useActionWithKeyboard('b', true);
   const [activeTab, setActiveTab] = useState('project');
 
   const handleTabSelection = (target: string) => {
@@ -31,6 +32,15 @@ const Sidebar: FC<sidebarProps> = ({ userList }) => {
       setProjectOpen(true);
     }
   };
+
+  useEffect(() => {
+    if (!projectOpen) {
+      setActiveTab('');
+    } else {
+      setActiveTab('project');
+    }
+  }, [projectOpen]);
+
   return (
     <div className="flex">
       <aside className="w-10 overflow-y-auto border-r-2 border-mdark">

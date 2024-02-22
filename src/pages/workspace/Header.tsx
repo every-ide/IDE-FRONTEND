@@ -12,6 +12,7 @@ import useWebSocketStore from '@/src/store/useWebSocketStore';
 import { useParams } from 'react-router-dom';
 import { useCallback } from 'react';
 import { toast } from 'react-toastify';
+import useUserStore from '@/src/store/useUserStore';
 
 const createFileRunCommand = (filePath: string) => {
   const language = filePath.split('.').pop()?.toLowerCase();
@@ -36,6 +37,7 @@ const Header = () => {
   const { saveFileContent } = useFileAPI();
   const { webSocketService, isConnected } = useWebSocketStore();
   const { containerId } = useParams<{ containerId: string }>();
+  const { containerName } = useParams<{ containerName: string }>();
 
   // 코드 저장 버튼 onClick
   const handleSave = useCallback(async () => {
@@ -105,7 +107,7 @@ const Header = () => {
 
   return (
     <header className="inline-flex h-8 items-center justify-between border-b-2 border-mdark bg-ldark px-2">
-      <div>유저이름 - 컨테이너 이름</div>
+      <div className="text-gray-400">컨테이너: {containerName}</div>
       <div>
         <TooltipProvider>
           <Tooltip>

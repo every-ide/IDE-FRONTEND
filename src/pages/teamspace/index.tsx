@@ -7,7 +7,7 @@ import Header from '../workspace/Header';
 import { cn } from '@/src/utils/style';
 import Footer from './Footer';
 import WorkInfo from './WorkInfo';
-import Editor from './Editor';
+import Editor from '../workspace/Editor';
 import Sidebar from './Sidebar';
 import Chat from './Chat';
 
@@ -23,7 +23,6 @@ export interface userListProps {
   email: string;
   containerId: string;
 }
-
 
 const TeamSpacePage = () => {
   const { connect, disconnect, webSocketService, isConnected } =
@@ -116,7 +115,7 @@ const TeamSpacePage = () => {
         <div className="flex flex-1 overflow-hidden">
           <Sidebar userList={userList} />
           <div className="no-scrollbar relative flex flex-1 flex-col ">
-            <Editor />
+            <Editor isTeamspace />
             <div className={cn(isOpenWorkInfo ? 'block' : 'hidden')}>
               <WorkInfo setIsOpen={setIsOpenWorkInfo} />
             </div>
