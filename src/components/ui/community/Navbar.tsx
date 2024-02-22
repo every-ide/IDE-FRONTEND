@@ -144,7 +144,7 @@ const NavigationBar: React.FC = () => {
       </div>
       <div className="flex items-center">
         <div className="mr-8 flex items-center">
-          <div className="flex flex-1 items-center justify-between rounded-lg bg-mdark">
+          <div className="flex flex-1 items-center justify-between rounded-lg bg-mdark max-md:hidden">
             <input
               type="text"
               value={searchKey}
