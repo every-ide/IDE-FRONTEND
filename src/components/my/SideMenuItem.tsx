@@ -13,20 +13,20 @@ const SideMenuItem = ({ label, icon, link, selected }: ISideMenuItemProps) => {
     <Link to={link}>
       <div
         className={`
-        flex
-        flex-row
-        gap-3
-        text-nowrap
-        rounded-2xl
-        bg-ldark
-        px-6
-        py-4 active:scale-95
-        ${selected ? 'border-[2px] border-accent/60 text-accent' : ''}
-        ${!selected ? 'hover:border-[0.5px] hover:border-neutral-500 hover:text-white hover:shadow-md hover:shadow-white/70' : ''}
-    `}
+            flex
+            flex-row
+            gap-3
+            text-nowrap
+            rounded-2xl
+            bg-ldark
+            px-6
+            py-4
+            ${selected ? 'border-[2px] border-accent/60 text-accent' : ''}
+            ${!selected ? 'hover:border-[0.5px] hover:border-neutral-500 hover:text-white hover:shadow-md' : ''}
+        `}
       >
         {icon && icon}
-        {label}
+        <p className="h-full">{label}</p>
       </div>
     </Link>
   );
