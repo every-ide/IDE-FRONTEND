@@ -139,12 +139,12 @@ const RoomDetailPage = () => {
                   size="sm"
                   className="w-[25%]"
                 >
-                  그룹 탈퇴
+                  커뮤니티 탈퇴
                 </Button>
               </div>
               <div className="flex size-full flex-col py-4">
                 <div className="mb-2 flex flex-col border-b border-ldark p-3">
-                  <p className="text-xl font-bold">그룹 정보</p>
+                  <p className="text-xl font-bold">커뮤니티 정보</p>
                   <div className="flex flex-col gap-2 p-3 text-sm font-light">
                     <div className="inline-flex items-center gap-3">
                       <Badge variant="custom1">커뮤니티장</Badge>
