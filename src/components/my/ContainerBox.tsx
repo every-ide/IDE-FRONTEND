@@ -169,6 +169,17 @@ const ContainerBox = ({
   return (
     <Card variant="container">
       <CardHeader className="pb-4">
+        <div className="flex">
+          {active ? (
+            <div className="rounded-lg border border-green-400 bg-green-400/20 px-2 py-0.5 text-[10px] text-green-400">
+              활성
+            </div>
+          ) : (
+            <div className="rounded-lg border border-red-400 bg-red-400/20 px-2 py-0.5 text-[10px] text-red-400">
+              비활성
+            </div>
+          )}
+        </div>
         <div className="flex flex-row justify-between">
           <CardTitle className="text-xl">{containerName}</CardTitle>
           <div className="flex flex-row items-center gap-1">
@@ -303,16 +314,7 @@ const ContainerBox = ({
         <p>생성일 : {formatDate(new Date(createDate))}</p>
         <p>최종수정일 : {formatDate(new Date(lastModifiedDate))}</p>
       </CardContent>
-      <CardFooter className="justify-between">
-        {active ? (
-          <div className="rounded-lg border border-green-400 bg-green-400/20 px-2 text-xs text-green-400">
-            활성
-          </div>
-        ) : (
-          <div className="rounded-lg border border-red-400 bg-red-400/20 px-2 text-xs text-red-400">
-            비활성
-          </div>
-        )}
+      <CardFooter className="justify-end">
         <Button
           onClick={() => navigateToUrlInNewTab(containerName, containerId)}
           size="sm"
