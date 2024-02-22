@@ -38,6 +38,7 @@
     "@uiw/codemirror-theme-material": "^4.21.21",
     "@uiw/codemirror-theme-vscode": "^4.21.21",
     "axios": "^1.6.7",
+    "boring-avatars": "^1.10.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "codemirror": "^6.0.1",
