@@ -2,10 +2,21 @@ import ContainerBox from '@/src/components/my/ContainerBox';
 import DashboardLayout from '@/src/components/my/DashboardLayout';
 import EmptyState from '@/src/components/my/EmptyState';
 import { Skeleton } from '@/src/components/ui/skeleton';
+import useContainerAPI from '@/src/hooks/useContainerAPI';
 import useContainerStore from '@/src/store/useContainerStore';
+import useUserStore from '@/src/store/useUserStore';
+import { useEffect } from 'react';
 
 const SharedContainerPage = () => {
   const { containerList } = useContainerStore();
+  const { getContainersData } = useContainerAPI();
+  const { userId } = { ...useUserStore((state) => state.user) };
+
+  useEffect(() => {
+    if (userId) {
+      getContainersData();
+    }
+  }, [userId]);
 
   // while Loading data : Show Skeleton
   if (!containerList) {
