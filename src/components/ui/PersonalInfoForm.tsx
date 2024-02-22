@@ -1,4 +1,3 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import AuthInput from '@/components/auth/AuthInput'; // Adjust import as necessary
 import { toast } from 'react-toastify';
