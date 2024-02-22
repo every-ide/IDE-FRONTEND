@@ -30,6 +30,7 @@ export interface IEnteredRoomDetail {
     maxPeople: number;
     containers: IContainer[];
     usersId: number[];
+    description: string;
   };
   ownerId: number;
   usersName: string[];
