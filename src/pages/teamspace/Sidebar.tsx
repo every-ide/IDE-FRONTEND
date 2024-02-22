@@ -64,25 +64,27 @@ const Sidebar: FC<sidebarProps> = ({ userList }) => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger className="w-full">
-                <li
-                  className={cn(
-                    'cursor-pointer p-1 hover:bg-gray-600',
-                    activeTab === 'user' &&
-                      'border-l-2 border-accent text-accent',
-                  )}
-                  onClick={() => handleTabSelection('user')}
-                >
-                  <FaRegUser className="size-6 w-full " />
-                </li>
-              </TooltipTrigger>
-              <TooltipContent side="right" align="start">
-                <p>참가인원</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          {userList && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="w-full">
+                  <li
+                    className={cn(
+                      'cursor-pointer p-1 hover:bg-gray-600',
+                      activeTab === 'user' &&
+                        'border-l-2 border-accent text-accent',
+                    )}
+                    onClick={() => handleTabSelection('user')}
+                  >
+                    <FaRegUser className="size-6 w-full " />
+                  </li>
+                </TooltipTrigger>
+                <TooltipContent side="right" align="start">
+                  <p>참가인원</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </ul>
       </aside>
       {projectOpen && (
