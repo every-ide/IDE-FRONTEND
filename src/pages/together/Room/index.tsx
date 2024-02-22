@@ -122,7 +122,7 @@ const RoomDetailPage = () => {
         <div className="flex h-[calc(100vh-87px)] flex-row border-t-2 border-ldark">
           <div className="flex w-[40%] flex-col p-3 py-7 pl-6">
             <div className="flex h-full flex-col items-center rounded-lg border-2 border-ldark p-6">
-              <div className="flex w-full flex-row justify-between text-left text-2xl font-bold">
+              <div className="flex w-full flex-row justify-between border-b-2 border-ldark pb-6 text-left text-2xl font-bold">
                 <p className="inline-flex justify-center gap-3">
                   <span className="text-4xl">🛸</span> Welcome to{' '}
                   {enteredRoom?.room.name}!
@@ -131,11 +131,12 @@ const RoomDetailPage = () => {
                   onClick={handleLeaveRoom}
                   variant="outline"
                   size="sm"
-                  className="w-[30%]"
+                  className="w-[25%]"
                 >
                   그룹 탈퇴
                 </Button>
               </div>
+              <div></div>
             </div>
           </div>
           <div className="w-[60%] p-3 py-7 pr-6">
@@ -155,7 +156,7 @@ const RoomDetailPage = () => {
                 />
                 <BringMyContainerForm />
               </div>
-              <div className="h-full overflow-x-hidden overflow-y-scroll">
+              <div className="overflow-x-hidden overflow-y-scroll">
                 {enteredRoom?.room.containers.length ? (
                   <div className="grid grid-cols-1 gap-5 px-4 pb-1 pt-4 sm:grid-cols-2">
                     {enteredRoom.room.containers.map((c) => (
@@ -172,7 +173,7 @@ const RoomDetailPage = () => {
                     ))}
                   </div>
                 ) : (
-                  <EmptyState />
+                  <EmptyState className="h-[calc(100vh-300px)]" />
                 )}
               </div>
             </div>
