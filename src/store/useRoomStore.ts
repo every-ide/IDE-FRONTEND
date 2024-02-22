@@ -11,7 +11,9 @@ export interface RoomType {
   personCnt: number;
   maxPeople: number;
   ownerName: string;
+  description: string;
   fullRoom: boolean;
+  isJoined: boolean;
 }
 
 export interface IEnteredRoomDetail {

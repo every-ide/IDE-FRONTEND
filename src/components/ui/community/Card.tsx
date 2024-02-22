@@ -150,7 +150,9 @@ const CardContainer: React.FC<CardProps> = ({
 
             <DialogContent>
               <DialogHeader>
-                <DialogTitle className="text-black">방 수정하기</DialogTitle>
+                <DialogTitle className="text-black">
+                  커뮤니티 수정하기
+                </DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit(handleUpdateContainer)}>
                 <div className="grid gap-4 py-4">
@@ -170,14 +172,15 @@ const CardContainer: React.FC<CardProps> = ({
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="newName" className="text-right text-black">
-                      새 방 이름
+                      새 커뮤니티 이름
                     </Label>
                     <Input
                       id="newName"
-                      placeholder="새 방 이름을 입력하세요"
+                      placeholder="새 커뮤니티 이름을 입력하세요"
+                      value={name}
                       className="col-span-3 text-black"
                       {...register('newName', {
-                        required: '새 방 이름은 필수 입력 사항입니다.',
+                        required: '새 커뮤니티 이름은 필수 입력 사항입니다.',
                       })}
                     />
                     {errors.newName && (
@@ -199,7 +202,7 @@ const CardContainer: React.FC<CardProps> = ({
                       className="col-span-3 text-black"
                       defaultValue={description}
                       {...register('description', {
-                        required: '새 방 이름은 필수 입력 사항입니다.',
+                        required: '새 커뮤니티 이름은 필수 입력 사항입니다.',
                       })}
                     />
                     {errors.newName && (
@@ -210,7 +213,7 @@ const CardContainer: React.FC<CardProps> = ({
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="active" className="text-right text-black">
-                      방 잠금
+                      커뮤니티 잠금
                     </Label>
                     <Controller
                       name="isLocked"
@@ -250,7 +253,7 @@ const CardContainer: React.FC<CardProps> = ({
                             isLocked
                               ? value
                                 ? true
-                                : '비공개 방에는 비밀번호가 필요합니다.'
+                                : '비공개 커뮤니티에는 비밀번호가 필요합니다.'
                               : true,
                         })}
                       />
