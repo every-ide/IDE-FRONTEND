@@ -88,6 +88,7 @@ const Sidebar: FC<sidebarProps> = ({ userList }) => {
       {projectOpen && (
         <aside className="flex w-72 flex-col overflow-hidden pt-2">
           {activeTab === 'project' && <Arborist />}
+
           {activeTab === 'user' && <UserList userList={userList} />}
         </aside>
       )}
