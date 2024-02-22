@@ -8,9 +8,10 @@ export interface RoomType {
   isLocked: boolean;
   type: string;
   available: boolean;
-  usersCount: number;
+  personCnt: number;
   maxPeople: number;
   ownerName: string;
+  fullRoom: boolean;
 }
 
 export interface IEnteredRoomDetail {
@@ -36,6 +37,8 @@ export interface RoomStoreState {
   rooms: RoomType[];
   enteredRoom: IEnteredRoomDetail | null;
   isLoading: boolean;
+  searchKey: string;
+  setSearchKey: (searchKey: string) => void;
   setIsLoading: (isLoading: boolean) => void;
   setRooms: (rooms: RoomType[]) => void;
   setEnteredRoom: (room: IEnteredRoomDetail) => void;
@@ -46,12 +49,16 @@ export interface RoomStoreState {
 }
 
 const useRoomStore = create<RoomStoreState>((set) => ({
+  searchKey: '',
   rooms: [],
   enteredRoom: null,
   isLoading: true,
   setRooms: (rooms) => {
     console.log('rooms: ', rooms);
     set({ rooms });
+  },
+  setSearchKey: (searchKey) => {
+    set({ searchKey });
   },
   setEnteredRoom: (room) => set({ enteredRoom: room }),
   addNewRoom: (room) => {

@@ -20,6 +20,7 @@ import useUserStore from '@/src/store/useUserStore';
 import useContainerAPI from '@/src/hooks/useContainerAPI';
 import { IContainer } from '@/src/store/useContainerStore';
 import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
 
 const BringMyContainerForm = () => {
   const { user } = useUserStore();
@@ -78,14 +79,28 @@ const BringMyContainerForm = () => {
         }
       } catch (error) {
         console.error(error);
+        const err = error as AxiosError;
 
-        toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        if (err.response?.status === 400) {
+          toast.error(
+            '이미 불러온 컨테이너입니다. 다른 컨테이너를 선택해주세요.',
+            {
+              position: 'top-right',
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              theme: 'dark',
+            },
+          );
+        } else {
+          toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            theme: 'dark',
+          });
+        }
       }
     }
 

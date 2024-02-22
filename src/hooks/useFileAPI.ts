@@ -24,16 +24,6 @@ const useFileAPI = () => {
         newContent,
       });
 
-      if (response.status === 200) {
-        toast('파일이 저장되었습니다.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
-      }
-
       return response;
     } catch (error) {
       console.error(error);

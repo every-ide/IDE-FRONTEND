@@ -1,38 +1,41 @@
 import { useRef, useState } from 'react';
-import { Message, loggedInUserData } from './data';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/src/components/ui/popover';
-import { GoPlusCircle } from 'react-icons/go';
+
 import { cn } from '@/src/utils/style';
 import { buttonVariants } from '@/src/components/ui/button';
 import { FaMicrophone } from 'react-icons/fa';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Textarea } from '@/src/components/ui/textarea';
+import EmojiPicker from './EmojiPicker';
+import { SendHorizonal, ThumbsUp, PlusCircle } from 'lucide-react';
 
 interface ChatBottombarProps {
-  sendMessage: (newMessage: Message) => void;
+  sendMessage: (newMessage: string) => void;
 }
 
 const ChatBottombar = ({ sendMessage }: ChatBottombarProps) => {
   const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [isComposing, setIsComposing] = useState<boolean>(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
   };
 
+  const handleThumbsUp = () => {
+    if (!isComposing) {
+      sendMessage('👍');
+      setMessage('');
+    }
+  };
+
   const handleSend = () => {
-    if (message.trim()) {
-      const newMessage: Message = {
-        id: message.length + 1,
-        name: loggedInUserData.name,
-        avatar: loggedInUserData.avatar,
-        message: message.trim(),
-      };
-      sendMessage(newMessage);
+    if (!isComposing && message.trim()) {
+      sendMessage(message.trim());
       setMessage('');
 
       if (inputRef.current) {
@@ -53,8 +56,16 @@ const ChatBottombar = ({ sendMessage }: ChatBottombarProps) => {
     }
   };
 
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
+  };
+
   return (
-    <div className="flex w-full items-center justify-between gap-2 p-2">
+    <div className="flex w-full items-center justify-between gap-2 border-t-2 border-mdark bg-ldark p-2">
       <div className="flex">
         <Popover>
           <PopoverTrigger asChild>
@@ -62,7 +73,7 @@ const ChatBottombar = ({ sendMessage }: ChatBottombarProps) => {
               href="#"
               className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}
             >
-              <GoPlusCircle className="size-6" />
+              <PlusCircle size={20} className="text-muted-foreground" />
             </a>
           </PopoverTrigger>
           <PopoverContent side="top" className="w-full p-2">
@@ -101,11 +112,46 @@ const ChatBottombar = ({ sendMessage }: ChatBottombarProps) => {
             ref={inputRef}
             onKeyDown={handleKeyPress}
             onChange={handleInputChange}
+            onCompositionStart={handleCompositionStart}
+            onCompositionEnd={handleCompositionEnd}
             name="message"
             placeholder="Aa"
             className="flex h-9 w-full resize-none items-center overflow-hidden rounded-full border bg-background text-mdark"
           ></Textarea>
+          <div className="absolute bottom-0.5 right-2">
+            <EmojiPicker
+              onChange={(value) => {
+                setMessage(message + value);
+                if (inputRef.current) {
+                  inputRef.current.focus();
+                }
+              }}
+            />
+          </div>
         </motion.div>
+        {message.trim() ? (
+          <a
+            href="#"
+            className={cn(
+              buttonVariants({ variant: 'ghost', size: 'icon' }),
+              'shrink-0',
+            )}
+            onClick={handleSend}
+          >
+            <SendHorizonal size={20} className="text-muted-foreground" />
+          </a>
+        ) : (
+          <a
+            href="#"
+            className={cn(
+              buttonVariants({ variant: 'ghost', size: 'icon' }),
+              'shrink-0',
+            )}
+            onClick={handleThumbsUp}
+          >
+            <ThumbsUp size={20} className="text-muted-foreground" />
+          </a>
+        )}
       </AnimatePresence>
     </div>
   );

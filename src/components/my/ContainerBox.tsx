@@ -35,6 +35,7 @@ interface IContainerBoxProps {
   active: boolean;
   createDate: Date;
   lastModifiedDate: Date;
+  roomName?: string;
 }
 
 export interface IUpdateContainerForm {
@@ -53,6 +54,7 @@ const ContainerBox = ({
   active,
   createDate,
   lastModifiedDate,
+  roomName,
 }: IContainerBoxProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -88,7 +90,7 @@ const ContainerBox = ({
         );
       } else {
         window.open(
-          `${import.meta.env.VITE_CLIENT_URI}/teamspace/${containerName}/${containerId}`,
+          `${import.meta.env.VITE_CLIENT_URI}/teamspace/${containerName}/${containerId}?roomId=${roomId}`,
           '_blank',
           'noopener,noreferrer',
         );

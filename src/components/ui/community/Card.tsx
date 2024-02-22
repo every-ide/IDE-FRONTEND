@@ -33,9 +33,10 @@ interface CardProps {
   name: string;
   type: string;
   isLocked: boolean;
-  usersCount: number;
+  personCnt: number;
   maxPeople: number;
   ownerName: string;
+  description: string;
 }
 
 interface IUpdateCardProps {
@@ -43,6 +44,7 @@ interface IUpdateCardProps {
   newName: string;
   isLocked: boolean;
   password: string;
+  description: string;
 }
 
 const CardContainer: React.FC<CardProps> = ({
@@ -50,9 +52,10 @@ const CardContainer: React.FC<CardProps> = ({
   name,
   type,
   isLocked,
-  usersCount,
+  personCnt,
   maxPeople,
   ownerName,
+  description,
 }) => {
   const navigate = useNavigate();
   const { updateRoomData } = useRoomAPI();
@@ -72,6 +75,7 @@ const CardContainer: React.FC<CardProps> = ({
       oldName: name,
       newName: name,
       isLocked,
+      description,
       password: '',
     },
   });
@@ -92,6 +96,7 @@ const CardContainer: React.FC<CardProps> = ({
         name: data.newName,
         isLocked: data.isLocked,
         password: data.password,
+        description: data.description,
       };
       const response = await updateRoomData(
         {
@@ -100,6 +105,7 @@ const CardContainer: React.FC<CardProps> = ({
         roomId,
       );
 
+      console.log('response: ', response);
       if (response.status === 204) {
         // zustand store update;
 
@@ -130,12 +136,7 @@ const CardContainer: React.FC<CardProps> = ({
   };
 
   return (
-    <Card variant="container">
-      {/* <img
-        src="src/assets/images/placeholder.jpg"
-        alt="Event Banner"
-        className="h-auto w-full object-cover p-4"
-      /> */}
+    <Card variant="container" className="h-72">
       <CardHeader className="pb-4">
         <CardTitle className="ml-1 text-xl">{name}</CardTitle>
         <div className="flex flex-row items-center gap-1">
@@ -176,6 +177,28 @@ const CardContainer: React.FC<CardProps> = ({
                       placeholder="새 방 이름을 입력하세요"
                       className="col-span-3 text-black"
                       {...register('newName', {
+                        required: '새 방 이름은 필수 입력 사항입니다.',
+                      })}
+                    />
+                    {errors.newName && (
+                      <p className="mt-1 text-xs text-error">
+                        {errors.newName.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label
+                      htmlFor="description"
+                      className="text-right text-black"
+                    >
+                      설명
+                    </Label>
+                    <Input
+                      id="description"
+                      placeholder="설명을 입력하세요"
+                      className="col-span-3 text-black"
+                      defaultValue={description}
+                      {...register('description', {
                         required: '새 방 이름은 필수 입력 사항입니다.',
                       })}
                     />
@@ -273,14 +296,14 @@ const CardContainer: React.FC<CardProps> = ({
         <div className="flex items-center justify-between pt-4 text-sm text-white dark:text-white">
           <span>Owner: {ownerName}</span>
           <span className="mr-1">
-            {usersCount || 1} / {maxPeople}
+            {personCnt || 1} / {maxPeople}
           </span>
         </div>
       </CardContent>
       <CardFooter>
         <Button
           className="w-full"
-          onClick={() => navigate(`/together/${roomId}`)}
+          onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}`)}
         >
           가입하기
         </Button>

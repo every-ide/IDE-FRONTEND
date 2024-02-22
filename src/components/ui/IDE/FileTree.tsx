@@ -17,6 +17,8 @@ const Arborist = () => {
     useFileTreeCRUD(); // 수정된 부분
   const { containerName: projectName } = useParams<{ containerName: string }>();
   const { userId } = { ...useUserStore((state) => state.user) };
+  console.log('userId: ', userId);
+  console.log();
   useEffect(() => {
     // console.log('파일트리 변경됨 : ', fileTree);
   }, [fileTree]);
@@ -34,8 +36,8 @@ const Arborist = () => {
   }, [projectName, userId]);
   return (
     <>
-      <div className="border-b-2 border-mdark">
-        <div className="folderFileActions pl-2">
+      <div className="flex h-12 items-center border-b-2 border-mdark px-2">
+        <div className="folderFileActions">
           <button
             onClick={() => {
               treeRef.current?.createInternal();
@@ -54,7 +56,7 @@ const Arborist = () => {
             <AiOutlineFileAdd />
           </button>
         </div>
-        <div className="p-2">
+        <div className="flex-1">
           <input
             type="text"
             placeholder="Search..."

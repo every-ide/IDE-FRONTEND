@@ -4,32 +4,35 @@ import Header from '@/src/components/my/Header';
 import { useEffect, useState } from 'react';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 import useRoomStore from '@/src/store/useRoomStore';
+import { set } from 'react-hook-form';
+import EmptyStateCommunity from '@/src/components/my/EmptyStateCommunity';
+import LoadingEnterRoom from './Room/LoadingEnterRoom';
 
 const MenteesPage = () => {
-  const { rooms, setRooms } = useRoomStore();
-  const { getRooms } = useRoomAPI();
-  const [isLoading, setIsLoading] = useState(true); // Add this line
+  const { rooms, isLoading, searchKey } = useRoomStore();
+  const { fetchSearchRooms } = useRoomAPI();
 
   useEffect(() => {
-    async function fetchData() {
-      const roomData = await getRooms();
-      console.log('roomData: ', roomData);
-      setRooms(roomData.filter((room: any) => room.type === 'QUESTION'));
-      setIsLoading(false); // Add this line
-    }
-    fetchData();
+    fetchSearchRooms(searchKey);
   }, []);
 
   if (isLoading) {
-    return <div className="loading-indicator">Loading...</div>; // Modify this as needed
+    console.log('isLoading: ', isLoading);
+    return <LoadingEnterRoom />; // Modify this as needed
   }
   return (
     <div className="bg-mdark">
       <Header />
       <Navbar />
       <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {rooms.map((room, index) =>
-          room.available ? <Card key={index} {...room} /> : null,
+        {rooms ? (
+          rooms
+            .filter((room: any) => room.type === 'QUESTION')
+            .map((room, index) =>
+              room.available ? <Card key={index} {...room} /> : null,
+            )
+        ) : (
+          <EmptyStateCommunity />
         )}
       </div>
     </div>

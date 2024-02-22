@@ -18,12 +18,15 @@ const useYorkieHook = () => {
     await client.activate();
 
     const axiosFile = await axiosFileTree(projectName);
+    console.log('axiosFile: ', axiosFile);
     const doc = new yorkie.Document(`${projectName}-${projectId}`);
+    console.log(
+      '`${projectName}-${projectId}`: ',
+      `${projectName}-${projectId}`,
+    );
 
     // Zustand 스토어에 yorkie 문서와 컨테이너 아이디를 설정
     setContainerId(projectId);
-    // console.log('projectId: ', projectId);
-    // setContainerId(axiosFile.id);
     setDocument(doc);
     setContainerName(projectName);
     await client.attach(doc);
