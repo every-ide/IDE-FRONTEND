@@ -79,7 +79,6 @@ const CardContainer: React.FC<CardProps> = ({
       password: '',
     },
   });
-  console.log('description: ', description);
   useEffect(() => {
     if (openModal) {
       reset();

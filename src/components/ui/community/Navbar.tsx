@@ -192,11 +192,6 @@ const NavigationBar: React.FC = () => {
                         value: 20,
                         message: '방 이름은 20자 이내로 작성해주세요.',
                       },
-                      // validate: {
-                      //   noSpace: (v) =>
-                      //     !/\s/.test(v) ||
-                      //     '방 이름에 공백을 포함할 수 없습니다.',
-                      // },
                     })}
                   />
                 </div>
@@ -221,7 +216,7 @@ const NavigationBar: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="isLocked" className="text-right text-black">
-                    방 비공개
+                    커뮤니티 비공개
                   </Label>
                   <Controller
                     name="isLocked"
@@ -261,7 +256,7 @@ const NavigationBar: React.FC = () => {
                 )}
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="roomType" className="text-right text-black">
-                    방 종류
+                    커뮤니티 종류
                   </Label>
                   <Controller
                     name="roomType"
