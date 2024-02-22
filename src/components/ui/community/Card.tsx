@@ -280,7 +280,7 @@ const CardContainer: React.FC<CardProps> = ({
       <CardFooter>
         <Button
           className="w-full"
-          onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}}`)}
+          onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}`)}
         >
           가입하기
         </Button>

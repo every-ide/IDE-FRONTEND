@@ -7,7 +7,7 @@ import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import useRoomStore from '@/src/store/useRoomStore';
 import { AxiosError } from 'axios';
 import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import LoadingEnterRoom from './LoadingEnterRoom';
 import EnterPassword from './EnterPassword';
@@ -17,17 +17,13 @@ const RoomDetailPage = () => {
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const { roomId } = useParams<{ roomId: string }>();
-  const { rooms, enteredRoom, setEnteredRoom } = useRoomStore();
-  const isLocked = useRef<boolean>(true);
+  const [searchParams] = useSearchParams();
+  const isLocked = useRef<boolean>(
+    searchParams.get('isLocked') === 'true' ? true : false,
+  );
+  const { enteredRoom, setEnteredRoom } = useRoomStore();
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const openRoom = rooms.find((room) => room.roomId === roomId);
-    if (openRoom !== undefined) {
-      isLocked.current = openRoom?.isLocked;
-    }
-  }, [rooms, roomId]);
 
   // 초기 Room Detail data 요청
   const getRoomDetail = useCallback(async () => {
