@@ -85,16 +85,16 @@ const Header = () => {
       }
 
       // 컴파일 전 저장이 필요한 경우
-      // if (targetFile?.needSave) {
-      //   const response = await saveFileContent({
-      //     filePath: targetFilePath!,
-      //     newContent: targetFile.yorkieDoc!.getRoot().content.toString(),
-      //   });
-      //   if (response?.status === 200) {
-      //     targetFile.yorkieDoc!.update((root) => (root.backendSaved = true));
-      //     setNeedSave(selectedFileId, false);
-      //   }
-      // }
+      if (targetFile?.needSave) {
+        const response = await saveFileContent({
+          filePath: targetFilePath!,
+          newContent: targetFile.yorkieDoc!.getRoot().content.toString(),
+        });
+        if (response?.status === 200) {
+          targetFile.yorkieDoc!.update((root) => (root.backendSaved = true));
+          setNeedSave(selectedFileId, false);
+        }
+      }
 
       webSocketService.client.publish({
         destination: `/app/container/${containerId}/terminal`,
