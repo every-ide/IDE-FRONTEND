@@ -4,6 +4,18 @@ import useFileTree from '@/src/hooks/filetreeHook/useFileTreeApi';
 import { useParams } from 'react-router-dom';
 const API_KEY = import.meta.env.VITE_YORKIE_API_KEY;
 
+interface FileTreeNode {
+  id: string;
+  name: string;
+  path: string;
+  type: string;
+  children: FileTreeNode[]; // 디렉토리일 경우 자식 노드 포함, 파일일 경우 없음
+}
+
+export interface YorkieContainer {
+  yorkieContainer: FileTreeNode;
+}
+
 const useYorkieHook = () => {
   const { setFileTree, setDocument, setContainerId, setContainerName } =
     useFileTreeStore();
@@ -17,16 +29,13 @@ const useYorkieHook = () => {
     });
     await client.activate();
 
-    const axiosFile = await axiosFileTree(projectName);
-    console.log('axiosFile: ', axiosFile);
-    const doc = new yorkie.Document(`${projectName}-${projectId}`);
-    console.log(
-      '`${projectName}-${projectId}`: ',
+    const axiosFile = (await axiosFileTree(projectName)) as FileTreeNode;
+    const doc = new yorkie.Document<YorkieContainer>(
       `${projectName}-${projectId}`,
     );
 
     // Zustand 스토어에 yorkie 문서와 컨테이너 아이디를 설정
-    setContainerId(projectId);
+    setContainerId(projectId as string);
     setDocument(doc);
     setContainerName(projectName);
     await client.attach(doc);
@@ -38,21 +47,24 @@ const useYorkieHook = () => {
       await initializeDataToYorkie(doc, axiosFile);
     }
     const fileTree = doc.getRoot().yorkieContainer.children.toJS();
+    console.log('fileTreeqbbdhjb!!!BH!BHJ!B!H!JH!BH!: ', fileTree);
     setFileTree(fileTree); // 초기 상태 설정
 
     return { client, doc };
   };
 
   const initializeDataToYorkie = async (
-    doc: Document<unknown, Indexable>,
-    axiosTree: any,
+    doc: Document<YorkieContainer, Indexable>,
+    axiosTree: FileTreeNode, // Specify the type of axiosTree parameter
   ) => {
     doc.update((root) => {
       root.yorkieContainer = axiosTree;
     }, 'Initialize file tree');
   };
 
-  const subscribeToFileTreeChanges = (doc) => {
+  const subscribeToFileTreeChanges = (
+    doc: Document<YorkieContainer, Indexable>,
+  ) => {
     const unsubscribe = doc.subscribe((event) => {
       if (event.type === 'remote-change' || event.type === 'local-change') {
         console.log(
@@ -67,7 +79,9 @@ const useYorkieHook = () => {
     return unsubscribe;
   };
 
-  const checkDocumentInitialization = async (doc) => {
+  const checkDocumentInitialization = async (
+    doc: Document<YorkieContainer, Indexable>,
+  ) => {
     const root = doc.getRoot();
     // 문서의 root에 yorkieContainer가 존재하는지 확인
     if (root.yorkieContainer) {
@@ -79,18 +93,8 @@ const useYorkieHook = () => {
     }
   };
 
-  const detachDocument = async (client, doc) => {
-    try {
-      await client.deactivate(); // 클라이언트 비활성화
-      await client.detach(doc); // 문서를 클라이언트로부터 분리
-      console.log('문서가 성공적으로 분리되었습니다.');
-    } catch (error) {
-      console.error('문서 분리 중 오류 발생:', error);
-    }
-  };
   return {
     initializeYorkieAndSyncWithZustand,
-    detachDocument,
   };
 };
 

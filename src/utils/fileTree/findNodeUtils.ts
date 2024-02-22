@@ -7,9 +7,9 @@ interface NodeWithParent {
 export const findNodeById = (
   nodes: FileNodeType[],
   nodeId: string | null,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   currentParentId: string | null,
 ): NodeWithParent => {
-  console.log('nodeId: ', nodeId);
   for (const node of nodes) {
     if (node.id === nodeId) {
       return { node };
@@ -89,14 +89,11 @@ export const findParentNodeById = (
 ): FileNodeType | null => {
   const parentPath = findNodeById(nodes, id, '/').node?.path;
   console.log('parentPath:', parentPath);
-  const lastSlashIndex = parentPath?.lastIndexOf('/');
+  const lastSlashIndex = parentPath?.lastIndexOf('/') ?? -1;
   const pathWithoutLastPart =
     lastSlashIndex > -1 ? parentPath?.substring(0, lastSlashIndex) : parentPath;
 
-  if (pathWithoutLastPart === '') {
-    return null;
-  }
-  const parentId = findNodeIdByPath(nodes, pathWithoutLastPart);
+  const parentId = findNodeIdByPath(nodes, pathWithoutLastPart as string);
   const parentNode = findNodeById(nodes, parentId, '/');
 
   return parentNode.node;

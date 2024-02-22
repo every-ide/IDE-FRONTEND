@@ -22,6 +22,8 @@ import { FileNodeType } from '../../types/IDE/FileTree/FileDataTypes';
 import { useDropzone } from 'react-dropzone';
 import { createFileTree } from '../../utils/localFileUpload/fileReadUtils';
 import useFileStore from '../../store/useFileStore';
+import { YorkieContainer } from './useYorkie';
+import { JSONObject } from 'yorkie-js-sdk';
 
 const useFileTreeCRUD = () => {
   const { fileTree, deleteNode, addNode, doc } = useFileTreeStore();
@@ -46,7 +48,6 @@ const useFileTreeCRUD = () => {
       // 여기에서 파일 처리 로직 구현
       const dropData = await createFileTree(acceptedFiles);
       console.log('createFileTree(acceptedFiles);: ', dropData);
-      const fileId = dropData[0].id;
       const isDuplicate = dropData.some((item) =>
         fileTree.some((node) => node.name === item.name),
       );
@@ -56,12 +57,11 @@ const useFileTreeCRUD = () => {
         return; // 함수 종료
       }
 
-      console.log('acceptedFiles: ', acceptedFiles);
-      acceptedFiles.forEach((file) => {
+      acceptedFiles.forEach((file: any) => {
         axiosUploadLocalFile(file.path, file);
       });
 
-      doc.update((root) => {
+      doc.update((root: JSONObject<YorkieContainer>) => {
         dropData.forEach((item) => root.yorkieContainer.children.push(item));
       });
     },
@@ -74,7 +74,11 @@ const useFileTreeCRUD = () => {
     if (findNodeById(fileTree, parentId, null)?.node?.type === 'file') {
       parentId = null;
     }
-    const maxNumber = findMaxFileNumberByPath(fileTree, parentId, baseFilename);
+    const maxNumber = findMaxFileNumberByPath(
+      fileTree,
+      parentId || '',
+      baseFilename,
+    );
     const newName =
       maxNumber > 0 ? `${baseFilename}(${maxNumber})` : baseFilename;
 
@@ -90,7 +94,9 @@ const useFileTreeCRUD = () => {
     addNode(newNode, parentId);
 
     try {
-      await axiosCreateIsFile(projectName, newPath, newNode.type);
+      if (projectName) {
+        await axiosCreateIsFile(projectName, newPath, newNode.type);
+      }
     } catch (error) {
       console.error('File creation error:', error);
       throw error;
@@ -114,7 +120,9 @@ const useFileTreeCRUD = () => {
     const oldPath = node.data.path;
     const newPath = oldPath.substring(0, oldPath.lastIndexOf('/')) + `/${name}`;
     try {
-      axiosRenameIsFile(projectName, oldPath, newPath, node.data.type);
+      if (projectName) {
+        axiosRenameIsFile(projectName, oldPath, newPath, node.data.type);
+      }
     } catch (error) {
       console.error('File renaming error:', error);
       throw error;
@@ -126,7 +134,9 @@ const useFileTreeCRUD = () => {
     const deletingNode = findNodeById(fileTree, ids[0], null).node;
     deleteNode(ids[0]);
     closeFile(ids[0]);
-    axiosDeleteIsFile(projectName, deletingNode.path, deletingNode.type);
+    if (projectName && deletingNode) {
+      axiosDeleteIsFile(projectName, deletingNode.path, deletingNode.type);
+    }
   };
 
   const onMove: MoveHandler<FileNodeType> = ({
@@ -134,9 +144,7 @@ const useFileTreeCRUD = () => {
     parentId,
     parentNode,
     dragNodes,
-    index,
   }) => {
-    console.log('index: ', index);
     let newDragNodeData: FileNodeType = {} as FileNodeType;
     const dragNodeData = dragNodes[0].data;
     const parentNodeData = parentNode?.data;
@@ -144,7 +152,7 @@ const useFileTreeCRUD = () => {
     if (parentNodeData?.type === 'file') return;
     const newPath = parentNode
       ? `${parentNode.data.path}/${dragNodeData.name}`
-      : '';
+      : `/${dragNodeData.name}`;
 
     if (dragNodeData.children) {
       newDragNodeData = updatePath(dragNodeData, newPath);

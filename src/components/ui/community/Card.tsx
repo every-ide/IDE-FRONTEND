@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { GiTeacher } from 'react-icons/gi';
 import {
   Card,
   CardContent,
@@ -7,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { TbUserQuestion } from 'react-icons/tb';
 import { FaLock, FaLockOpen } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../button';
@@ -33,10 +31,11 @@ interface CardProps {
   name: string;
   type: string;
   isLocked: boolean;
-  personCnt: number;
+  usersCnt: number;
   maxPeople: number;
   ownerName: string;
   description: string;
+  isJoined: boolean;
 }
 
 interface IUpdateCardProps {
@@ -52,10 +51,11 @@ const CardContainer: React.FC<CardProps> = ({
   name,
   type,
   isLocked,
-  personCnt,
+  usersCnt,
   maxPeople,
   ownerName,
   description,
+  isJoined,
 }) => {
   const navigate = useNavigate();
   const { updateRoomData } = useRoomAPI();
@@ -83,6 +83,7 @@ const CardContainer: React.FC<CardProps> = ({
     if (openModal) {
       reset();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openModal]);
 
   const handleUpdateContainer = async (data: IUpdateCardProps) => {
@@ -151,13 +152,16 @@ const CardContainer: React.FC<CardProps> = ({
         </div>
 
         <div className="flex items-center justify-between">
-          <CardTitle className="ml-1 text-xl">{name}</CardTitle>
-          <div className="flex items-center gap-2">
-            <div className="flex flex-row items-center gap-1">
+          <div className="flex flex-row items-center justify-between gap-1">
+            <CardTitle className="ml-1 text-xl">{name}</CardTitle>
+            <div className="flex items-center gap-2">
               {/* 컨테이너 수정 Button & Modal */}
               <Dialog open={openModal} onOpenChange={setOpenModal}>
                 <DialogTrigger asChild>
-                  <Button variant="icon" className="p-0 text-[#888]">
+                  <Button
+                    variant="icon"
+                    className={`p-0 text-[#888] ${isJoined ? '' : 'hidden'} mr-3 `}
+                  >
                     <MdOutlineSettings size={20} />
                   </Button>
                 </DialogTrigger>
@@ -165,7 +169,7 @@ const CardContainer: React.FC<CardProps> = ({
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle className="text-black">
-                      방 수정하기
+                      커뮤니티 수정하기
                     </DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleSubmit(handleUpdateContainer)}>
@@ -192,14 +196,16 @@ const CardContainer: React.FC<CardProps> = ({
                           htmlFor="newName"
                           className="text-right text-black"
                         >
-                          새 방 이름
+                          새 커뮤니티 이름
                         </Label>
                         <Input
                           id="newName"
-                          placeholder="새 방 이름을 입력하세요"
+                          placeholder="새 커뮤니티 이름을 입력하세요"
+                          value={name}
                           className="col-span-3 text-black"
                           {...register('newName', {
-                            required: '새 방 이름은 필수 입력 사항입니다.',
+                            required:
+                              '새 커뮤니티 이름은 필수 입력 사항입니다.',
                           })}
                         />
                         {errors.newName && (
@@ -221,7 +227,8 @@ const CardContainer: React.FC<CardProps> = ({
                           className="col-span-3 text-black"
                           defaultValue={description}
                           {...register('description', {
-                            required: '새 방 이름은 필수 입력 사항입니다.',
+                            required:
+                              '새 커뮤니티 이름은 필수 입력 사항입니다.',
                           })}
                         />
                         {errors.newName && (
@@ -235,7 +242,7 @@ const CardContainer: React.FC<CardProps> = ({
                           htmlFor="active"
                           className="text-right text-black"
                         >
-                          방 잠금
+                          커뮤니티 잠금
                         </Label>
                         <Controller
                           name="isLocked"
@@ -275,7 +282,7 @@ const CardContainer: React.FC<CardProps> = ({
                                 isLocked
                                   ? value
                                     ? true
-                                    : '비공개 방에는 비밀번호가 필요합니다.'
+                                    : '비공개 커뮤니티에는 비밀번호가 필요합니다.'
                                   : true,
                             })}
                           />
@@ -308,17 +315,26 @@ const CardContainer: React.FC<CardProps> = ({
         <div className="flex flex-col gap-2 text-xs text-gray-400">
           <div>방장 - {ownerName}</div>
           <div>
-            가입인원 / 총인원 - {personCnt || 1} / {maxPeople}
+            가입인원 / 총인원 - {usersCnt || 1} / {maxPeople}
           </div>
         </div>
       </CardContent>
       <CardFooter>
-        <Button
-          className="w-full"
-          onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}`)}
-        >
-          가입하기
-        </Button>
+        {isJoined ? (
+          <Button
+            className="w-full"
+            onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}`)}
+          >
+            입장하기
+          </Button>
+        ) : (
+          <Button
+            className="w-full"
+            onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}`)}
+          >
+            가입하기
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

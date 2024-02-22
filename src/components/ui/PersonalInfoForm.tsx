@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import AuthInput from '@/components/auth/AuthInput'; // Adjust import as necessary
 import { toast } from 'react-toastify';
@@ -25,28 +25,7 @@ const PersonalInfoForm = () => {
     mode: 'onChange',
   });
 
-  // useEffect(() => {
-  //   // Fetch user information when the component mounts
-  //   const fetchUserInfo = async () => {
-  //     try {
-  //       const response = await axiosPrivate.get('/user/info'); // Assuming this endpoint returns user info
-  //       console.log('통신', response);
-  //       // Assuming the response contains the email to pre-fill
-  //       const { email, name } = response.data;
-
-  //       // Set the email field value
-  //       setValue('email', email);
-  //       setValue('name', name); // Set the name field value
-  //     } catch (error) {
-  //       console.error('Failed to fetch user info:', error);
-  //       toast.error('Failed to fetch user info', { theme: 'dark' });
-  //     }
-  //   };
-
-  //   fetchUserInfo();
-  // }, [axiosPrivate, setValue]);
-
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     const { email, oldPassword, newPassword, confirmPassword, name } = data;
     if (newPassword !== confirmPassword) {
       setError('confirmPassword', {

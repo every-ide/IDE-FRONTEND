@@ -1,7 +1,7 @@
 import Navbar from '@/src/components/ui/community/Navbar';
 import Card from '@/src/components/ui/community/Card';
 import Header from '@/src/components/my/Header';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useRoomStore from '@/src/store/useRoomStore';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 import EmptyStateCommunity from '@/src/components/my/EmptyStateCommunity';
@@ -13,6 +13,7 @@ const TogetherPage = () => {
 
   useEffect(() => {
     fetchSearchRooms(searchKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {

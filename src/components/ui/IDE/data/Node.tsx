@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { NodeApi, NodeRendererProps, TreeApi } from 'react-arborist';
+import { NodeApi, TreeApi } from 'react-arborist';
 import { AiFillFolder } from 'react-icons/ai';
 import { MdArrowRight, MdArrowDropDown, MdEdit } from 'react-icons/md';
 import { RxCross2 } from 'react-icons/rx';
@@ -9,17 +9,14 @@ import {
   getFileIcon,
   getFileLanguage,
 } from '@/src/utils/fileTree/langauageSelector';
-import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
+// import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 import useFileTreeApi from '@/src/hooks/filetreeHook/useFileTreeApi';
-import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 // DiC 아이콘을 대신할 적절한 아이콘을 찾아 import하세요.
 
-interface MyNodeData {
+export interface MyNodeData {
   id: string;
   name: string;
-  type: 'file' | 'directory';
-  icon?: React.ElementType;
-  iconColor?: string;
+  type: string;
   children?: MyNodeData[];
   path: string;
 }
@@ -31,14 +28,9 @@ interface NodeProps {
   tree: TreeApi<MyNodeData>;
 }
 
-const Node: FC<NodeProps> = ({
-  node,
-  style,
-  dragHandle,
-  tree,
-}): NodeRendererProps<FileNodeType> => {
+const Node: FC<NodeProps> = ({ node, style, dragHandle, tree }) => {
   const { axiosOpenFile } = useFileTreeApi();
-  const { containerId } = useFileTreeStore();
+  // const { containerId } = useFileTreeStore();
   const { openFile } = useFileStore();
 
   // 파일 확장자를 기반으로 아이콘 선택

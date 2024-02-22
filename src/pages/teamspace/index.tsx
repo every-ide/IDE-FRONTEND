@@ -61,7 +61,10 @@ const TeamSpacePage = () => {
       webSocketService.subscribeToDestination(
         `/app/container/${containerId}/enter`,
         (message) => {
-          console.log('방입장으로 부터의 message', JSON.parse(message.body));
+          console.log(
+            '커뮤니티 입장으로 부터의 message',
+            JSON.parse(message.body),
+          );
         },
         accessToken!,
         containerId,

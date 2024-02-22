@@ -57,7 +57,7 @@ const useRoomAPI = () => {
     console.log('response: 룸을 만들었습니다 :', response);
 
     if (response.status === 200) {
-      toast('새로운 방 생성되었습니다.', {
+      toast('새로운 커뮤니티가 생성되었습니다.', {
         position: 'top-right',
         autoClose: 2000,
         hideProgressBar: false,
@@ -93,7 +93,7 @@ const useRoomAPI = () => {
       `/api/community/${roomId}/settings`,
       data,
     );
-    console.log('response: 방을 수정했습니다 ', response);
+    console.log('response: 커뮤니티를 수정했습니다 ', response);
     return response;
   };
   const fetchSearchRooms = async (name = '') => {
