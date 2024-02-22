@@ -132,19 +132,19 @@ const NavigationBar: React.FC = () => {
           to="/together/mentors"
           className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/mentors') ? 'border-blue-400' : 'border-transparent'}`}
         >
-          멘토
+          질문 받아요
         </Link>
         <Link
           to="/together/mentees"
           className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/mentees') ? 'border-blue-400' : 'border-transparent'}`}
         >
-          멘티
+          질문 있어요
         </Link>
         <Link
           to="/together/my"
           className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/my') ? 'border-blue-400' : 'border-transparent'}`}
         >
-          참여 프로젝트
+          참여중인 커뮤니티
         </Link>
       </div>
       <div className="flex items-center">
@@ -196,7 +196,10 @@ const NavigationBar: React.FC = () => {
             <form onSubmit={handleSubmit(newRoomAction)}>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right text-black">
+                  <Label
+                    htmlFor="name"
+                    className="text-right text-xs text-black"
+                  >
                     커뮤니티 이름
                   </Label>
                   <Input
@@ -215,7 +218,7 @@ const NavigationBar: React.FC = () => {
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label
                     htmlFor="description"
-                    className="text-right text-black"
+                    className="text-right text-xs text-black"
                   >
                     커뮤니티 설명
                   </Label>
@@ -232,8 +235,11 @@ const NavigationBar: React.FC = () => {
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="isLocked" className="text-right text-black">
-                    커뮤니티 비공개
+                  <Label
+                    htmlFor="isLocked"
+                    className="text-right text-xs text-black"
+                  >
+                    커뮤니티 잠금
                   </Label>
                   <Controller
                     name="isLocked"
@@ -272,7 +278,10 @@ const NavigationBar: React.FC = () => {
                   </div>
                 )}
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="roomType" className="text-right text-black">
+                  <Label
+                    htmlFor="roomType"
+                    className="text-right text-xs text-black"
+                  >
                     커뮤니티 종류
                   </Label>
                   <Controller
@@ -296,13 +305,13 @@ const NavigationBar: React.FC = () => {
                           <SelectItem value="QUESTION">
                             <div className="inline-flex items-center gap-2">
                               <TbUserQuestion />
-                              멘티
+                              질문있어요
                             </div>
                           </SelectItem>
                           <SelectItem value="ANSWER">
                             <div className="inline-flex items-center gap-2">
                               <GiTeacher />
-                              멘토
+                              질문받아요
                             </div>
                           </SelectItem>
                         </SelectContent>
@@ -312,7 +321,10 @@ const NavigationBar: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="maxPeople" className="text-right text-black">
+                  <Label
+                    htmlFor="maxPeople"
+                    className="text-right text-xs text-black"
+                  >
                     최대 인원
                   </Label>
                   <Input

@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import useUserStore from '@/src/store/useUserStore';
 import { messageListProps } from '.';
 import { getColorForUserId } from '@/src/utils/helper';
+import Avatar from 'boring-avatars';
 
 interface ChatProps {
   messageList?: messageListProps[];
@@ -70,14 +71,18 @@ const ChatList = ({ messageList }: ChatProps) => {
             >
               <div className="flex items-end gap-1">
                 {message.userId !== user?.userId && (
-                  <div
-                    className={cn(
-                      'flex size-8 -translate-y-1 items-center justify-center rounded-full text-xl font-medium  text-black',
-                      getColorForUserId(message.userId),
-                    )}
-                  >
-                    {message.name[0]}
-                  </div>
+                  <Avatar
+                    // name={message.userId}
+                    size={60}
+                    variant="beam"
+                    colors={[
+                      '#92A1C6',
+                      '#146A7C',
+                      '#F0AB3D',
+                      '#C271B4',
+                      '#C20D90',
+                    ]}
+                  />
                 )}
                 <div className="flex flex-col">
                   <small className="text-gray-400">{message.name}</small>
@@ -87,14 +92,18 @@ const ChatList = ({ messageList }: ChatProps) => {
                 </div>
 
                 {message.userId === user?.userId && (
-                  <div
-                    className={cn(
-                      'flex size-8 -translate-y-1 items-center justify-center rounded-full text-xl font-medium  text-black',
-                      getColorForUserId(message.userId),
-                    )}
-                  >
-                    {message.name[0]}
-                  </div>
+                  <Avatar
+                    // name={message.userId}
+                    size={40}
+                    variant="beam"
+                    colors={[
+                      '#92A1C6',
+                      '#146A7C',
+                      '#F0AB3D',
+                      '#C271B4',
+                      '#C20D90',
+                    ]}
+                  />
                 )}
               </div>
             </motion.div>
