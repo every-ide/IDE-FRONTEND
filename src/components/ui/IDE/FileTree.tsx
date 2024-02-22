@@ -36,8 +36,8 @@ const Arborist = () => {
   }, [projectName, userId]);
   return (
     <>
-      <div className="border-b-2 border-mdark">
-        <div className="folderFileActions pl-2">
+      <div className="flex h-12 items-center border-b-2 border-mdark px-2">
+        <div className="folderFileActions">
           <button
             onClick={() => {
               treeRef.current?.createInternal();
@@ -56,7 +56,7 @@ const Arborist = () => {
             <AiOutlineFileAdd />
           </button>
         </div>
-        <div className="p-2">
+        <div className="flex-1">
           <input
             type="text"
             placeholder="Search..."

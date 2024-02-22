@@ -6,11 +6,15 @@ import {
   TabsTrigger,
 } from '@/src/components/ui/tabs';
 import useFileStore from '@/src/store/useFileStore';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FaXmark } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 
-const Editor = () => {
+interface EditorProps {
+  isTeamspace: boolean;
+}
+
+const Editor: FC<EditorProps> = ({ isTeamspace = false }) => {
   const { files, selectedFileId, closeFile, selectFile } = useFileStore();
   const [tab, setTab] = useState(selectedFileId);
 
@@ -75,15 +79,37 @@ const Editor = () => {
             <p className="text-[1rem] text-neutral-200">
               파일을 열어 시작하세요.
             </p>
-            <div className="inline-flex items-center justify-center gap-2">
-              <p className="text-[1rem] text-[#888]">Open Terminal </p>
-              <div className="rounded-md border border-[#888] p-1">⌘</div>
-              <div className="rounded-md border border-[#888] px-2 py-1">J</div>
-            </div>
-            <div className="inline-flex items-center justify-center gap-2">
-              <p className="text-[1rem] text-[#888]">Save File </p>
-              <div className="rounded-md border border-[#888] p-1">⌘</div>
-              <div className="rounded-md border border-[#888] px-2 py-1">S</div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="inline-flex items-center justify-end gap-2">
+                <p className="text-[1rem] text-[#888]">Open Terminal </p>
+                <div className="rounded-md border border-[#888] p-1">⌘</div>
+                <div className="rounded-md border border-[#888] px-2 py-1">
+                  J
+                </div>
+              </div>
+              <div className="inline-flex items-center justify-end gap-2">
+                <p className="text-[1rem] text-[#888]">Save File </p>
+                <div className="rounded-md border border-[#888] p-1">⌘</div>
+                <div className="rounded-md border border-[#888] px-2 py-1">
+                  S
+                </div>
+              </div>
+              <div className="inline-flex items-center justify-end gap-2">
+                <p className="text-[1rem] text-[#888]">Open Sidebar </p>
+                <div className="rounded-md border border-[#888] p-1">⌘</div>
+                <div className="rounded-md border border-[#888] px-2 py-1">
+                  B
+                </div>
+              </div>
+              {isTeamspace && (
+                <div className="inline-flex items-center justify-end gap-2">
+                  <p className="text-[1rem] text-[#888]">Open Chat </p>
+                  <div className="rounded-md border border-[#888] p-1">⌘</div>
+                  <div className="rounded-md border border-[#888] px-2 py-1">
+                    C
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
