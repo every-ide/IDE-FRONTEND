@@ -9,6 +9,7 @@ export interface IContainer {
   createDate: Date;
   lastModifiedDate: Date;
   language: string;
+  shared: number;
 }
 
 interface IContainerStore {

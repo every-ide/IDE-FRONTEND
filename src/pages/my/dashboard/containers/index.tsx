@@ -35,7 +35,7 @@ const ContainerPage = () => {
   if (!containerList.length) {
     return (
       <DashboardLayout>
-        <EmptyState />
+        <EmptyState className="h-[calc(100vh-151px)]" />
       </DashboardLayout>
     );
   }

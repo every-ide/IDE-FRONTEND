@@ -2,10 +2,21 @@ import ContainerBox from '@/src/components/my/ContainerBox';
 import DashboardLayout from '@/src/components/my/DashboardLayout';
 import EmptyState from '@/src/components/my/EmptyState';
 import { Skeleton } from '@/src/components/ui/skeleton';
+import useContainerAPI from '@/src/hooks/useContainerAPI';
 import useContainerStore from '@/src/store/useContainerStore';
+import useUserStore from '@/src/store/useUserStore';
+import { useEffect } from 'react';
 
 const MyContainerPage = () => {
   const { containerList } = useContainerStore();
+  const { getContainersData } = useContainerAPI();
+  const { userId } = { ...useUserStore((state) => state.user) };
+
+  useEffect(() => {
+    if (userId) {
+      getContainersData();
+    }
+  }, [userId]);
 
   // while Loading data : Show Skeleton
   if (!containerList) {
@@ -21,10 +32,10 @@ const MyContainerPage = () => {
     );
   }
 
-  if (!containerList.length) {
+  if (!containerList.filter((c) => c.shared === 0).length) {
     return (
       <DashboardLayout>
-        <EmptyState />
+        <EmptyState className="h-[calc(100vh-151px)]" />
       </DashboardLayout>
     );
   }
@@ -32,18 +43,20 @@ const MyContainerPage = () => {
   return (
     <DashboardLayout>
       <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {containerList.map((c) => (
-          <ContainerBox
-            key={c.name}
-            containerId={c.id}
-            containerName={c.name}
-            description={c.description}
-            language={c.language}
-            active={c.active}
-            createDate={c.createDate}
-            lastModifiedDate={c.lastModifiedDate}
-          />
-        ))}
+        {containerList
+          .filter((c) => c.shared === 0)
+          .map((c) => (
+            <ContainerBox
+              key={c.name}
+              containerId={c.id}
+              containerName={c.name}
+              description={c.description}
+              language={c.language}
+              active={c.active}
+              createDate={c.createDate}
+              lastModifiedDate={c.lastModifiedDate}
+            />
+          ))}
       </div>
     </DashboardLayout>
   );
