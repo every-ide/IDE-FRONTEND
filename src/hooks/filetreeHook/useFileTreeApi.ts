@@ -1,23 +1,26 @@
 import useAxiosPrivate from '../useAxiosPrivate';
 import useUserStore from '../../store/useUserStore';
 import { useFileTreeStore } from '../../store/useFileTreeStore';
+import { useLocation } from 'react-router-dom';
+
+import { useParams } from 'react-router-dom';
 
 const useFileTreeApi = () => {
   const axiosPrivate = useAxiosPrivate();
   const { userId, email } = { ...useUserStore((state) => state.user) };
-  const { containerId, containerName } = useFileTreeStore();
+  const { containerName } = useFileTreeStore();
+  const location = useLocation();
+  const path = location.pathname;
+  const { containerId: projectId } = useParams<{ containerId: string }>();
+
+  const hasTeamspace = path.includes('/teamspace/');
 
   const axiosFileTree = async (containerName: string) => {
     // console.log('containerName: ', containerName);
     try {
       const response = axiosPrivate.get(
-        `api/${userId}/filetree/${containerName}`,
+        `api/${hasTeamspace ? projectId : userId}/filetree/${containerName}`,
       );
-      // console.log(
-      //   '파일트리 api 호출:',
-      //   `api/${userId}/filetree/${containerName}`,
-      // );
-      // console.log('response: ', (await response).data);
       const data = (await response).data;
       return data;
     } catch (error) {
@@ -28,9 +31,9 @@ const useFileTreeApi = () => {
   const axiosOpenFile = async (path: string) => {
     try {
       const response = axiosPrivate.get(
-        `api/containers/${containerId}/files?path=${path}`,
+        `api/containers/${projectId}/files?path=${path}`,
       );
-      console.log(`api/containers/${containerId}/files?path=${path}`);
+      console.log(`api/containers/${projectId}/files?path=${path}`);
       const data = await response;
       return data;
     } catch (error) {
