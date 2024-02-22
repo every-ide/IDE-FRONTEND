@@ -46,7 +46,6 @@ const useFileTreeCRUD = () => {
       // 여기에서 파일 처리 로직 구현
       const dropData = await createFileTree(acceptedFiles);
       console.log('createFileTree(acceptedFiles);: ', dropData);
-      const fileId = dropData[0].id;
       const isDuplicate = dropData.some((item) =>
         fileTree.some((node) => node.name === item.name),
       );
@@ -56,12 +55,11 @@ const useFileTreeCRUD = () => {
         return; // 함수 종료
       }
 
-      console.log('acceptedFiles: ', acceptedFiles);
-      acceptedFiles.forEach((file) => {
+      acceptedFiles.forEach((file: any) => {
         axiosUploadLocalFile(file.path, file);
       });
 
-      doc.update((root) => {
+      doc.update((root: any) => {
         dropData.forEach((item) => root.yorkieContainer.children.push(item));
       });
     },
@@ -74,7 +72,11 @@ const useFileTreeCRUD = () => {
     if (findNodeById(fileTree, parentId, null)?.node?.type === 'file') {
       parentId = null;
     }
-    const maxNumber = findMaxFileNumberByPath(fileTree, parentId, baseFilename);
+    const maxNumber = findMaxFileNumberByPath(
+      fileTree,
+      parentId || '',
+      baseFilename,
+    );
     const newName =
       maxNumber > 0 ? `${baseFilename}(${maxNumber})` : baseFilename;
 
@@ -90,7 +92,9 @@ const useFileTreeCRUD = () => {
     addNode(newNode, parentId);
 
     try {
-      await axiosCreateIsFile(projectName, newPath, newNode.type);
+      if (projectName) {
+        await axiosCreateIsFile(projectName, newPath, newNode.type);
+      }
     } catch (error) {
       console.error('File creation error:', error);
       throw error;
@@ -114,7 +118,9 @@ const useFileTreeCRUD = () => {
     const oldPath = node.data.path;
     const newPath = oldPath.substring(0, oldPath.lastIndexOf('/')) + `/${name}`;
     try {
-      axiosRenameIsFile(projectName, oldPath, newPath, node.data.type);
+      if (projectName) {
+        axiosRenameIsFile(projectName, oldPath, newPath, node.data.type);
+      }
     } catch (error) {
       console.error('File renaming error:', error);
       throw error;
@@ -126,7 +132,9 @@ const useFileTreeCRUD = () => {
     const deletingNode = findNodeById(fileTree, ids[0], null).node;
     deleteNode(ids[0]);
     closeFile(ids[0]);
-    axiosDeleteIsFile(projectName, deletingNode.path, deletingNode.type);
+    if (projectName && deletingNode) {
+      axiosDeleteIsFile(projectName, deletingNode.path, deletingNode.type);
+    }
   };
 
   const onMove: MoveHandler<FileNodeType> = ({

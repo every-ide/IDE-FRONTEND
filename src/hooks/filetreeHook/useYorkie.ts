@@ -26,7 +26,7 @@ const useYorkieHook = () => {
     );
 
     // Zustand 스토어에 yorkie 문서와 컨테이너 아이디를 설정
-    setContainerId(projectId);
+    setContainerId(projectId as string);
     setDocument(doc);
     setContainerName(projectName);
     await client.attach(doc);
@@ -45,7 +45,7 @@ const useYorkieHook = () => {
 
   const initializeDataToYorkie = async (
     doc: Document<unknown, Indexable>,
-    axiosTree: any,
+    axiosTree: any, // Specify the type of axiosTree parameter
   ) => {
     doc.update((root) => {
       root.yorkieContainer = axiosTree;
@@ -67,7 +67,9 @@ const useYorkieHook = () => {
     return unsubscribe;
   };
 
-  const checkDocumentInitialization = async (doc) => {
+  const checkDocumentInitialization = async (
+    doc: Document<unknown, Indexable>,
+  ) => {
     const root = doc.getRoot();
     // 문서의 root에 yorkieContainer가 존재하는지 확인
     if (root.yorkieContainer) {
@@ -79,18 +81,17 @@ const useYorkieHook = () => {
     }
   };
 
-  const detachDocument = async (client, doc) => {
-    try {
-      await client.deactivate(); // 클라이언트 비활성화
-      await client.detach(doc); // 문서를 클라이언트로부터 분리
-      console.log('문서가 성공적으로 분리되었습니다.');
-    } catch (error) {
-      console.error('문서 분리 중 오류 발생:', error);
-    }
-  };
+  // const detachDocument = async (client, doc) => {
+  //   try {
+  //     await client.deactivate(); // 클라이언트 비활성화
+  //     await client.detach(doc); // 문서를 클라이언트로부터 분리
+  //     console.log('문서가 성공적으로 분리되었습니다.');
+  //   } catch (error) {
+  //     console.error('문서 분리 중 오류 발생:', error);
+  //   }
+  // };
   return {
     initializeYorkieAndSyncWithZustand,
-    detachDocument,
   };
 };
 

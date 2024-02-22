@@ -89,7 +89,7 @@ export const findParentNodeById = (
 ): FileNodeType | null => {
   const parentPath = findNodeById(nodes, id, '/').node?.path;
   console.log('parentPath:', parentPath);
-  const lastSlashIndex = parentPath?.lastIndexOf('/');
+  const lastSlashIndex = parentPath?.lastIndexOf('/') ?? -1;
   const pathWithoutLastPart =
     lastSlashIndex > -1 ? parentPath?.substring(0, lastSlashIndex) : parentPath;
 

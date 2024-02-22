@@ -13,7 +13,6 @@ export const makePath = (
   // 새로운 path를 생성합니다.
   const newPath = `${parentPath}/${name}`.replace('//', '/');
 
-  console.log('New path:', newPath);
   return newPath;
 };
 

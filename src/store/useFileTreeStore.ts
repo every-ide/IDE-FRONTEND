@@ -8,7 +8,7 @@ export interface FileTreeState {
   containerId: string;
   fileTree: FileNodeType[];
   setFileTree: (fileTree: FileNodeType[]) => void;
-  setDocument: (document: any) => void;
+  setDocument: (document: any /* Specify the type here */) => void;
   setContainerId: (containerId: string) => void;
   setContainerName: (containerName: string) => void;
   addNode: (newNode: FileNodeType, parentId?: string | null) => void;

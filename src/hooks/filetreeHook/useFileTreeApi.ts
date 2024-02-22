@@ -202,7 +202,9 @@ const useFileTreeApi = () => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('path', path);
-    formData.append('email', email);
+    if (email) {
+      formData.append('email', email);
+    }
     console.log('file: ', file);
     console.log('path: ', path);
     console.log('email: ', email);
