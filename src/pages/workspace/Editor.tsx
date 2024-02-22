@@ -11,7 +11,7 @@ import { FaXmark } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 
 interface EditorProps {
-  isTeamspace: boolean;
+  isTeamspace?: boolean;
 }
 
 const Editor: FC<EditorProps> = ({ isTeamspace = false }) => {
