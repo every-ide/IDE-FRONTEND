@@ -47,12 +47,12 @@ export async function createFileTree(files: File[]) {
 }
 
 // fileMetadataToObject 함수 수정. content 인자 추가
-export function fileMetadataToObject(file: File, filePath?: string) {
+export function fileMetadataToObject(file: File, filePath: string) {
   return {
     id: uuidv4(),
     name: file.name,
     type: 'file',
-    path: filePath || file.path,
+    path: filePath,
     children: [],
   };
 }

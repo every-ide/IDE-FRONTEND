@@ -7,15 +7,14 @@ interface NodeWithParent {
 export const findNodeById = (
   nodes: FileNodeType[],
   nodeId: string | null,
-  currentParentId: string | null,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 ): NodeWithParent => {
-  console.log('nodeId: ', nodeId);
   for (const node of nodes) {
     if (node.id === nodeId) {
       return { node };
     }
     if (node.children) {
-      const foundNode = findNodeById(node.children, nodeId, node.id);
+      const foundNode = findNodeById(node.children, nodeId);
       if (foundNode.node) {
         return foundNode;
       }
@@ -56,7 +55,7 @@ export const findMaxFileNumberByPath = (
   const regex = new RegExp(`^${baseFilename}(\\((\\d+)\\))?$`);
 
   // parentId에 해당하는 노드 찾기
-  const parentNode = findNodeById(nodes, parentId, null).node;
+  const parentNode = findNodeById(nodes, parentId).node;
   if (!parentNode || !parentNode.children) {
     nodes.forEach((node) => {
       const match = node.name.match(regex);
@@ -87,17 +86,14 @@ export const findParentNodeById = (
   nodes: FileNodeType[],
   id: string | null,
 ): FileNodeType | null => {
-  const parentPath = findNodeById(nodes, id, '/').node?.path;
-  console.log('parentPath:', parentPath);
-  const lastSlashIndex = parentPath?.lastIndexOf('/');
+  const parentPath = findNodeById(nodes, id).node?.path;
+  // console.log('parentPath:', parentPath);
+  const lastSlashIndex = parentPath?.lastIndexOf('/') ?? -1;
   const pathWithoutLastPart =
     lastSlashIndex > -1 ? parentPath?.substring(0, lastSlashIndex) : parentPath;
 
-  if (pathWithoutLastPart === '') {
-    return null;
-  }
-  const parentId = findNodeIdByPath(nodes, pathWithoutLastPart);
-  const parentNode = findNodeById(nodes, parentId, '/');
+  const parentId = findNodeIdByPath(nodes, pathWithoutLastPart as string);
+  const parentNode = findNodeById(nodes, parentId);
 
   return parentNode.node;
 };

@@ -1,11 +1,11 @@
 import Navbar from '@/src/components/ui/community/Navbar';
 import Card from '@/src/components/ui/community/Card';
-import Header from '@/src/components/my/Header';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useRoomStore from '@/src/store/useRoomStore';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 import EmptyStateCommunity from '@/src/components/my/EmptyStateCommunity';
 import LoadingEnterRoom from './Room/LoadingEnterRoom';
+import Header from '@/src/components/my/Header';
 
 const TogetherPage = () => {
   const { rooms, isLoading, searchKey } = useRoomStore();
@@ -13,6 +13,7 @@ const TogetherPage = () => {
 
   useEffect(() => {
     fetchSearchRooms(searchKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {
@@ -21,18 +22,18 @@ const TogetherPage = () => {
   }
 
   return (
-    <div className="bg-mdark">
+    <div className="h-[calc(100vh)] bg-mdark">
       <Header />
       <Navbar />
-      <div className="grid h-[calc(100vh-151px)] grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {rooms ? (
-          rooms.map((room, index) =>
+      {rooms ? (
+        <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+          {rooms.map((room, index) =>
             room.available ? <Card key={index} {...room} /> : null,
-          )
-        ) : (
-          <EmptyStateCommunity />
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <EmptyStateCommunity />
+      )}
     </div>
   );
 };

@@ -21,7 +21,6 @@ export type YorkieDoc = {
 
 const CodeEditorWindow = ({
   fileId,
-  fileName,
   filePath,
   content,
   language,

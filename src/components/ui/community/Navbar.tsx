@@ -27,6 +27,7 @@ import useRoomStore from '@/src/store/useRoomStore';
 import { GiTeacher } from 'react-icons/gi';
 import { TbUserQuestion } from 'react-icons/tb';
 import { Switch } from '../switch';
+import { FaRotate } from 'react-icons/fa6';
 
 type TNewRoomForm = {
   name: string;
@@ -109,6 +110,10 @@ const NavigationBar: React.FC = () => {
   const handleSearch = () => {
     fetchSearchRooms(searchKey);
   };
+  const handleReset = () => {
+    fetchSearchRooms('');
+    setSearchKey('');
+  };
   // 경로가 활성 링크인지 확인하는 함수
   const isActiveLink = (path: string): boolean => {
     return location.pathname === path;
@@ -127,24 +132,24 @@ const NavigationBar: React.FC = () => {
           to="/together/mentors"
           className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/mentors') ? 'border-blue-400' : 'border-transparent'}`}
         >
-          멘토
+          질문 받아요
         </Link>
         <Link
           to="/together/mentees"
           className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/mentees') ? 'border-blue-400' : 'border-transparent'}`}
         >
-          멘티
+          질문 있어요
         </Link>
         <Link
           to="/together/my"
           className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/my') ? 'border-blue-400' : 'border-transparent'}`}
         >
-          참여 프로젝트
+          참여중인 커뮤니티
         </Link>
       </div>
       <div className="flex items-center">
         <div className="mr-8 flex items-center">
-          <div className="flex flex-1 items-center justify-between rounded-lg bg-mdark max-md:hidden">
+          <div className="flex flex-1 items-center justify-between rounded-lg bg-mdark max-lg:hidden">
             <input
               type="text"
               value={searchKey}
@@ -152,12 +157,22 @@ const NavigationBar: React.FC = () => {
               placeholder="Enter to search..."
               className="rounded-xl bg-mdark p-3 outline-none "
             />
-            <button
-              className="pr-4 text-accent hover:text-accent/65 active:scale-90"
+            {searchKey && (
+              <Button
+                className="border-none pr-4 text-accent hover:text-accent/65 active:scale-90"
+                onClick={() => {
+                  handleReset();
+                }}
+              >
+                <FaRotate size={18} />
+              </Button>
+            )}
+            <Button
+              className="border-none pr-4 text-accent hover:text-accent/65 active:scale-90"
               onClick={handleSearch}
             >
               <FaSearch size={18} />
-            </button>
+            </Button>
           </div>
         </div>
         <Dialog open={openModal} onOpenChange={setOpenModal}>
@@ -165,21 +180,26 @@ const NavigationBar: React.FC = () => {
             <Button
               variant="outline"
               size="lg"
-              className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95"
+              className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95 max-md:hidden"
             >
-              <MdAddCircleOutline size={20} className="text-accent" />방
-              생성하기
+              <MdAddCircleOutline size={20} className="text-accent" />
+              커뮤니티 생성하기
             </Button>
           </DialogTrigger>
 
           <DialogContent className="text-black">
             <DialogHeader>
-              <DialogTitle className="text-black">방 생성하기</DialogTitle>
+              <DialogTitle className="text-black">
+                커뮤니티 생성하기
+              </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit(newRoomAction)}>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right text-black">
+                  <Label
+                    htmlFor="name"
+                    className="text-right text-xs text-black"
+                  >
                     커뮤니티 이름
                   </Label>
                   <Input
@@ -187,10 +207,10 @@ const NavigationBar: React.FC = () => {
                     placeholder="알파벳, 숫자, -, _만 포함, 20자 이내"
                     className="col-span-3 text-black"
                     {...register('name', {
-                      required: '방 이름은 필수 입력입니다.',
+                      required: '커뮤니티 이름은 필수 입력입니다.',
                       maxLength: {
                         value: 20,
-                        message: '방 이름은 20자 이내로 작성해주세요.',
+                        message: '커뮤니티 이름은 20자 이내로 작성해주세요.',
                       },
                     })}
                   />
@@ -198,7 +218,7 @@ const NavigationBar: React.FC = () => {
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label
                     htmlFor="description"
-                    className="text-right text-black"
+                    className="text-right text-xs text-black"
                   >
                     커뮤니티 설명
                   </Label>
@@ -215,8 +235,11 @@ const NavigationBar: React.FC = () => {
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="isLocked" className="text-right text-black">
-                    커뮤니티 비공개
+                  <Label
+                    htmlFor="isLocked"
+                    className="text-right text-xs text-black"
+                  >
+                    커뮤니티 잠금
                   </Label>
                   <Controller
                     name="isLocked"
@@ -255,14 +278,17 @@ const NavigationBar: React.FC = () => {
                   </div>
                 )}
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="roomType" className="text-right text-black">
+                  <Label
+                    htmlFor="roomType"
+                    className="text-right text-xs text-black"
+                  >
                     커뮤니티 종류
                   </Label>
                   <Controller
                     name="roomType"
                     control={control}
-                    rules={{ required: '방 종류 선택은 필수입니다.' }}
-                    render={({ field: { ref, ...restField } }) => (
+                    rules={{ required: '커뮤니티 종류 선택은 필수입니다.' }}
+                    render={({ field: { ...restField } }) => (
                       <Select
                         {...restField}
                         onValueChange={(value) => {
@@ -270,19 +296,22 @@ const NavigationBar: React.FC = () => {
                         }}
                       >
                         <SelectTrigger className="col-span-3 text-black">
-                          <SelectValue id="roomType" placeholder="방 종류" />
+                          <SelectValue
+                            id="roomType"
+                            placeholder="커뮤니티 종류"
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="QUESTION">
                             <div className="inline-flex items-center gap-2">
                               <TbUserQuestion />
-                              멘티
+                              질문있어요
                             </div>
                           </SelectItem>
                           <SelectItem value="ANSWER">
                             <div className="inline-flex items-center gap-2">
                               <GiTeacher />
-                              멘토
+                              질문받아요
                             </div>
                           </SelectItem>
                         </SelectContent>
@@ -292,7 +321,10 @@ const NavigationBar: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="maxPeople" className="text-right text-black">
+                  <Label
+                    htmlFor="maxPeople"
+                    className="text-right text-xs text-black"
+                  >
                     최대 인원
                   </Label>
                   <Input
@@ -345,7 +377,7 @@ const NavigationBar: React.FC = () => {
                   className="border-none"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? '방 생성 중입니다...' : '생성하기'}
+                  {isSubmitting ? '커뮤니티 생성 중입니다...' : '생성하기'}
                 </Button>
               </DialogFooter>
             </form>
