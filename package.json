@@ -94,6 +94,9 @@
     "vite": "^5.0.8",
     "vite-tsconfig-paths": "^4.3.1"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.6.1"
+  },
   "msw": {
     "workerDirectory": [
       "public"
