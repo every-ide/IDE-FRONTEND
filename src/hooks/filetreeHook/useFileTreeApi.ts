@@ -1,7 +1,7 @@
 import useAxiosPrivate from '../useAxiosPrivate';
 import useUserStore from '../../store/useUserStore';
 import { useFileTreeStore } from '../../store/useFileTreeStore';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { useParams } from 'react-router-dom';
 
@@ -12,14 +12,14 @@ const useFileTreeApi = () => {
   const location = useLocation();
   const path = location.pathname;
   const { containerId: projectId } = useParams<{ containerId: string }>();
-  const { roomId } = useParams<{ roomId: string }>();
-
+  const [searchParams] = useSearchParams();
   const hasTeamspace = path.includes('teamspace');
 
   const axiosFileTree = async (containerName: string) => {
     // console.log('containerName: ', containerName);
     try {
       if (hasTeamspace) {
+        const roomId = searchParams.get('roomId');
         const response = axiosPrivate.get(
           `api/${roomId}/filetree/${containerName}`,
         );

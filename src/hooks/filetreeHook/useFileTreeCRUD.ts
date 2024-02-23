@@ -26,7 +26,8 @@ import { YorkieContainer } from './useYorkie';
 import { JSONObject } from 'yorkie-js-sdk';
 
 const useFileTreeCRUD = () => {
-  const { fileTree, deleteNode, addNode, doc } = useFileTreeStore();
+  const { fileTree, deleteNode, addNode, doc, containerName } =
+    useFileTreeStore();
   const { updateNodeNameAndPath, updatePath } = useFileTreeNodeUtils();
   const {
     axiosCreateIsFile,
@@ -150,6 +151,7 @@ const useFileTreeCRUD = () => {
     const parentNodeData = parentNode?.data;
 
     if (parentNodeData?.type === 'file') return;
+
     const newPath = parentNode
       ? `${parentNode.data.path}/${dragNodeData.name}`
       : `/${dragNodeData.name}`;
@@ -163,6 +165,12 @@ const useFileTreeCRUD = () => {
       if (!fileTree.some((node) => node.name === dragNodeData.name)) {
         deleteNode(dragIds[0]);
         addNode(newDragNodeData);
+        axiosRenameIsFile(
+          containerName,
+          dragNodeData.path,
+          newPath,
+          dragNodeData.type,
+        );
         return;
       }
     } else {
@@ -173,6 +181,12 @@ const useFileTreeCRUD = () => {
       ) {
         deleteNode(dragIds[0]);
         addNode(newDragNodeData, parentId);
+        axiosRenameIsFile(
+          containerName,
+          dragNodeData.path,
+          newPath,
+          dragNodeData.type,
+        );
         return;
       }
     }
