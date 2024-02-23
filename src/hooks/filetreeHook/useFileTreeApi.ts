@@ -13,8 +13,8 @@ const useFileTreeApi = () => {
   const path = location.pathname;
   const { containerId: projectId } = useParams<{ containerId: string }>();
   const [searchParams] = useSearchParams();
-  const hasTeamspace = path.includes('teamspace');
   const roomId = searchParams.get('roomId');
+  const hasTeamspace = path.includes('teamspace');
   const axiosFileTree = async (containerName: string) => {
     // console.log('containerName: ', containerName);
     try {
