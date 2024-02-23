@@ -149,7 +149,7 @@ const NavigationBar: React.FC = () => {
       </div>
       <div className="flex items-center">
         <div className="mr-8 flex items-center">
-          <div className="flex flex-1 items-center justify-between rounded-lg bg-mdark max-md:hidden">
+          <div className="flex flex-1 items-center justify-between rounded-lg bg-mdark max-lg:hidden">
             <input
               type="text"
               value={searchKey}
@@ -180,7 +180,7 @@ const NavigationBar: React.FC = () => {
             <Button
               variant="outline"
               size="lg"
-              className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95"
+              className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95 max-md:hidden"
             >
               <MdAddCircleOutline size={20} className="text-accent" />
               커뮤니티 생성하기
