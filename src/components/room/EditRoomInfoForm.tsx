@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -16,6 +16,13 @@ import { MdOutlineSettings } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import useRoomStore from '@/src/store/useRoomStore';
 import useRoomAPI from '@/src/hooks/useRoomApi';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip';
+import useUserStore from '@/src/store/useUserStore';
 
 export interface IUpdateCardProps {
   oldName: string;
@@ -39,15 +46,35 @@ const EditRoomInfoForm = ({
   description,
 }: IEditRoomInfoFormProps) => {
   const { updateRoomData } = useRoomAPI();
-  const { updateEnteredRoom } = useRoomStore();
+  const { enteredRoom, updateEnteredRoom } = useRoomStore();
   const [openModal, setOpenModal] = useState(false);
   const [value, setValue] = useState(isLocked);
+  const { userId } = { ...useUserStore((state) => state.user) };
 
   useEffect(() => {
     if (openModal) {
       reset();
     }
   }, [openModal]);
+
+  const checkIfOwner = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    if (enteredRoom?.ownerId === userId) {
+      setOpenModal(true);
+    } else {
+      toast.error(
+        '커뮤니티 수정 권한이 없습니다. 커뮤니티장에게 문의해주세요.',
+        {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          theme: 'dark',
+        },
+      );
+    }
+  };
 
   const {
     control,
@@ -100,8 +127,6 @@ const EditRoomInfoForm = ({
         updateEnteredRoom({ ...newData, newName: newData.name });
       }
     } catch (error) {
-      console.error(error);
-
       toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
         position: 'top-right',
         autoClose: 2000,
@@ -114,11 +139,24 @@ const EditRoomInfoForm = ({
 
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
-      <DialogTrigger asChild>
-        <Button variant="icon" className="p-0 text-[#888]">
-          <MdOutlineSettings size={20} />
-        </Button>
-      </DialogTrigger>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <DialogTrigger asChild>
+              <Button
+                onClick={(e) => checkIfOwner(e)}
+                variant="icon"
+                className="p-0 text-[#888]"
+              >
+                <MdOutlineSettings size={20} />
+              </Button>
+            </DialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">
+            <p>커뮤니티 정보 수정</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <DialogContent className="text-black">
         <DialogHeader>
