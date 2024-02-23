@@ -1,9 +1,8 @@
 import { useFileTreeStore } from '@/src/store/useFileTreeStore';
-import yorkie, { Document, Indexable, JSONArray } from 'yorkie-js-sdk';
+import yorkie, { Document, Indexable } from 'yorkie-js-sdk';
 import useFileTree from '@/src/hooks/filetreeHook/useFileTreeApi';
 import { useParams } from 'react-router-dom';
 import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
-const { CRDTObject } = yorkie;
 const API_KEY = import.meta.env.VITE_YORKIE_API_KEY;
 
 export interface YorkieContainer {
@@ -44,7 +43,7 @@ const useYorkieHook = () => {
     if (!isInitialized) {
       await initializeDataToYorkie(doc, axiosFile);
     }
-    const fileTree = doc.getRoot().yorkieContainer.children;
+    const fileTree = doc.getRoot().yorkieContainer.children as any;
     console.log('doc: ', doc);
     console.log('doc.getRoot(): ', doc.getRoot());
     console.log(
@@ -73,7 +72,7 @@ const useYorkieHook = () => {
   ) => {
     const unsubscribe = doc.subscribe((event) => {
       if (event.type === 'remote-change' || event.type === 'local-change') {
-        const fileTree = doc.getRoot().yorkieContainer.children;
+        const fileTree = doc.getRoot().yorkieContainer.children as any;
         if (fileTree) setFileTree(fileTree.toJS()); // Zustand 스토어의 setFileTree 함수를 호출
       }
     });
