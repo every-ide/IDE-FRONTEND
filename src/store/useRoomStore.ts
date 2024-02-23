@@ -34,6 +34,7 @@ export interface IEnteredRoomDetail {
     description: string;
   };
   ownerName: string;
+  ownerId: string;
   usersName: string[];
 }
 
