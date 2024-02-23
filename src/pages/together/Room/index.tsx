@@ -16,10 +16,19 @@ import Avatar from 'boring-avatars';
 import { formatDate } from '@/src/utils/formatDate';
 import { Badge } from '@/src/components/ui/badge';
 import EditRoomInfoForm from '@/src/components/room/EditRoomInfoForm';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/src/components/ui/tooltip';
+import { MdOutlineDelete } from 'react-icons/md';
+import useUserStore from '@/src/store/useUserStore';
 
 const RoomDetailPage = () => {
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
+  const { userId } = { ...useUserStore((state) => state.user) };
   const { roomId } = useParams<{ roomId: string }>();
   const [searchParams] = useSearchParams();
   const isLocked = useRef<boolean>(
@@ -105,6 +114,45 @@ const RoomDetailPage = () => {
     }
   }, [roomId]);
 
+  const handleDeleteRoom = useCallback(async () => {
+    if (enteredRoom?.ownerId !== userId) {
+      toast.error('삭제 권한이 없습니다. (권한: 커뮤니티장)', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        theme: 'dark',
+      });
+    } else {
+      if (window.confirm('정말 커뮤니티를 삭제하시겠습니까?')) {
+        try {
+          const response = await axiosPrivate.delete(
+            `/api/community/${roomId}`,
+          );
+
+          if (response.status === 200) {
+            toast('커뮤니티가 삭제되었습니다.', {
+              position: 'top-right',
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              theme: 'dark',
+            });
+            navigate('/together');
+          }
+        } catch (error) {
+          toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            theme: 'dark',
+          });
+        }
+      }
+    }
+  }, [userId, roomId, enteredRoom]);
+
   return (
     <div className="h-dvh bg-mdark">
       <Header />
@@ -155,6 +203,24 @@ const RoomDetailPage = () => {
                           : ''
                       }
                     />
+                    {/* 커뮤니티 삭제 */}
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Button
+                            onClick={handleDeleteRoom}
+                            variant="icon"
+                            size="icon"
+                            className="p-0 text-[#888]"
+                          >
+                            <MdOutlineDelete size={20} />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                          <p>커뮤니티 삭제</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
 
                   <div className="flex flex-col gap-2 p-3 text-sm font-light">
