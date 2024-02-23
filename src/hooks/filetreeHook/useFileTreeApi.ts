@@ -14,12 +14,11 @@ const useFileTreeApi = () => {
   const { containerId: projectId } = useParams<{ containerId: string }>();
   const [searchParams] = useSearchParams();
   const hasTeamspace = path.includes('teamspace');
-
+  const roomId = searchParams.get('roomId');
   const axiosFileTree = async (containerName: string) => {
     // console.log('containerName: ', containerName);
     try {
       if (hasTeamspace) {
-        const roomId = searchParams.get('roomId');
         const response = axiosPrivate.get(
           `api/${roomId}/filetree/${containerName}`,
         );
@@ -58,112 +57,54 @@ const useFileTreeApi = () => {
     }
   };
 
-  const axiosCreateDir = async (containerName: string, name: string) => {
-    const path = `/${containerName}${name}`;
-    console.log('파일 생성 보내기직전 점검 : ', email, path);
-    try {
-      const response = await axiosPrivate.post(`/api/directories`, {
-        email,
-        path,
-      });
-      console.log('파일 생성 api 호출:', `/api/directories`);
-      console.log('response: ', response);
-    } catch (error) {
-      console.error('파일 생성 오류:', error);
-    }
-  };
+  const getAuthEmail = () => (hasTeamspace ? roomId : email);
 
-  const axiosDeleteDir = async (containerName: string, deletePath: string) => {
-    const path = `/${containerName}${deletePath}`;
-    try {
-      const response = await axiosPrivate.delete(`/api/directories`, {
-        data: {
-          email,
-          path,
-        },
-      });
-      console.log('파일 삭제 api 호출:', `/api/directories`);
-      console.log('response: ', response);
-    } catch (error) {
-      console.error('파일 삭제 오류:', error);
-    }
-  };
+  const performOperation = async ({
+    type,
+    operation,
+    containerName,
+    path,
+    newPath = '',
+    content = '',
+  }: {
+    type: string;
+    operation: string;
+    containerName: string;
+    path: string;
+    newPath?: string;
+    content?: string;
+  }) => {
+    const basePath = `/${containerName}${path}`;
+    const url = `/api/${type === 'file' ? 'files' : 'directories'}`;
+    const authEmail = getAuthEmail();
+    let response;
 
-  const axiosRenameDir = async (
-    containerName: string,
-    oldPath: string,
-    newPath: string,
-  ) => {
-    const fromPath = `/${containerName}${oldPath}`;
-    const toPath = `/${containerName}${newPath}`;
     try {
-      const response = await axiosPrivate.patch(`/api/directories`, {
-        email,
-        fromPath,
-        toPath,
-      });
-      console.log('파일 이름 변경 api 호출:', `/api/directories`);
-      console.log('response: ', response);
-    } catch (error) {
-      console.error('파일 이름 변경 오류:', error);
-    }
-  };
+      if (operation === 'create') {
+        const data = {
+          email: authEmail,
+          path: basePath,
+          ...(type === 'file' ? { content } : {}),
+        };
+        response = await axiosPrivate.post(url, data);
+      } else if (operation === 'delete') {
+        const data = { email: authEmail, path: basePath };
+        response = await axiosPrivate.delete(url, { data });
+      } else if (operation === 'rename') {
+        const data = {
+          email: authEmail,
+          fromPath: basePath,
+          toPath: `/${containerName}${newPath}`,
+        };
+        response = await axiosPrivate.patch(url, data);
+      } else {
+        throw new Error('Unsupported operation');
+      }
 
-  const axiosCreateFile = async (containerName: string, name: string) => {
-    const path = `/${containerName}${name}`;
-    const content = '';
-    try {
-      console.log(
-        '/api/files : 파일 생성 email,path,content,: ',
-        email,
-        path,
-        content,
-      );
-      const response = await axiosPrivate.post(`/api/files`, {
-        email,
-        path,
-        content,
-      });
-      console.log('파일 생성 api 호출:', `/api/files`);
-      console.log('response: ', response);
-    } catch (error) {
-      console.error('파일 생성 오류:', error);
-    }
-  };
-
-  const axiosRenameFile = async (
-    containerName: string,
-    oldPath: string,
-    newPath: string,
-  ) => {
-    const fromPath = `/${containerName}${oldPath}`;
-    const toPath = `/${containerName}${newPath}`;
-    try {
-      const response = await axiosPrivate.patch(`/api/files`, {
-        email,
-        fromPath,
-        toPath,
-      });
-      console.log('파일 이름 변경 api 호출:', `/api/files`);
-      console.log('response: ', response);
-    } catch (error) {
-      console.error('파일 이름 변경 오류:', error);
-    }
-  };
-
-  const axiosDeleteFile = async (containerName: string, deletePath: string) => {
-    const path = `/${containerName}${deletePath}`;
-    try {
-      const response = await axiosPrivate.delete(`/api/files`, {
-        data: {
-          email,
-          path,
-        },
-      });
-      console.log('File deleted successfully', response.data);
+      console.log(`${type} ${operation} operation successful:`, response);
       return response.data;
     } catch (error) {
-      console.error('File deletion error:', error);
+      console.error(`${type} ${operation} operation error:`, error);
       throw error;
     }
   };
@@ -172,13 +113,23 @@ const useFileTreeApi = () => {
     containerName: string,
     path: string,
     type: string,
+    content = '',
   ) => {
-    console.log('axiosCreateIsFile: ', containerName, path, type);
-    if (type === 'file') {
-      await axiosCreateFile(containerName, path);
-    } else {
-      await axiosCreateDir(containerName, path);
-    }
+    return performOperation({
+      type,
+      operation: 'create',
+      containerName,
+      path,
+      content,
+    });
+  };
+
+  const axiosDeleteIsFile = async (
+    containerName: string,
+    path: string,
+    type: string,
+  ) => {
+    return performOperation({ type, operation: 'delete', containerName, path });
   };
 
   const axiosRenameIsFile = async (
@@ -187,27 +138,14 @@ const useFileTreeApi = () => {
     newPath: string,
     type: string,
   ) => {
-    console.log('axiosRenameIsFile: ', containerName, oldPath, newPath, type);
-    if (type === 'file') {
-      await axiosRenameFile(containerName, oldPath, newPath);
-    } else {
-      await axiosRenameDir(containerName, oldPath, newPath);
-    }
+    return performOperation({
+      type,
+      operation: 'rename',
+      containerName,
+      path: oldPath,
+      newPath,
+    });
   };
-
-  const axiosDeleteIsFile = async (
-    containerName: string,
-    path: string,
-    type: string,
-  ) => {
-    console.log('axiosDeleteIsFile: ', containerName, path, type);
-    if (type === 'file') {
-      await axiosDeleteFile(containerName, path);
-    } else {
-      await axiosDeleteDir(containerName, path);
-    }
-  };
-
   const axiosUploadLocalFile = async (file: File) => {
     const path = `/${containerName}/`;
     console.log('containerName: ', containerName);
@@ -217,10 +155,6 @@ const useFileTreeApi = () => {
     if (email) {
       formData.append('email', email);
     }
-    console.log('file: ', file);
-    console.log('path: ', path);
-    console.log('email: ', email);
-
     console.log('formData: ', formData.get('file'));
     console.log('formData: ', formData.get('path'));
     console.log('formData: ', formData.get('email'));
