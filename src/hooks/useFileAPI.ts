@@ -12,17 +12,20 @@ const useFileAPI = () => {
   const axiosPrivate = useAxiosPrivate();
   const { email } = { ...useUserStore((state) => state.user) };
   const { containerName } = useParams<{ containerName: string }>();
+  const { roomId } = useParams<{ roomId: string }>();
 
   const saveFileContent = async ({
     filePath,
     newContent,
   }: ISaveFileContent) => {
+    const requestData = {
+      email: roomId ? roomId : email,
+      fromPath: `/${containerName}${filePath}`,
+      newContent,
+    };
+
     try {
-      const response = await axiosPrivate.patch('/api/files', {
-        email,
-        fromPath: `/${containerName}${filePath}`,
-        newContent,
-      });
+      const response = await axiosPrivate.patch('/api/files', requestData);
 
       return response;
     } catch (error) {
