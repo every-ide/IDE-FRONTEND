@@ -6,7 +6,6 @@ import useWebSocketStore from '@/src/store/useWebSocketStore';
 import { useParams } from 'react-router-dom';
 import useUserStore from '@/src/store/useUserStore';
 import { messageListProps } from '.';
-import { getColorForUserId } from '@/src/utils/helper';
 import Avatar from 'boring-avatars';
 
 interface ChatProps {

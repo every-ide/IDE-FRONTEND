@@ -89,7 +89,7 @@ const RoomDetailPage = () => {
   const handleLeaveRoom = useCallback(async () => {
     if (window.confirm('정말 그룹을 탈퇴하시겠습니까?')) {
       try {
-        const response = await axiosPrivate.get(
+        const response = await axiosPrivate.patch(
           `/api/community/${roomId}/leave`,
         );
         if (response.status === 200) {
