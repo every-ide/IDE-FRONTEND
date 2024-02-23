@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 import useRoomStore from '@/src/store/useRoomStore';
 import useRoomAPI from '@/src/hooks/useRoomApi';
 
-interface IUpdateCardProps {
+export interface IUpdateCardProps {
   oldName: string;
   newName: string;
   isLocked: boolean;
@@ -39,8 +39,7 @@ const EditRoomInfoForm = ({
   description,
 }: IEditRoomInfoFormProps) => {
   const { updateRoomData } = useRoomAPI();
-  const { getRooms } = useRoomAPI();
-  const { setRooms } = useRoomStore();
+  const { updateEnteredRoom } = useRoomStore();
   const [openModal, setOpenModal] = useState(false);
   const [value, setValue] = useState(isLocked);
 
@@ -70,16 +69,16 @@ const EditRoomInfoForm = ({
   const handleUpdateContainer = async (data: IUpdateCardProps) => {
     if (!data.isLocked) {
       data.password = '';
-      console.log('data.password: ', data.password);
     }
+
     try {
-      console.log('data.password: ', data.password);
       const newData = {
         name: data.newName,
         isLocked: data.isLocked,
         password: data.password,
         description: data.description,
       };
+
       const response = await updateRoomData(
         {
           ...newData,
@@ -89,8 +88,6 @@ const EditRoomInfoForm = ({
 
       console.log('response: ', response);
       if (response.status === 204) {
-        // zustand store update;
-
         toast('컨테이너가 성공적으로 수정되었습니다.', {
           position: 'top-right',
           autoClose: 2000,
@@ -100,9 +97,7 @@ const EditRoomInfoForm = ({
         });
 
         setOpenModal(false);
-        const getData = await getRooms();
-        console.log('getData: ', getData);
-        setRooms(getData);
+        updateEnteredRoom({ ...newData, newName: newData.name });
       }
     } catch (error) {
       console.error(error);

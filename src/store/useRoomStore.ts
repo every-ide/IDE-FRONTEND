@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { IContainer } from './useContainerStore';
 import { IUpdateContainerForm } from '../components/my/ContainerBox';
+import { IUpdateCardProps } from '../components/room/EditRoomInfoForm';
 
 export interface RoomType {
   roomId: string;
@@ -45,6 +46,7 @@ export interface RoomStoreState {
   setIsLoading: (isLoading: boolean) => void;
   setRooms: (rooms: RoomType[]) => void;
   setEnteredRoom: (room: IEnteredRoomDetail) => void;
+  updateEnteredRoom: (update: Omit<IUpdateCardProps, 'oldName'>) => void;
   addNewRoom: (room: RoomType) => void;
   addContainerToRoom: (container: IContainer) => void;
   updateContainerInRoom: (updatedContainer: IUpdateContainerForm) => void;
@@ -64,6 +66,22 @@ const useRoomStore = create<RoomStoreState>((set) => ({
     set({ searchKey });
   },
   setEnteredRoom: (room) => set({ enteredRoom: room }),
+  updateEnteredRoom: (update) => {
+    set((state) => {
+      return {
+        enteredRoom: {
+          ...state.enteredRoom!,
+          room: {
+            ...state.enteredRoom!.room!,
+            name: update.newName,
+            description: update.description,
+            isLocked: update.isLocked,
+            password: update.password,
+          },
+        },
+      };
+    });
+  },
   addNewRoom: (room) => {
     set((state) => ({
       rooms: [...state.rooms, room],
