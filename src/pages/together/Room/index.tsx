@@ -53,16 +53,13 @@ const RoomDetailPage = () => {
         });
         isLocked.current = true;
       } else if (err.response!.status === 408 || err.response?.status === 500) {
-        toast.error(
-          '그룹 커뮤니티 정보를 불러올 수 없습니다. 다시 접속해주세요.',
-          {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          },
-        );
+        toast.error('커뮤니티 정보를 불러올 수 없습니다. 다시 접속해주세요.', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          theme: 'dark',
+        });
         navigate('/together');
       }
     }
@@ -87,13 +84,13 @@ const RoomDetailPage = () => {
   }, []);
 
   const handleLeaveRoom = useCallback(async () => {
-    if (window.confirm('정말 그룹을 탈퇴하시겠습니까?')) {
+    if (window.confirm('정말 커뮤니티를 탈퇴하시겠습니까?')) {
       try {
         const response = await axiosPrivate.patch(
           `/api/community/${roomId}/leave`,
         );
         if (response.status === 200) {
-          toast('그룹에서 탈퇴되었습니다.', {
+          toast('커뮤니티에서 탈퇴되었습니다.', {
             position: 'top-right',
             autoClose: 2000,
             hideProgressBar: false,
