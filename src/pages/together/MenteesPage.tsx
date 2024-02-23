@@ -27,17 +27,17 @@ const MenteesPage = () => {
     <div className="bg-mdark">
       <Header />
       <Navbar />
-      <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {rooms ? (
-          rooms
+      {rooms ? (
+        <div className="grid h-[calc(100vh-151px)] grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {rooms
             .filter((room: RoomType) => room.type === 'QUESTION')
             .map((room, index) =>
               room.available ? <Card key={index} {...room} /> : null,
-            )
-        ) : (
-          <EmptyStateCommunity />
-        )}
-      </div>
+            )}
+        </div>
+      ) : (
+        <EmptyStateCommunity />
+      )}
     </div>
   );
 };
