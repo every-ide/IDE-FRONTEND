@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { NodeApi, TreeApi } from 'react-arborist';
 import { AiFillFolder } from 'react-icons/ai';
 import { MdArrowRight, MdArrowDropDown, MdEdit } from 'react-icons/md';
@@ -24,14 +24,23 @@ export interface MyNodeData {
 interface NodeProps {
   node: NodeApi<MyNodeData>;
   style: React.CSSProperties;
-  dragHandle: React.Ref<HTMLDivElement>;
+  dragHandle?: (el: HTMLDivElement | null) => void;
   tree: TreeApi<MyNodeData>;
 }
 
 const Node: FC<NodeProps> = ({ node, style, dragHandle, tree }) => {
+  const nodeRef = useRef<HTMLDivElement | null>(null);
+
   const { axiosOpenFile } = useFileTreeApi();
   // const { containerId } = useFileTreeStore();
   const { openFile } = useFileStore();
+
+  useEffect(() => {
+    if (dragHandle && nodeRef.current) {
+      dragHandle(nodeRef.current);
+    }
+    // Optionally, you can return a cleanup function if your dragHandle supports detachment
+  }, [dragHandle]);
 
   // 파일 확장자를 기반으로 아이콘 선택
   const IconComponent =

@@ -196,7 +196,6 @@ const CardContainer: React.FC<CardProps> = ({
                       <Input
                         id="newName"
                         placeholder="새 커뮤니티 이름을 입력하세요"
-                        value={name}
                         className="col-span-3 text-black"
                         {...register('newName', {
                           required: '새 커뮤니티 이름은 필수 입력 사항입니다.',
@@ -219,14 +218,13 @@ const CardContainer: React.FC<CardProps> = ({
                         id="description"
                         placeholder="설명을 입력하세요"
                         className="col-span-3 text-black"
-                        defaultValue={description}
                         {...register('description', {
-                          required: '새 커뮤니티 이름은 필수 입력 사항입니다.',
+                          required: '새 커뮤니티 설명은 필수 입력 사항입니다.',
                         })}
                       />
-                      {errors.newName && (
+                      {errors.description && (
                         <p className="mt-1 text-xs text-error">
-                          {errors.newName.message}
+                          {errors.description.message}
                         </p>
                       )}
                     </div>
