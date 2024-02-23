@@ -12,7 +12,7 @@ const useFileAPI = () => {
   const axiosPrivate = useAxiosPrivate();
   const { email } = { ...useUserStore((state) => state.user) };
   const { containerName } = useParams<{ containerName: string }>();
-  const { roomId } = useParams<{ roomId: string }>();
+  const roomId = new URLSearchParams(location.search).get('roomId');
 
   const saveFileContent = async ({
     filePath,
