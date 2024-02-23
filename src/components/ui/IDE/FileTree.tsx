@@ -18,7 +18,6 @@ const Arborist = () => {
   const { containerName: projectName } = useParams<{ containerName: string }>();
   const { userId } = { ...useUserStore((state) => state.user) };
   useEffect(() => {
-    console.log('asndjashdjkandjkdnksanasndkjnakjsnajkdnaskjsndajknajkndjk');
     console.log('파일트리 변경됨 : ', fileTree);
   }, [fileTree]);
 

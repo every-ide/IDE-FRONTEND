@@ -44,13 +44,6 @@ const useYorkieHook = () => {
       await initializeDataToYorkie(doc, axiosFile);
     }
     const fileTree = doc.getRoot().yorkieContainer.children as any;
-    console.log('doc: ', doc);
-    console.log('doc.getRoot(): ', doc.getRoot());
-    console.log(
-      'doc.getRoot().yorkieContainer: ',
-      doc.getRoot().yorkieContainer,
-    );
-    console.log('fileTreeqbbdhjb!!!BH!BHJ!B!H!JH!BH!: ', fileTree);
     if (fileTree) {
       setFileTree(fileTree.toJS());
     } // 초기 상태 설정

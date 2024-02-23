@@ -24,9 +24,18 @@ const useFileTreeApi = () => {
           `api/${roomId}/filetree/${containerName}`,
         );
         const data = (await response).data;
+        console.log(
+          '`api/${roomId}/filetree/${containerName}`: ',
+          `api/${roomId}/filetree/${containerName} : `,
+        );
+        console.log('data: ', data);
         return data;
       }
       const response = axiosPrivate.get(
+        `api/${userId}/filetree/${containerName}`,
+      );
+      console.log(
+        '`api/${userId}/filetree/${containerName}`: ',
         `api/${userId}/filetree/${containerName}`,
       );
       const data = (await response).data;
@@ -164,6 +173,7 @@ const useFileTreeApi = () => {
     path: string,
     type: string,
   ) => {
+    console.log('axiosCreateIsFile: ', containerName, path, type);
     if (type === 'file') {
       await axiosCreateFile(containerName, path);
     } else {
@@ -177,6 +187,7 @@ const useFileTreeApi = () => {
     newPath: string,
     type: string,
   ) => {
+    console.log('axiosRenameIsFile: ', containerName, oldPath, newPath, type);
     if (type === 'file') {
       await axiosRenameFile(containerName, oldPath, newPath);
     } else {
@@ -189,6 +200,7 @@ const useFileTreeApi = () => {
     path: string,
     type: string,
   ) => {
+    console.log('axiosDeleteIsFile: ', containerName, path, type);
     if (type === 'file') {
       await axiosDeleteFile(containerName, path);
     } else {

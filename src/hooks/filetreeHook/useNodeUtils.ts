@@ -36,10 +36,8 @@ const useFileTreeNodeUtils = () => {
   ): FileNodeType => {
     console.log('name: ', name);
     if (node.type === 'file') {
-      console.log('이것은 파일이여!');
       updateFileNameAndPath(node.id, newPath, name);
     } else {
-      console.log('이것은 디렉토리이여!');
       updateFileNameAndPath(node.id, newPath);
     }
     // 자식 노드가 있는 경우, 각 자식에 대해 재귀적으로 업데이트

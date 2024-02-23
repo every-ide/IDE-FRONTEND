@@ -16,7 +16,6 @@ const MenteesPage = () => {
   }, []);
 
   if (isLoading) {
-    console.log('isLoading: ', isLoading);
     return (
       <div className="flex items-center justify-center">
         <LoadingEnterRoom />

@@ -25,19 +25,19 @@ export const useFileTreeStore = create<FileTreeState>((set) => ({
   containerId: '',
   fileTree: data.children,
   setDocument: (document) => {
-    console.log('document: 도큐먼트하는중,,,', document);
+    // console.log('document: 도큐먼트하는중,,,', document);
     set({ doc: document });
   },
   setFileTree: (fileTree) => {
-    console.log('fileTree: 스토어에 업로드를 해보는중', fileTree);
+    // console.log('fileTree: 스토어에 업로드를 해보는중', fileTree);
     set({ fileTree });
   },
   setContainerId: (containerId) => {
-    console.log('containerId: 컨테이너id하는중', containerId);
+    // console.log('containerId: 컨테이너id하는중', containerId);
     set({ containerId });
   },
   setContainerName: (containerName) => {
-    console.log('containerName: 컨테이너 이름 넣는중,,', containerName);
+    // console.log('containerName: 컨테이너 이름 넣는중,,', containerName);
     set({ containerName });
   },
   addNode: (newNode: FileNodeType, parentId?: string | null) => {
