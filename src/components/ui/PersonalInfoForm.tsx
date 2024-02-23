@@ -1,4 +1,3 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import AuthInput from '@/components/auth/AuthInput'; // Adjust import as necessary
 import { toast } from 'react-toastify';
@@ -25,8 +24,16 @@ const PersonalInfoForm = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = async (data: any) => {
-    const { email, oldPassword, newPassword, confirmPassword, name } = data;
+  interface IFormInput {
+    name: string;
+    email: string;
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }
+
+  const onSubmit = async (data: IFormInput) => {
+    const { email, oldPassword, newPassword, confirmPassword } = data;
     if (newPassword !== confirmPassword) {
       setError('confirmPassword', {
         type: 'manual',

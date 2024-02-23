@@ -1,7 +1,7 @@
 import useAxiosPrivate from '../useAxiosPrivate';
 import useUserStore from '../../store/useUserStore';
 import { useFileTreeStore } from '../../store/useFileTreeStore';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { useParams } from 'react-router-dom';
 
@@ -12,21 +12,30 @@ const useFileTreeApi = () => {
   const location = useLocation();
   const path = location.pathname;
   const { containerId: projectId } = useParams<{ containerId: string }>();
-  const { roomId } = useParams<{ roomId: string }>();
-
+  const [searchParams] = useSearchParams();
   const hasTeamspace = path.includes('teamspace');
 
   const axiosFileTree = async (containerName: string) => {
     // console.log('containerName: ', containerName);
     try {
       if (hasTeamspace) {
+        const roomId = searchParams.get('roomId');
         const response = axiosPrivate.get(
           `api/${roomId}/filetree/${containerName}`,
         );
         const data = (await response).data;
+        console.log(
+          '`api/${roomId}/filetree/${containerName}`: ',
+          `api/${roomId}/filetree/${containerName} : `,
+        );
+        console.log('data: ', data);
         return data;
       }
       const response = axiosPrivate.get(
+        `api/${userId}/filetree/${containerName}`,
+      );
+      console.log(
+        '`api/${userId}/filetree/${containerName}`: ',
         `api/${userId}/filetree/${containerName}`,
       );
       const data = (await response).data;
@@ -164,6 +173,7 @@ const useFileTreeApi = () => {
     path: string,
     type: string,
   ) => {
+    console.log('axiosCreateIsFile: ', containerName, path, type);
     if (type === 'file') {
       await axiosCreateFile(containerName, path);
     } else {
@@ -177,6 +187,7 @@ const useFileTreeApi = () => {
     newPath: string,
     type: string,
   ) => {
+    console.log('axiosRenameIsFile: ', containerName, oldPath, newPath, type);
     if (type === 'file') {
       await axiosRenameFile(containerName, oldPath, newPath);
     } else {
@@ -189,6 +200,7 @@ const useFileTreeApi = () => {
     path: string,
     type: string,
   ) => {
+    console.log('axiosDeleteIsFile: ', containerName, path, type);
     if (type === 'file') {
       await axiosDeleteFile(containerName, path);
     } else {
@@ -196,7 +208,7 @@ const useFileTreeApi = () => {
     }
   };
 
-  const axiosUploadLocalFile = async (newPath: string, file: File) => {
+  const axiosUploadLocalFile = async (file: File) => {
     const path = `/${containerName}/`;
     console.log('containerName: ', containerName);
     const formData = new FormData();

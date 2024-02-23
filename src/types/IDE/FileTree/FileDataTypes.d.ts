@@ -4,10 +4,4 @@ export interface FileNodeType {
   children?: FileNodeType[];
   type: string;
   path: string;
-
-  // isDirty?: boolean;
-  // isOpened?: boolean;
-  // language?: string;
-  // filePath?: string | null;
-  // content?: string | null;
 }
