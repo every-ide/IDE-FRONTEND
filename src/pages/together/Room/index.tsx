@@ -114,7 +114,7 @@ const RoomDetailPage = () => {
     }
   }, [roomId]);
 
-  const handleDeleteRoom = async () => {
+  const handleDeleteRoom = useCallback(async () => {
     if (enteredRoom?.ownerId !== userId) {
       toast.error('삭제 권한이 없습니다. (권한: 커뮤니티장)', {
         position: 'top-right',
@@ -151,7 +151,7 @@ const RoomDetailPage = () => {
         }
       }
     }
-  };
+  }, [userId, roomId, enteredRoom]);
 
   return (
     <div className="h-dvh bg-mdark">
