@@ -132,8 +132,10 @@ const useFileTreeCRUD = () => {
 
   //파일 또는 폴더 삭제 시 동작
   const onDelete: DeleteHandler<FileNodeType> = ({ ids }) => {
-    if (window.confirm('정말 삭제합니까?')) {
-      const deletingNode = findNodeById(fileTree, ids[0]).node;
+    const deletingNode = findNodeById(fileTree, ids[0]).node as FileNodeType;
+    if (
+      window.confirm(`${deletingNode.name}(${deletingNode})을 정말 삭제합니까?`)
+    ) {
       deleteNode(ids[0]);
       closeFile(ids[0]);
       if (projectName && deletingNode) {
