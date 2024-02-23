@@ -33,7 +33,7 @@ export interface IEnteredRoomDetail {
     usersId: number[];
     description: string;
   };
-  ownerId: number;
+  ownerName: string;
   usersName: string[];
 }
 

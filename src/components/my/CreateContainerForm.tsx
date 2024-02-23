@@ -90,7 +90,7 @@ const CreateContainerForm = ({
           } else {
             // 새 창에서 그룹 컨테이너 열기
             window.open(
-              `${import.meta.env.VITE_CLIENT_URI}/teamspace/${response.data.name}/${response.data.id}`,
+              `${import.meta.env.VITE_CLIENT_URI}/teamspace/${response.data.name}/${response.data.id}?roomId=${roomId}`,
               '_blank',
               'noopener,noreferrer',
             );

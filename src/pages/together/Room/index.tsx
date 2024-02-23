@@ -166,7 +166,7 @@ const RoomDetailPage = () => {
                   <div className="flex flex-col gap-2 p-3 text-sm font-light">
                     <div className="inline-flex items-center gap-3">
                       <Badge variant="custom1">커뮤니티장</Badge>
-                      <p>커뮤니티장 이름</p>
+                      <p>{enteredRoom?.ownerName}</p>
                     </div>
                     <div className="inline-flex items-center gap-3">
                       <Badge variant="custom1">생성일</Badge>
@@ -190,7 +190,7 @@ const RoomDetailPage = () => {
                     </div>
                     <div className="inline-flex items-center gap-3">
                       <Badge variant="custom1">소개</Badge>
-                      <p>설명 ~~~</p>
+                      <p>{enteredRoom?.room.description}</p>
                     </div>
                   </div>
                 </div>
