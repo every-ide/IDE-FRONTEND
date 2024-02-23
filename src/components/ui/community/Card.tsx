@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -9,22 +9,22 @@ import {
 import { FaLock, FaLockOpen } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from '@/components/ui/dialog';
-import { Controller, useForm } from 'react-hook-form';
-import { MdOutlineSettings } from 'react-icons/md';
-import { toast } from 'react-toastify';
-import useRoomStore from '@/src/store/useRoomStore';
-import useRoomAPI from '@/src/hooks/useRoomApi';
-import { Label } from '@radix-ui/react-label';
-import { Input } from '../input';
-import { Switch } from '../switch';
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+//   DialogFooter,
+// } from '@/components/ui/dialog';
+// import { Controller, useForm } from 'react-hook-form';
+// import { MdOutlineSettings } from 'react-icons/md';
+// import { toast } from 'react-toastify';
+// import useRoomStore from '@/src/store/useRoomStore';
+// import useRoomAPI from '@/src/hooks/useRoomApi';
+// import { Label } from '@radix-ui/react-label';
+// import { Input } from '../input';
+// import { Switch } from '../switch';
 
 interface CardProps {
   roomId: string;
@@ -38,13 +38,13 @@ interface CardProps {
   isJoined: boolean;
 }
 
-interface IUpdateCardProps {
-  oldName: string;
-  newName: string;
-  isLocked: boolean;
-  password: string;
-  description: string;
-}
+// interface IUpdateCardProps {
+//   oldName: string;
+//   newName: string;
+//   isLocked: boolean;
+//   password: string;
+//   description: string;
+// }
 
 const CardContainer: React.FC<CardProps> = ({
   roomId,
@@ -54,87 +54,86 @@ const CardContainer: React.FC<CardProps> = ({
   usersCnt,
   maxPeople,
   ownerName,
-  description,
   isJoined,
 }) => {
   const navigate = useNavigate();
-  const { updateRoomData } = useRoomAPI();
-  const { getRooms } = useRoomAPI();
-  const { setRooms } = useRoomStore();
-  const [openModal, setOpenModal] = useState(false);
-  const [value, setValue] = useState(isLocked);
-  const {
-    control,
-    reset,
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<IUpdateCardProps>({
-    mode: 'onChange',
-    defaultValues: {
-      oldName: name,
-      newName: name,
-      isLocked,
-      description,
-      password: '',
-    },
-  });
-  useEffect(() => {
-    if (openModal) {
-      reset();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openModal]);
+  // const { updateRoomData } = useRoomAPI();
+  // const { getRooms } = useRoomAPI();
+  // const { setRooms } = useRoomStore();
+  // const [openModal, setOpenModal] = useState(false);
+  // const [value, setValue] = useState(isLocked);
+  // const {
+  //   control,
+  //   reset,
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors, isSubmitting },
+  // } = useForm<IUpdateCardProps>({
+  //   mode: 'onChange',
+  //   defaultValues: {
+  //     oldName: name,
+  //     newName: name,
+  //     isLocked,
+  //     description,
+  //     password: '',
+  //   },
+  // });
+  // useEffect(() => {
+  //   if (openModal) {
+  //     reset();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [openModal]);
 
-  const handleUpdateContainer = async (data: IUpdateCardProps) => {
-    if (!data.isLocked) {
-      data.password = '';
-      console.log('data.password: ', data.password);
-    }
-    try {
-      console.log('data.password: ', data.password);
-      const newData = {
-        name: data.newName,
-        isLocked: data.isLocked,
-        password: data.password,
-        description: data.description,
-      };
-      const response = await updateRoomData(
-        {
-          ...newData,
-        },
-        roomId,
-      );
+  // const handleUpdateContainer = async (data: IUpdateCardProps) => {
+  //   if (!data.isLocked) {
+  //     data.password = '';
+  //     console.log('data.password: ', data.password);
+  //   }
+  //   try {
+  //     console.log('data.password: ', data.password);
+  //     const newData = {
+  //       name: data.newName,
+  //       isLocked: data.isLocked,
+  //       password: data.password,
+  //       description: data.description,
+  //     };
+  //     const response = await updateRoomData(
+  //       {
+  //         ...newData,
+  //       },
+  //       roomId,
+  //     );
 
-      console.log('response: ', response);
-      if (response.status === 204) {
-        // zustand store update;
+  //     console.log('response: ', response);
+  //     if (response.status === 204) {
+  //       // zustand store update;
 
-        toast('컨테이너가 성공적으로 수정되었습니다.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+  //       toast('컨테이너가 성공적으로 수정되었습니다.', {
+  //         position: 'top-right',
+  //         autoClose: 2000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         theme: 'dark',
+  //       });
 
-        setOpenModal(false);
-        const getData = await getRooms();
-        console.log('getData: ', getData);
-        setRooms(getData);
-      }
-    } catch (error) {
-      console.error(error);
+  //       setOpenModal(false);
+  //       const getData = await getRooms();
+  //       console.log('getData: ', getData);
+  //       setRooms(getData);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
 
-      toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        theme: 'dark',
-      });
-    }
-  };
+  //     toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
+  //       position: 'top-right',
+  //       autoClose: 2000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       theme: 'dark',
+  //     });
+  //   }
+  // };
 
   return (
     <Card variant="container">
@@ -151,7 +150,7 @@ const CardContainer: React.FC<CardProps> = ({
           )}
           <div className="flex items-center gap-2">
             {/* 컨테이너 수정 Button & Modal */}
-            <Dialog open={openModal} onOpenChange={setOpenModal}>
+            {/* <Dialog open={openModal} onOpenChange={setOpenModal}>
               <DialogTrigger asChild>
                 <Button
                   variant="icon"
@@ -196,7 +195,6 @@ const CardContainer: React.FC<CardProps> = ({
                       <Input
                         id="newName"
                         placeholder="새 커뮤니티 이름을 입력하세요"
-                        value={name}
                         className="col-span-3 text-black"
                         {...register('newName', {
                           required: '새 커뮤니티 이름은 필수 입력 사항입니다.',
@@ -219,14 +217,13 @@ const CardContainer: React.FC<CardProps> = ({
                         id="description"
                         placeholder="설명을 입력하세요"
                         className="col-span-3 text-black"
-                        defaultValue={description}
                         {...register('description', {
-                          required: '새 커뮤니티 이름은 필수 입력 사항입니다.',
+                          required: '새 커뮤니티 설명은 필수 입력 사항입니다.',
                         })}
                       />
-                      {errors.newName && (
+                      {errors.description && (
                         <p className="mt-1 text-xs text-error">
-                          {errors.newName.message}
+                          {errors.description.message}
                         </p>
                       )}
                     </div>
@@ -294,7 +291,7 @@ const CardContainer: React.FC<CardProps> = ({
                   </DialogFooter>
                 </form>
               </DialogContent>
-            </Dialog>
+            </Dialog> */}
             {isLocked ? (
               <FaLock className="size-5" />
             ) : (

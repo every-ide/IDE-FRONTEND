@@ -7,7 +7,7 @@ export const makePath = (
   parentId: string | null,
 ): string => {
   // 부모 노드의 path를 찾습니다.
-  const parentNode = parentId ? findNodeById(nodes, parentId, null).node : null;
+  const parentNode = parentId ? findNodeById(nodes, parentId).node : null;
   const parentPath = parentNode ? parentNode.path : '';
 
   // 새로운 path를 생성합니다.
@@ -40,7 +40,7 @@ export const addNodeToTree = (
   nodes: FileNodeType[],
   newNode: FileNodeType,
   parentId: string | null,
-) => {
+): FileNodeType[] => {
   return nodes.reduce((acc: FileNodeType[], node: FileNodeType) => {
     const newNodeArray = [...acc];
     if (node.id === parentId) {

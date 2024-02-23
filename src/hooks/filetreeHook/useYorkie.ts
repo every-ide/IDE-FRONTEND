@@ -2,18 +2,11 @@ import { useFileTreeStore } from '@/src/store/useFileTreeStore';
 import yorkie, { Document, Indexable } from 'yorkie-js-sdk';
 import useFileTree from '@/src/hooks/filetreeHook/useFileTreeApi';
 import { useParams } from 'react-router-dom';
+import { FileNodeType } from '@/src/types/IDE/FileTree/FileDataTypes';
 const API_KEY = import.meta.env.VITE_YORKIE_API_KEY;
 
-interface FileTreeNode {
-  id: string;
-  name: string;
-  path: string;
-  type: string;
-  children: FileTreeNode[]; // 디렉토리일 경우 자식 노드 포함, 파일일 경우 없음
-}
-
 export interface YorkieContainer {
-  yorkieContainer: FileTreeNode;
+  yorkieContainer: FileNodeType;
 }
 
 const useYorkieHook = () => {
@@ -29,11 +22,15 @@ const useYorkieHook = () => {
     });
     await client.activate();
 
-    const axiosFile = (await axiosFileTree(projectName)) as FileTreeNode;
+    const axiosFile = await axiosFileTree(projectName);
     const doc = new yorkie.Document<YorkieContainer>(
       `${projectName}-${projectId}`,
     );
 
+    console.log(
+      '`${projectName}-${projectId}`: ',
+      `${projectName}-${projectId}`,
+    );
     // Zustand 스토어에 yorkie 문서와 컨테이너 아이디를 설정
     setContainerId(projectId as string);
     setDocument(doc);
@@ -46,16 +43,17 @@ const useYorkieHook = () => {
     if (!isInitialized) {
       await initializeDataToYorkie(doc, axiosFile);
     }
-    const fileTree = doc.getRoot().yorkieContainer.children.toJS();
-    console.log('fileTreeqbbdhjb!!!BH!BHJ!B!H!JH!BH!: ', fileTree);
-    setFileTree(fileTree); // 초기 상태 설정
+    const fileTree = doc.getRoot().yorkieContainer.children as any;
+    if (fileTree) {
+      setFileTree(fileTree.toJS());
+    } // 초기 상태 설정
 
     return { client, doc };
   };
 
   const initializeDataToYorkie = async (
     doc: Document<YorkieContainer, Indexable>,
-    axiosTree: FileTreeNode, // Specify the type of axiosTree parameter
+    axiosTree: FileNodeType, // Specify the type of axiosTree parameter
   ) => {
     doc.update((root) => {
       root.yorkieContainer = axiosTree;
@@ -67,12 +65,8 @@ const useYorkieHook = () => {
   ) => {
     const unsubscribe = doc.subscribe((event) => {
       if (event.type === 'remote-change' || event.type === 'local-change') {
-        console.log(
-          '파일트리 변경됨 : ',
-          doc.getRoot().yorkieContainer.children.toJS(),
-        );
-        const fileTree = doc.getRoot().yorkieContainer.children.toJS();
-        setFileTree(fileTree); // Zustand 스토어의 setFileTree 함수를 호출
+        const fileTree = doc.getRoot().yorkieContainer.children as any;
+        if (fileTree) setFileTree(fileTree.toJS()); // Zustand 스토어의 setFileTree 함수를 호출
       }
     });
 
