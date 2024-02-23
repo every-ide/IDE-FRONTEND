@@ -35,9 +35,6 @@ const RoomDetailPage = () => {
     setIsLoading(true);
 
     try {
-      // Test용!!!! (추후 삭제)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
       const response = await axiosPrivate.get(
         `/api/community/${roomId}?password=${password}`,
       );
@@ -55,7 +52,7 @@ const RoomDetailPage = () => {
           theme: 'dark',
         });
         isLocked.current = true;
-      } else if (err.response!.status === 408) {
+      } else if (err.response!.status === 408 || err.response?.status === 500) {
         toast.error(
           '그룹 커뮤니티 정보를 불러올 수 없습니다. 다시 접속해주세요.',
           {
@@ -190,7 +187,11 @@ const RoomDetailPage = () => {
                     </div>
                     <div className="inline-flex items-center gap-3">
                       <Badge variant="custom1">소개</Badge>
-                      <p>{enteredRoom?.room.description}</p>
+                      <p>
+                        {enteredRoom?.room.description !== null
+                          ? enteredRoom?.room.description
+                          : '-'}
+                      </p>
                     </div>
                   </div>
                 </div>
