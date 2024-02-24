@@ -6,7 +6,7 @@ import useRoomAPI from '@/src/hooks/useRoomApi';
 import EmptyStateCommunity from '@/src/components/my/EmptyStateCommunity';
 import LoadingEnterRoom from './Room/LoadingEnterRoom';
 import Header from '@/src/components/my/Header';
-import SEOMetaTag from '@/src/SEO/SEOMetaTag';
+// import SEOMetaTag from '@/src/SEO/SEOMetaTag';
 import Banner from './Banner';
 
 const TogetherPage = () => {
@@ -25,11 +25,11 @@ const TogetherPage = () => {
 
   return (
     <>
-      <SEOMetaTag
+      {/* <SEOMetaTag
         title="EVERYIDE - Community"
         description="코딩하다 막힐 때, 막막한 누군가를 도와주고 싶을 때 EveryIde와 함께 커뮤니티를 만들고 실시간으로 지식을 공유하세요!"
         url="https://ide-frontend-wheat.vercel.app/together"
-      />
+      /> */}
       <div className="h-[calc(100vh)] bg-mdark">
         <Header />
         <Navbar />

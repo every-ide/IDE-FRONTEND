@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import EmptyState from '@/src/components/my/EmptyState';
 import useUserStore from '@/src/store/useUserStore';
-import SEOMetaTag from '@/src/SEO/SEOMetaTag';
+// import SEOMetaTag from '@/src/SEO/SEOMetaTag';
 
 const ContainerPage = () => {
   const { containerList } = useContainerStore();
@@ -42,10 +42,10 @@ const ContainerPage = () => {
   }
   return (
     <>
-      <SEOMetaTag
+      {/* <SEOMetaTag
         title="EVERYIDE - My Dashboard"
         url="https://ide-frontend-wheat.vercel.app/my/dashboard"
-      />
+      /> */}
       <DashboardLayout>
         <div className="h-[calc(100vh-9rem)] overflow-x-hidden overflow-y-scroll">
           <div className="grid grid-cols-1 gap-x-5 gap-y-10 py-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
