@@ -155,7 +155,7 @@ const NavigationBar: React.FC = () => {
                 type="text"
                 value={searchKey}
                 onChange={(e) => setSearchKey(e.target.value)}
-                placeholder="Enter to search..."
+                placeholder="검색어를 입력하세요..."
                 className="rounded-xl bg-mdark p-3 outline-none "
               />
               {searchKey && (
