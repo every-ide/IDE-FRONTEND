@@ -87,7 +87,7 @@ const SignUpForm = () => {
         <form onSubmit={handleSubmit(signUpAction)}>
           <div className="mb-5 flex flex-col">
             <AuthInput
-              label="Email"
+              label="이메일"
               name="email"
               type="text"
               placeholder="ex) abc@defg.com"
@@ -101,7 +101,7 @@ const SignUpForm = () => {
               errors={errors}
             />
             <AuthInput
-              label="Nickname"
+              label="닉네임"
               name="name"
               type="text"
               placeholder="ex) every-ide"
@@ -115,7 +115,7 @@ const SignUpForm = () => {
               errors={errors}
             />
             <AuthInput
-              label="Password"
+              label="비밀번호"
               name="password"
               type="password"
               placeholder="패스워드 입력"
