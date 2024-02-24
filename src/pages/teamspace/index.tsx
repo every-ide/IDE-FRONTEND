@@ -10,6 +10,7 @@ import WorkInfo from './WorkInfo';
 import Editor from '../workspace/Editor';
 import Sidebar from './Sidebar';
 import Chat from './Chat';
+import { Helmet } from 'react-helmet-async';
 
 export interface messageListProps {
   userId: number;
@@ -106,30 +107,35 @@ const TeamSpacePage = () => {
   }, [messageList]);
 
   return (
-    <div className="flex h-screen text-xs">
-      <div className="flex flex-1 flex-col">
-        <Navigation
-          isTeamspace
-          setIsOpenChat={setIsOpenChat}
-          isOpenChat={isOpenChat}
-          isNewChat={isNewChat}
-        />
-        <Header />
-        <div className="flex flex-1 overflow-hidden">
-          <Sidebar userList={userList} />
-          <div className="no-scrollbar relative flex flex-1 flex-col ">
-            <Editor isTeamspace />
-            <div className={cn(isOpenWorkInfo ? 'block' : 'hidden')}>
-              <WorkInfo setIsOpen={setIsOpenWorkInfo} />
+    <>
+      <Helmet>
+        <title>EVERYIDE - Team Space</title>
+      </Helmet>
+      <div className="flex h-screen text-xs">
+        <div className="flex flex-1 flex-col">
+          <Navigation
+            isTeamspace
+            setIsOpenChat={setIsOpenChat}
+            isOpenChat={isOpenChat}
+            isNewChat={isNewChat}
+          />
+          <Header />
+          <div className="flex flex-1 overflow-hidden">
+            <Sidebar userList={userList} />
+            <div className="no-scrollbar relative flex flex-1 flex-col ">
+              <Editor isTeamspace />
+              <div className={cn(isOpenWorkInfo ? 'block' : 'hidden')}>
+                <WorkInfo setIsOpen={setIsOpenWorkInfo} />
+              </div>
             </div>
           </div>
+          <Footer setIsOpen={setIsOpenWorkInfo} isOpen={isOpenWorkInfo} />
         </div>
-        <Footer setIsOpen={setIsOpenWorkInfo} isOpen={isOpenWorkInfo} />
+        {isOpenChat && (
+          <Chat setIsOpenChat={setIsOpenChat} messageList={messageList} />
+        )}
       </div>
-      {isOpenChat && (
-        <Chat setIsOpenChat={setIsOpenChat} messageList={messageList} />
-      )}
-    </div>
+    </>
   );
 };
 

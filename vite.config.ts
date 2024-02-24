@@ -26,13 +26,4 @@ export default defineConfig({
   //   global: {},
   // },
   plugins: [react(), tsconfigPaths()],
-  server: {
-    proxy: {
-      // WebSocket 및 HTTP 요청을 위한 프록시 설정
-      '/ws': {
-        target: 'ws://43.203.66.34:8000/ws',
-        ws: true,
-      },
-    },
-  },
 });

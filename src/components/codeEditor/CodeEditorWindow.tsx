@@ -5,6 +5,8 @@ import useFileStore from '@/src/store/useFileStore';
 import yorkie, { type Text, Client, Document, Indexable } from 'yorkie-js-sdk';
 import createEditorState from './CreateEditorState';
 import useFileAPI from '@/src/hooks/useFileAPI';
+import useUserStore from '@/src/store/useUserStore';
+import ColorHash from 'color-hash';
 
 interface ICodeEditorWindowProps {
   fileId: string;
@@ -19,6 +21,11 @@ export type YorkieDoc = {
   content: Text;
 };
 
+type PresenceType = {
+  username: string;
+  color: string;
+};
+
 const CodeEditorWindow = ({
   fileId,
   filePath,
@@ -31,6 +38,8 @@ const CodeEditorWindow = ({
   const yorkieDocRef = useRef<Document<YorkieDoc, Indexable>>();
   const { setYorkieDoc, setNeedSave, getYorkieDoc } = useFileStore();
   const { saveFileContent } = useFileAPI();
+  const { name } = { ...useUserStore((state) => state.user) };
+  const colorHash = new ColorHash();
 
   const initializeYorkieEditor = useCallback(async () => {
     // 01. Create & Activate yorkie client
@@ -42,10 +51,16 @@ const CodeEditorWindow = ({
     yorkieClientRef.current = client;
 
     // 02. Create new yorkie document
-    const doc = new yorkie.Document<YorkieDoc>(`${fileId}`); // Document key: [fileId]
+    const doc = new yorkie.Document<YorkieDoc, PresenceType>(`${fileId}`); // Document key: [fileId]
     yorkieDocRef.current = doc;
 
-    await client.attach(doc); // 생성한 doc을 client에 attach : 로컬 Document의 변경사항이 원격지의 Document와 동기화됨
+    // 생성한 doc을 client에 attach : 로컬 Document의 변경사항이 원격지의 Document와 동기화됨
+    await client.attach(doc, {
+      initialPresence: {
+        username: name,
+        color: colorHash.hex(name!),
+      },
+    });
 
     // 03. 해당 key의 Yorkie document에 content가 없으면 새로운 Text 생성, 기존에 저장된 코드 삽입
     doc.update((root) => {
