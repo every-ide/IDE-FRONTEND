@@ -18,7 +18,7 @@ const Header = () => {
       sticky
       top-0
       z-10
-      h-16
+      h-20
       border-b
       border-b-ldark
       bg-ldark
