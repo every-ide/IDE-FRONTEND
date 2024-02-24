@@ -9,7 +9,7 @@ const SearchBar = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="flex h-16 items-center justify-end bg-ldark px-8">
+    <div className="flex h-16 items-center justify-end">
       <div className="flex w-1/3 items-center justify-end">
         <input
           type="text"

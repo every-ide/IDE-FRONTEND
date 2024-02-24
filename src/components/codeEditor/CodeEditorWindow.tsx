@@ -58,7 +58,7 @@ const CodeEditorWindow = ({
     await client.attach(doc, {
       initialPresence: {
         username: name,
-        color: colorHash.hex(name),
+        color: colorHash.hex(name!),
       },
     });
 

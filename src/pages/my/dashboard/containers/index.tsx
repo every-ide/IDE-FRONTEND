@@ -23,7 +23,7 @@ const ContainerPage = () => {
   if (!containerList) {
     return (
       <DashboardLayout>
-        <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-5 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <Skeleton className="h-[230px] w-full rounded-xl" />
           <Skeleton className="h-[230px] w-full rounded-xl" />
           <Skeleton className="h-[230px] w-full rounded-xl" />
@@ -36,11 +36,10 @@ const ContainerPage = () => {
   if (!containerList.length) {
     return (
       <DashboardLayout>
-        <EmptyState className="h-[calc(100vh-151px)]" />
+        <EmptyState className="h-[calc(100vh-9rem)]" />
       </DashboardLayout>
     );
   }
-
   return (
     <>
       <SEOMetaTag
@@ -48,8 +47,8 @@ const ContainerPage = () => {
         url="https://ide-frontend-wheat.vercel.app/my/dashboard"
       />
       <DashboardLayout>
-        <div className="h-[calc(100vh-151px)] overflow-x-hidden overflow-y-scroll">
-          <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="h-[calc(100vh-9rem)] overflow-x-hidden overflow-y-scroll">
+          <div className="grid grid-cols-1 gap-x-5 gap-y-10 py-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {containerList.map((c) => (
               <ContainerBox
                 key={c.name}
