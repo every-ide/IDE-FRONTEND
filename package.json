@@ -36,6 +36,7 @@
     "@replit/codemirror-minimap": "^0.5.2",
     "@splinetool/react-spline": "^2.2.6",
     "@stomp/stompjs": "^7.0.0",
+    "@types/color-hash": "^1.0.5",
     "@uiw/codemirror-theme-material": "^4.21.21",
     "@uiw/codemirror-theme-vscode": "^4.21.21",
     "axios": "^1.6.7",
