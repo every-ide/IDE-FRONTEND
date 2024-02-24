@@ -94,7 +94,6 @@
     "msw": "^2.1.5",
     "postcss": "^8.4.33",
     "prettier": "^3.2.4",
-    "react-snap": "^1.23.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
@@ -106,13 +105,6 @@
   "msw": {
     "workerDirectory": [
       "public"
-    ]
-  },
-  "reactSnap": {
-    "include": [
-      "/",
-      "/my/dashboard",
-      "/together"
     ]
   }
 }
