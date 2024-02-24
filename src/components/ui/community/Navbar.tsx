@@ -120,269 +120,274 @@ const NavigationBar: React.FC = () => {
   };
 
   return (
-    <nav className="flex h-16 justify-between bg-ldark px-4">
-      <div className="flex items-center">
-        <Link
-          to="/together"
-          className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together') ? 'border-blue-400' : 'border-transparent'}`}
-        >
-          전체
-        </Link>
-        <Link
-          to="/together/mentors"
-          className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/mentors') ? 'border-blue-400' : 'border-transparent'}`}
-        >
-          질문 받아요
-        </Link>
-        <Link
-          to="/together/mentees"
-          className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/mentees') ? 'border-blue-400' : 'border-transparent'}`}
-        >
-          질문 있어요
-        </Link>
-        <Link
-          to="/together/my"
-          className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/my') ? 'border-blue-400' : 'border-transparent'}`}
-        >
-          참여중인 커뮤니티
-        </Link>
-      </div>
-      <div className="flex items-center">
-        <div className="mr-8 flex items-center">
-          <div className="flex flex-1 items-center justify-between rounded-lg bg-mdark max-lg:hidden">
-            <input
-              type="text"
-              value={searchKey}
-              onChange={(e) => setSearchKey(e.target.value)}
-              placeholder="Enter to search..."
-              className="rounded-xl bg-mdark p-3 outline-none "
-            />
-            {searchKey && (
+    <nav className="flex h-16  bg-ldark">
+      <div className="container flex justify-between">
+        <div className="flex items-center">
+          <Link
+            to="/together"
+            className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together') ? 'border-blue-400' : 'border-transparent'}`}
+          >
+            전체
+          </Link>
+          <Link
+            to="/together/mentors"
+            className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/mentors') ? 'border-blue-400' : 'border-transparent'}`}
+          >
+            질문 받아요
+          </Link>
+          <Link
+            to="/together/mentees"
+            className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/mentees') ? 'border-blue-400' : 'border-transparent'}`}
+          >
+            질문 있어요
+          </Link>
+          <Link
+            to="/together/my"
+            className={`flex h-full items-center border-b-4 px-6 py-2 text-white ${isActiveLink('/together/my') ? 'border-blue-400' : 'border-transparent'}`}
+          >
+            참여중인 커뮤니티
+          </Link>
+        </div>
+        <div className="flex items-center">
+          <div className="mr-8 flex items-center">
+            <div className="flex flex-1 items-center justify-between rounded-lg bg-mdark max-lg:hidden">
+              <input
+                type="text"
+                value={searchKey}
+                onChange={(e) => setSearchKey(e.target.value)}
+                placeholder="Enter to search..."
+                className="rounded-xl bg-mdark p-3 outline-none "
+              />
+              {searchKey && (
+                <Button
+                  className="border-none pr-4 text-accent hover:text-accent/65 active:scale-90"
+                  onClick={() => {
+                    handleReset();
+                  }}
+                >
+                  <FaRotate size={18} />
+                </Button>
+              )}
               <Button
                 className="border-none pr-4 text-accent hover:text-accent/65 active:scale-90"
-                onClick={() => {
-                  handleReset();
-                }}
+                onClick={handleSearch}
               >
-                <FaRotate size={18} />
+                <FaSearch size={18} />
               </Button>
-            )}
-            <Button
-              className="border-none pr-4 text-accent hover:text-accent/65 active:scale-90"
-              onClick={handleSearch}
-            >
-              <FaSearch size={18} />
-            </Button>
+            </div>
           </div>
-        </div>
-        <Dialog open={openModal} onOpenChange={setOpenModal}>
-          <DialogTrigger asChild>
-            <Button
-              variant="outline"
-              size="lg"
-              className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95 max-md:hidden"
-            >
-              <MdAddCircleOutline size={20} className="text-accent" />
-              커뮤니티 생성하기
-            </Button>
-          </DialogTrigger>
-
-          <DialogContent className="text-black">
-            <DialogHeader>
-              <DialogTitle className="text-black">
+          <Dialog open={openModal} onOpenChange={setOpenModal}>
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-1 rounded-lg bg-mdark px-4 font-semibold active:scale-95 max-md:hidden"
+              >
+                <MdAddCircleOutline size={20} className="text-accent" />
                 커뮤니티 생성하기
-              </DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit(newRoomAction)}>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label
-                    htmlFor="name"
-                    className="text-right text-xs text-black"
-                  >
-                    커뮤니티 이름
-                  </Label>
-                  <Input
-                    id="name"
-                    placeholder="알파벳, 숫자, -, _만 포함, 20자 이내"
-                    className="col-span-3 text-black"
-                    {...register('name', {
-                      required: '커뮤니티 이름은 필수 입력입니다.',
-                      maxLength: {
-                        value: 20,
-                        message: '커뮤니티 이름은 20자 이내로 작성해주세요.',
-                      },
-                    })}
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label
-                    htmlFor="description"
-                    className="text-right text-xs text-black"
-                  >
-                    커뮤니티 설명
-                  </Label>
-                  <Input
-                    id="description"
-                    placeholder="설명을 해주세요 (100자 이내)"
-                    className="col-span-3 text-black"
-                    {...register('description', {
-                      maxLength: {
-                        value: 100,
-                        message: '설명은 100자 이내로 작성해주세요.',
-                      },
-                    })}
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label
-                    htmlFor="isLocked"
-                    className="text-right text-xs text-black"
-                  >
-                    커뮤니티 잠금
-                  </Label>
-                  <Controller
-                    name="isLocked"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        id="isLocked"
-                        checked={field.value}
-                        onCheckedChange={(checked) => {
-                          setIsLocked(checked); // 로컬 상태 업데이트
-                          field.onChange(checked); // 폼 상태 업데이트
-                        }}
-                        onBlur={field.onBlur}
-                      />
-                    )}
-                  />
-                </div>
-                {isLocked && (
+              </Button>
+            </DialogTrigger>
+
+            <DialogContent className="text-black">
+              <DialogHeader>
+                <DialogTitle className="text-black">
+                  커뮤니티 생성하기
+                </DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit(newRoomAction)}>
+                <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="password" className="text-right text-black">
-                      비밀번호
+                    <Label
+                      htmlFor="name"
+                      className="text-right text-xs text-black"
+                    >
+                      커뮤니티 이름
                     </Label>
                     <Input
-                      id="password"
-                      type="password"
-                      placeholder="비밀번호를 입력해주세요."
+                      id="name"
+                      placeholder="알파벳, 숫자, -, _만 포함, 20자 이내"
                       className="col-span-3 text-black"
-                      {...register('password', {
-                        required: '비밀번호는 필수 입력입니다.',
-                        minLength: {
-                          value: 6,
-                          message: '비밀번호는 6자 이상으로 설정해주세요.',
+                      {...register('name', {
+                        required: '커뮤니티 이름은 필수 입력입니다.',
+                        maxLength: {
+                          value: 20,
+                          message: '커뮤니티 이름은 20자 이내로 작성해주세요.',
                         },
                       })}
                     />
                   </div>
-                )}
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label
-                    htmlFor="roomType"
-                    className="text-right text-xs text-black"
-                  >
-                    커뮤니티 종류
-                  </Label>
-                  <Controller
-                    name="roomType"
-                    control={control}
-                    rules={{ required: '커뮤니티 종류 선택은 필수입니다.' }}
-                    render={({ field: { ...restField } }) => (
-                      <Select
-                        {...restField}
-                        onValueChange={(value) => {
-                          restField.onChange(value);
-                        }}
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label
+                      htmlFor="description"
+                      className="text-right text-xs text-black"
+                    >
+                      커뮤니티 설명
+                    </Label>
+                    <Input
+                      id="description"
+                      placeholder="설명을 해주세요 (100자 이내)"
+                      className="col-span-3 text-black"
+                      {...register('description', {
+                        maxLength: {
+                          value: 100,
+                          message: '설명은 100자 이내로 작성해주세요.',
+                        },
+                      })}
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label
+                      htmlFor="isLocked"
+                      className="text-right text-xs text-black"
+                    >
+                      커뮤니티 잠금
+                    </Label>
+                    <Controller
+                      name="isLocked"
+                      control={control}
+                      render={({ field }) => (
+                        <Switch
+                          id="isLocked"
+                          checked={field.value}
+                          onCheckedChange={(checked) => {
+                            setIsLocked(checked); // 로컬 상태 업데이트
+                            field.onChange(checked); // 폼 상태 업데이트
+                          }}
+                          onBlur={field.onBlur}
+                        />
+                      )}
+                    />
+                  </div>
+                  {isLocked && (
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label
+                        htmlFor="password"
+                        className="text-right text-black"
                       >
-                        <SelectTrigger className="col-span-3 text-black">
-                          <SelectValue
-                            id="roomType"
-                            placeholder="커뮤니티 종류"
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="QUESTION">
-                            <div className="inline-flex items-center gap-2">
-                              <TbUserQuestion />
-                              질문있어요
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="ANSWER">
-                            <div className="inline-flex items-center gap-2">
-                              <GiTeacher />
-                              질문받아요
-                            </div>
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
+                        비밀번호
+                      </Label>
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="비밀번호를 입력해주세요."
+                        className="col-span-3 text-black"
+                        {...register('password', {
+                          required: '비밀번호는 필수 입력입니다.',
+                          minLength: {
+                            value: 6,
+                            message: '비밀번호는 6자 이상으로 설정해주세요.',
+                          },
+                        })}
+                      />
+                    </div>
+                  )}
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label
+                      htmlFor="roomType"
+                      className="text-right text-xs text-black"
+                    >
+                      커뮤니티 종류
+                    </Label>
+                    <Controller
+                      name="roomType"
+                      control={control}
+                      rules={{ required: '커뮤니티 종류 선택은 필수입니다.' }}
+                      render={({ field: { ...restField } }) => (
+                        <Select
+                          {...restField}
+                          onValueChange={(value) => {
+                            restField.onChange(value);
+                          }}
+                        >
+                          <SelectTrigger className="col-span-3 text-black">
+                            <SelectValue
+                              id="roomType"
+                              placeholder="커뮤니티 종류"
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="QUESTION">
+                              <div className="inline-flex items-center gap-2">
+                                <TbUserQuestion />
+                                질문있어요
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="ANSWER">
+                              <div className="inline-flex items-center gap-2">
+                                <GiTeacher />
+                                질문받아요
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label
+                      htmlFor="maxPeople"
+                      className="text-right text-xs text-black"
+                    >
+                      최대 인원
+                    </Label>
+                    <Input
+                      id="maxPeople"
+                      type="number"
+                      placeholder="최대 인원을 입력해주세요."
+                      className="col-span-3 text-black"
+                      min="2" // HTML validation to not allow numbers less than 2
+                      {...register('maxPeople', {
+                        valueAsNumber: true,
+                        min: {
+                          value: 2,
+                          message: '최소 2명 이상이어야 합니다.', // Validation message for numbers less than 2
+                        },
+                        max: {
+                          value: 30,
+                          message: '최대 100명까지 가능합니다.', // Validation message for numbers more than 100
+                        },
+                      })}
+                    />
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <div className="flex flex-col items-end justify-center">
+                    {errors['name'] && (
+                      <p className="text-xs text-error">
+                        {errors['name'].message}
+                      </p>
                     )}
-                  />
-                </div>
+                    {errors['roomType'] && (
+                      <p className="text-xs text-error">
+                        {errors['roomType'].message}
+                      </p>
+                    )}
+                    {errors['maxPeople'] && (
+                      <p className="text-xs text-error">
+                        {errors['maxPeople'].message}
+                      </p>
+                    )}
+                    {errors['password'] && (
+                      <p className="text-xs text-error">
+                        {errors['password'].message}
+                      </p>
+                    )}
+                  </div>
 
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label
-                    htmlFor="maxPeople"
-                    className="text-right text-xs text-black"
+                  <Button
+                    type="submit"
+                    className="border-none"
+                    disabled={isSubmitting}
                   >
-                    최대 인원
-                  </Label>
-                  <Input
-                    id="maxPeople"
-                    type="number"
-                    placeholder="최대 인원을 입력해주세요."
-                    className="col-span-3 text-black"
-                    min="2" // HTML validation to not allow numbers less than 2
-                    {...register('maxPeople', {
-                      valueAsNumber: true,
-                      min: {
-                        value: 2,
-                        message: '최소 2명 이상이어야 합니다.', // Validation message for numbers less than 2
-                      },
-                      max: {
-                        value: 30,
-                        message: '최대 100명까지 가능합니다.', // Validation message for numbers more than 100
-                      },
-                    })}
-                  />
-                </div>
-              </div>
-
-              <DialogFooter>
-                <div className="flex flex-col items-end justify-center">
-                  {errors['name'] && (
-                    <p className="text-xs text-error">
-                      {errors['name'].message}
-                    </p>
-                  )}
-                  {errors['roomType'] && (
-                    <p className="text-xs text-error">
-                      {errors['roomType'].message}
-                    </p>
-                  )}
-                  {errors['maxPeople'] && (
-                    <p className="text-xs text-error">
-                      {errors['maxPeople'].message}
-                    </p>
-                  )}
-                  {errors['password'] && (
-                    <p className="text-xs text-error">
-                      {errors['password'].message}
-                    </p>
-                  )}
-                </div>
-
-                <Button
-                  type="submit"
-                  className="border-none"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? '커뮤니티 생성 중입니다...' : '생성하기'}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+                    {isSubmitting ? '커뮤니티 생성 중입니다...' : '생성하기'}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
     </nav>
   );

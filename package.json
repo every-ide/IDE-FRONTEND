@@ -42,6 +42,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "codemirror": "^6.0.1",
+    "embla-carousel-autoplay": "^8.0.0",
+    "embla-carousel-react": "^8.0.0",
     "framer-motion": "^11.0.5",
     "lucide-react": "^0.322.0",
     "re-resizable": "^6.9.11",

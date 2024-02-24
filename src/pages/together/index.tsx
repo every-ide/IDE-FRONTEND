@@ -6,6 +6,7 @@ import useRoomAPI from '@/src/hooks/useRoomApi';
 import EmptyStateCommunity from '@/src/components/my/EmptyStateCommunity';
 import LoadingEnterRoom from './Room/LoadingEnterRoom';
 import Header from '@/src/components/my/Header';
+import Banner from './Banner';
 
 const TogetherPage = () => {
   const { rooms, isLoading, searchKey } = useRoomStore();
@@ -25,16 +26,19 @@ const TogetherPage = () => {
     <div className="h-[calc(100vh)] bg-mdark">
       <Header />
       <Navbar />
-      <div className="h-[calc(100vh-151px)] overflow-x-hidden overflow-y-scroll">
-        {rooms ? (
-          <div className="grid grid-cols-1 gap-x-5 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {rooms.map((room, index) =>
-              room.available ? <Card key={index} {...room} /> : null,
-            )}
-          </div>
-        ) : (
-          <EmptyStateCommunity />
-        )}
+      <div className="h-[calc(100vh-8rem)] overflow-x-hidden">
+        <Banner />
+        <div className="container">
+          {rooms ? (
+            <div className="grid grid-cols-1 gap-5 py-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {rooms.map((room, index) =>
+                room.available ? <Card key={index} {...room} /> : null,
+              )}
+            </div>
+          ) : (
+            <EmptyStateCommunity />
+          )}
+        </div>
       </div>
     </div>
   );
