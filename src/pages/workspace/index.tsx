@@ -9,6 +9,7 @@ import Editor from './Editor';
 import WorkInfo from '../teamspace/WorkInfo';
 import { cn } from '@/src/utils/style';
 import useActionWithKeyboard from '@/src/hooks/eventHook/actionWithKeyboard';
+import { Helmet } from 'react-helmet-async';
 
 const WorkspacePage = () => {
   const { connect, disconnect, webSocketService } = useWebSocketStore();
@@ -33,20 +34,25 @@ const WorkspacePage = () => {
   }, [projectId, accessToken]);
 
   return (
-    <div className="flex h-screen flex-col text-xs">
-      <Navigation isTeamspace={false} />
-      <Header />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <div className="no-scrollbar relative flex flex-1 flex-col ">
-          <Editor isTeamspace={false} />
-          <div className={cn(isOpenWorkInfo ? 'block' : 'hidden')}>
-            <WorkInfo setIsOpen={setIsOpenWorkInfo} />
+    <>
+      <Helmet>
+        <title>EVERYIDE - Workspace</title>
+      </Helmet>
+      <div className="flex h-screen flex-col text-xs">
+        <Navigation isTeamspace={false} />
+        <Header />
+        <div className="flex flex-1 overflow-hidden">
+          <Sidebar />
+          <div className="no-scrollbar relative flex flex-1 flex-col ">
+            <Editor isTeamspace={false} />
+            <div className={cn(isOpenWorkInfo ? 'block' : 'hidden')}>
+              <WorkInfo setIsOpen={setIsOpenWorkInfo} />
+            </div>
           </div>
         </div>
+        <Footer setIsOpen={setIsOpenWorkInfo} isOpen={isOpenWorkInfo} />
       </div>
-      <Footer setIsOpen={setIsOpenWorkInfo} isOpen={isOpenWorkInfo} />
-    </div>
+    </>
   );
 };
 
