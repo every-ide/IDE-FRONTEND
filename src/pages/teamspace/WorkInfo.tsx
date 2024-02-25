@@ -30,7 +30,7 @@ const WorkInfo: FC<WorkInfoProps> = ({ setIsOpen }) => {
       >
         <div className="flex items-center justify-between border-b-2 border-mdark bg-ldark">
           <div className="inline-flex items-center justify-center bg-ldark">
-            <button
+            {/* <button
               className={cn(
                 'inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-xs font-medium text-white disabled:pointer-events-none disabled:opacity-50',
                 activeTab === 'debug'
@@ -40,7 +40,7 @@ const WorkInfo: FC<WorkInfoProps> = ({ setIsOpen }) => {
               onClick={() => setActiveTab('debug')}
             >
               디버그
-            </button>
+            </button> */}
             <button
               className={cn(
                 'inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-xs font-medium text-white disabled:pointer-events-none disabled:opacity-50',
@@ -52,7 +52,7 @@ const WorkInfo: FC<WorkInfoProps> = ({ setIsOpen }) => {
             >
               터미널
             </button>
-            <button
+            {/* <button
               className={cn(
                 'inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-xs font-medium text-white disabled:pointer-events-none disabled:opacity-50',
                 activeTab === 'search'
@@ -62,7 +62,7 @@ const WorkInfo: FC<WorkInfoProps> = ({ setIsOpen }) => {
               onClick={() => setActiveTab('search')}
             >
               검색
-            </button>
+            </button> */}
           </div>
           <div
             className="pr-2"
@@ -79,15 +79,15 @@ const WorkInfo: FC<WorkInfoProps> = ({ setIsOpen }) => {
             </div>
           </div>
         </div>
-        <div className={cn(activeTab === 'debug' ? 'block' : 'hidden')}>
+        {/* <div className={cn(activeTab === 'debug' ? 'block' : 'hidden')}>
           <div>디버그 탭입니다.</div>
-        </div>
+        </div> */}
         <div className={cn(activeTab === 'terminal' ? 'block' : 'hidden')}>
           <Terminal />
         </div>
-        <div className={cn(activeTab === 'search' ? 'block' : 'hidden')}>
+        {/* <div className={cn(activeTab === 'search' ? 'block' : 'hidden')}>
           <div>검색 탭입니다.</div>
-        </div>
+        </div> */}
       </Resizable>
     </div>
   );

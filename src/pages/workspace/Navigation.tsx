@@ -18,13 +18,13 @@ const Navigation: FC<NavigationProps> = ({
     <nav className="flex h-8  border-b-2 border-mdark bg-ldark px-1">
       <div className="flex grow items-center">
         <h2 className="cursor-pointer text-base">EveryIDE</h2>
-        <ul className="ml-4 flex cursor-pointer items-center gap-2">
+        {/* <ul className="ml-4 flex cursor-pointer items-center gap-2">
           <li className="px-2 py-1 hover:bg-gray-700">파일</li>
           <li className="px-2 py-1 hover:bg-gray-700">편집</li>
           <li className="px-2 py-1 hover:bg-gray-700">프로젝트</li>
           <li className="px-2 py-1 hover:bg-gray-700">컨테이너</li>
           <li className="px-2 py-1 hover:bg-gray-700">창</li>
-        </ul>
+        </ul> */}
       </div>
       {isTeamspace && (
         <div className="relative flex cursor-pointer items-center pr-2">
