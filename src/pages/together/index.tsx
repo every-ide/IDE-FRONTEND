@@ -19,7 +19,6 @@ const TogetherPage = () => {
   }, []);
 
   if (isLoading) {
-    console.log('isLoading: ', isLoading);
     return <LoadingEnterRoom />; // Modify this as needed
   }
 
