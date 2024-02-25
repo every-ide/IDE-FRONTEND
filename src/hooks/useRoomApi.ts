@@ -44,7 +44,7 @@ const useRoomAPI = () => {
       description,
     );
     const response = await axiosPrivate.post(
-      `/api/community`,
+      `/community`,
       JSON.stringify({
         name,
         isLocked,
@@ -75,11 +75,11 @@ const useRoomAPI = () => {
     try {
       let response;
       if (!name) {
-        response = await axiosPrivate.get(`/api/communities`);
-        console.log('/api/communities: ', response.data);
+        response = await axiosPrivate.get(`/communities`);
+        console.log('/communities: ', response.data);
       } else {
-        response = await axiosPrivate.get(`/api/communities?name=${name}`);
-        console.log('/api/communities?name=${name}: ', response.data);
+        response = await axiosPrivate.get(`/communities?name=${name}`);
+        console.log('/communities?name=${name}: ', response.data);
       }
       return response.data;
     } catch (error) {
@@ -90,7 +90,7 @@ const useRoomAPI = () => {
   const updateRoomData = async (data: IUpdateRoomData, roomId: string) => {
     console.log('data: ', data);
     const response = await axiosPrivate.patch(
-      `/api/community/${roomId}/settings`,
+      `/community/${roomId}/settings`,
       data,
     );
     console.log('response: 커뮤니티를 수정했습니다 ', response);
