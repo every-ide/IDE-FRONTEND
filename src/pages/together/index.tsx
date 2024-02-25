@@ -35,7 +35,7 @@ const TogetherPage = () => {
         <div className="h-[calc(100vh-9rem)] overflow-x-hidden">
           <Banner />
           <div className="container">
-            {rooms ? (
+            {rooms.length > 0 ? (
               <div className="grid grid-cols-1 gap-5 p-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {rooms.map((room, index) =>
                   room.available ? <Card key={index} {...room} /> : null,
