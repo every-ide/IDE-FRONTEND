@@ -78,7 +78,11 @@ const CardContainer: React.FC<CardProps> = ({
         ) : (
           <Button
             className="w-full"
-            onClick={() => navigate(`/together/${roomId}?isLocked=${isLocked}`)}
+            onClick={() => {
+              if (window.confirm('커뮤니티에 가입하시겠습니까?')) {
+                navigate(`/together/${roomId}?isLocked=${isLocked}`);
+              }
+            }}
             disabled={usersCnt === maxPeople}
           >
             {usersCnt === maxPeople ? '정원초과' : '가입하기'}
