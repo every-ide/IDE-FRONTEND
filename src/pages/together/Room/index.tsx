@@ -174,7 +174,7 @@ const RoomDetailPage = () => {
               <div className="flex w-[35%] flex-col p-3 py-7 pl-6">
                 <div className="flex h-full flex-col items-center rounded-lg border-2 border-ldark p-6">
                   <div className="flex w-full flex-row justify-between border-b-2 border-ldark pb-6 text-left text-2xl font-bold">
-                    <p className="inline-flex justify-center gap-3 text-nowrap">
+                    <p className="inline-flex justify-center gap-3">
                       <span className="text-4xl">🛸</span> Welcome to{' '}
                       {enteredRoom?.room.name}!
                     </p>
@@ -304,7 +304,7 @@ const RoomDetailPage = () => {
                 <div className="flex h-full flex-col gap-1 rounded-lg border-2 border-ldark p-6">
                   <div className="flex flex-row justify-between border-b-2 border-ldark pb-6">
                     <h1 className="text-2xl font-bold">
-                      <p className="inline-flex justify-center gap-3 text-nowrap">
+                      <p className="inline-flex justify-center gap-3">
                         <span className="text-4xl">🛰️</span>{' '}
                         {enteredRoom?.room.name}의 컨테이너
                       </p>
