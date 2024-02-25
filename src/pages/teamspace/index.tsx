@@ -74,8 +74,7 @@ const TeamSpacePage = () => {
         `/topic/container/${containerId}/state`,
         (message) => {
           console.log('현재유저정보 리스트 message', JSON.parse(message.body));
-          const { messages, userSessions } = JSON.parse(message.body);
-          setMessageList(messages);
+          const { userSessions } = JSON.parse(message.body);
           setUserList(userSessions);
         },
       );
@@ -86,7 +85,7 @@ const TeamSpacePage = () => {
         (message) => {
           console.log('채팅으로 부터 구독', JSON.parse(message.body));
           const newChat = JSON.parse(message.body);
-          setMessageList((prevMessageList) => [...prevMessageList!, newChat]);
+          setMessageList((prevMessageList) => [...prevMessageList, newChat]);
         },
       );
     }
