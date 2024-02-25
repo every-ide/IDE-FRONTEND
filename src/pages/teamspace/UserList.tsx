@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { sidebarProps } from './Sidebar';
-import { cn } from '@/src/utils/style';
-import { getColorForUserId } from '@/src/utils/helper';
+// import { cn } from '@/src/utils/style';
+// import { getColorForUserId } from '@/src/utils/helper';
 import { RiTeamLine } from 'react-icons/ri';
 import useUserStore from '@/src/store/useUserStore';
 import Avatar from 'boring-avatars';
