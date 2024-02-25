@@ -33,22 +33,13 @@ const BringMyContainerForm = () => {
 
   const fetchMyContainerList = useCallback(async () => {
     try {
-      // Test용!!!! (추후 삭제)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
       const fetchedContainerList = await getContainersData();
       setContainerList(fetchedContainerList);
       setListSetted(true);
     } catch (error) {
       console.error(error);
 
-      toast.error('컨테이너 목록을 불러오는 데 실패했습니다.', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        theme: 'dark',
-      });
+      toast.error('컨테이너 목록을 불러오는 데 실패했습니다.');
     }
   }, [user]);
 
@@ -67,13 +58,7 @@ const BringMyContainerForm = () => {
         const response = await bringContainerToRoom(selectedId);
 
         if (response.status === 200) {
-          toast('컨테이너 불러오기 성공 🎉', {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          });
+          toast('컨테이너 불러오기 성공 🎉');
 
           setOpenModal(false);
         }
@@ -84,22 +69,9 @@ const BringMyContainerForm = () => {
         if (err.response?.status === 400) {
           toast.error(
             '이미 불러온 컨테이너입니다. 다른 컨테이너를 선택해주세요.',
-            {
-              position: 'top-right',
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              theme: 'dark',
-            },
           );
         } else {
-          toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          });
+          toast.error('문제가 발생했습니다. 다시 시도해주세요.');
         }
       }
     }

@@ -27,13 +27,7 @@ const Editor: FC<EditorProps> = ({ isTeamspace = false }) => {
 
   const handleTabClose = (fileId: string, needSave: boolean) => {
     if (needSave) {
-      toast.error('파일을 저장해주세요.', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        theme: 'dark',
-      });
+      toast.error('파일을 저장해주세요.');
     } else {
       closeFile(fileId);
     }
