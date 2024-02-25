@@ -22,7 +22,7 @@ export class WebSocketService {
 
     this.client = new Client({
       brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
-      // brokerURL: 'wss://kf88999ca9f71a.user-app.krampoline.com/ws/websocket',
+      // brokerURL: 'wss://k547f55f71a44a.user-app.krampoline.com/ws/websocket',
       connectHeaders: {
         Authorization: token,
         ProjectId: projectId,
