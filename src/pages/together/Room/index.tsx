@@ -182,53 +182,50 @@ const RoomDetailPage = () => {
                       <span className="text-4xl">🛸</span> Welcome to{' '}
                       {enteredRoom?.room.name}!
                     </p>
-                    <Button
-                      onClick={handleLeaveRoom}
-                      variant="outline"
-                      size="sm"
-                      className="w-[25%]"
-                    >
-                      커뮤니티 탈퇴
-                    </Button>
                   </div>
                   <div className="flex size-full flex-col py-4">
                     <div className="mb-2 flex flex-col border-b border-ldark p-3">
                       <div className="flex w-full flex-row items-center gap-4">
                         <p className="text-xl font-bold">커뮤니티 정보</p>
-                        <EditRoomInfoForm
-                          roomId={roomId!}
-                          name={
-                            enteredRoom?.room.name ? enteredRoom?.room.name : ''
-                          }
-                          isLocked={
-                            searchParams.get('isLocked') === 'true'
-                              ? true
-                              : false
-                          }
-                          description={
-                            enteredRoom?.room.description
-                              ? enteredRoom?.room.description
-                              : ''
-                          }
-                        />
-                        {/* 커뮤니티 삭제 */}
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <Button
-                                onClick={handleDeleteRoom}
-                                variant="icon"
-                                size="icon"
-                                className="p-0 text-[#888]"
-                              >
-                                <MdOutlineDelete size={20} />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="bottom">
-                              <p>커뮤니티 삭제</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                        <div className="flex flex-row items-center">
+                          {/* 커뮤니티 수정 */}
+                          <EditRoomInfoForm
+                            roomId={roomId!}
+                            name={
+                              enteredRoom?.room.name
+                                ? enteredRoom?.room.name
+                                : ''
+                            }
+                            isLocked={
+                              searchParams.get('isLocked') === 'true'
+                                ? true
+                                : false
+                            }
+                            description={
+                              enteredRoom?.room.description
+                                ? enteredRoom?.room.description
+                                : ''
+                            }
+                          />
+                          {/* 커뮤니티 삭제 */}
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  onClick={handleDeleteRoom}
+                                  variant="icon"
+                                  size="icon"
+                                  className="p-0 text-[#888]"
+                                >
+                                  <MdOutlineDelete size={20} />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent side="bottom">
+                                <p>커뮤니티 삭제</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
                       </div>
 
                       <div className="flex flex-col gap-2 p-3 text-sm font-light">
@@ -250,7 +247,7 @@ const RoomDetailPage = () => {
                           <Badge variant="custom1">최대인원</Badge>
                           <p>
                             {enteredRoom?.room.maxPeople
-                              ? enteredRoom?.room.maxPeople
+                              ? `${enteredRoom?.room.maxPeople}명`
                               : ''}
                           </p>
                         </div>
@@ -269,7 +266,18 @@ const RoomDetailPage = () => {
                       </div>
                     </div>
                     <div className="flex flex-col gap-3 p-3">
-                      <p className="text-xl font-bold">참여 유저</p>
+                      <div className="flex flex-row justify-between">
+                        <p className="text-xl font-bold">참여 유저</p>
+                        <Button
+                          onClick={handleLeaveRoom}
+                          variant="outline"
+                          size="sm"
+                          className="w-[30%]"
+                        >
+                          커뮤니티 탈퇴
+                        </Button>
+                      </div>
+
                       <div className="grid grid-cols-1 gap-y-5 overflow-y-scroll pt-5 md:grid-cols-2 lg:grid-cols-3">
                         {enteredRoom?.usersName.map((user) => (
                           <div

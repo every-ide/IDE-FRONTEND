@@ -57,25 +57,6 @@ const EditRoomInfoForm = ({
     }
   }, [openModal]);
 
-  const checkIfOwner = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-
-    if (enteredRoom?.ownerId === userId) {
-      setOpenModal(true);
-    } else {
-      toast.error(
-        '커뮤니티 수정 권한이 없습니다. 커뮤니티장에게 문의해주세요.',
-        {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        },
-      );
-    }
-  };
-
   const {
     control,
     reset,
@@ -137,20 +118,37 @@ const EditRoomInfoForm = ({
     }
   };
 
+  const toggleDialog = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    if (enteredRoom?.ownerId === userId) {
+      setOpenModal(true);
+    } else {
+      toast.error(
+        '커뮤니티 수정 권한이 없습니다. 커뮤니티장에게 문의해주세요.',
+        {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          theme: 'dark',
+        },
+      );
+    }
+  };
+
   return (
-    <Dialog open={openModal} onOpenChange={setOpenModal}>
+    <>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>
-            <DialogTrigger asChild>
-              <Button
-                onClick={(e) => checkIfOwner(e)}
-                variant="icon"
-                className="p-0 text-[#888]"
-              >
-                <MdOutlineSettings size={20} />
-              </Button>
-            </DialogTrigger>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={toggleDialog}
+              variant="icon"
+              className="p-0 text-[#888]"
+            >
+              <MdOutlineSettings size={20} />
+            </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">
             <p>커뮤니티 정보 수정</p>
@@ -158,120 +156,127 @@ const EditRoomInfoForm = ({
         </Tooltip>
       </TooltipProvider>
 
-      <DialogContent className="text-black">
-        <DialogHeader>
-          <DialogTitle className="text-black">커뮤니티 수정하기</DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit(handleUpdateContainer)}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="oldName" className="text-right text-black">
-                기존 커뮤니티명
-              </Label>
-              <Input
-                id="oldName"
-                value={name}
-                disabled
-                className="col-span-3 text-black"
-                {...register('oldName', {
-                  required: '커뮤니티 이름은 필수 입력입니다.',
-                })}
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="newName" className="text-right text-black">
-                새 커뮤니티 이름
-              </Label>
-              <Input
-                id="newName"
-                placeholder="새 커뮤니티 이름을 입력하세요"
-                className="col-span-3 text-black"
-                {...register('newName', {
-                  required: '새 커뮤니티 이름은 필수 입력 사항입니다.',
-                })}
-              />
-              {errors.newName && (
-                <p className="mt-1 text-xs text-error">
-                  {errors.newName.message}
-                </p>
-              )}
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right text-black">
-                설명
-              </Label>
-              <Input
-                id="description"
-                placeholder="설명을 입력하세요"
-                className="col-span-3 text-black"
-                defaultValue={description}
-                {...register('description', {
-                  required: '커뮤니티 설명은 필수 입력 사항입니다.',
-                })}
-              />
-              {errors.newName && (
-                <p className="mt-1 text-xs text-error">
-                  {errors.newName.message}
-                </p>
-              )}
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="active" className="text-right text-black">
-                커뮤니티 잠금
-              </Label>
-              <Controller
-                name="isLocked"
-                control={control}
-                defaultValue={isLocked}
-                render={({ field: { onChange, onBlur, value, name, ref } }) => (
-                  <Switch
-                    checked={value}
-                    onCheckedChange={(checked) => {
-                      onChange(checked ? true : false);
-                      setValue(checked ? true : false);
-                    }}
-                    onBlur={onBlur}
-                    name={name}
-                    ref={ref}
-                  />
-                )}
-              />
-            </div>
-            {value && (
-              <div className={`grid grid-cols-4 items-center gap-4`}>
-                <Label htmlFor="password" className="text-right text-black">
-                  비밀번호
+      <Dialog open={openModal} onOpenChange={setOpenModal}>
+        <DialogTrigger>
+          <div style={{ display: 'none' }}>Trigger</div>
+        </DialogTrigger>
+        <DialogContent className="text-black">
+          <DialogHeader>
+            <DialogTitle className="text-black">커뮤니티 수정하기</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit(handleUpdateContainer)}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="oldName" className="text-right text-black">
+                  기존 커뮤니티명
                 </Label>
                 <Input
-                  id="password"
-                  type="password"
-                  placeholder="비밀번호를 입력하세요"
+                  id="oldName"
+                  value={name}
+                  disabled
                   className="col-span-3 text-black"
-                  {...register('password', {
-                    validate: (value) =>
-                      isLocked
-                        ? value
-                          ? true
-                          : '비공개 커뮤니티에는 비밀번호가 필요합니다.'
-                        : true,
+                  {...register('oldName', {
+                    required: '커뮤니티 이름은 필수 입력입니다.',
                   })}
                 />
-                {errors.password && (
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="newName" className="text-right text-black">
+                  새 커뮤니티 이름
+                </Label>
+                <Input
+                  id="newName"
+                  placeholder="새 커뮤니티 이름을 입력하세요"
+                  className="col-span-3 text-black"
+                  {...register('newName', {
+                    required: '새 커뮤니티 이름은 필수 입력 사항입니다.',
+                  })}
+                />
+                {errors.newName && (
                   <p className="mt-1 text-xs text-error">
-                    {errors.password.message}
+                    {errors.newName.message}
                   </p>
                 )}
               </div>
-            )}
-          </div>
-          <DialogFooter>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? '저장 중...' : '저장하기'}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="description" className="text-right text-black">
+                  설명
+                </Label>
+                <Input
+                  id="description"
+                  placeholder="설명을 입력하세요"
+                  className="col-span-3 text-black"
+                  defaultValue={description}
+                  {...register('description', {
+                    required: '커뮤니티 설명은 필수 입력 사항입니다.',
+                  })}
+                />
+                {errors.newName && (
+                  <p className="mt-1 text-xs text-error">
+                    {errors.newName.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="active" className="text-right text-black">
+                  커뮤니티 잠금
+                </Label>
+                <Controller
+                  name="isLocked"
+                  control={control}
+                  defaultValue={isLocked}
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                  }) => (
+                    <Switch
+                      checked={value}
+                      onCheckedChange={(checked) => {
+                        onChange(checked ? true : false);
+                        setValue(checked ? true : false);
+                      }}
+                      onBlur={onBlur}
+                      name={name}
+                      ref={ref}
+                    />
+                  )}
+                />
+              </div>
+              {value && (
+                <div className={`grid grid-cols-4 items-center gap-4`}>
+                  <Label htmlFor="password" className="text-right text-black">
+                    비밀번호
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="비밀번호를 입력하세요"
+                    className="col-span-3 text-black"
+                    {...register('password', {
+                      validate: (value) =>
+                        isLocked
+                          ? value
+                            ? true
+                            : '비공개 커뮤니티에는 비밀번호가 필요합니다.'
+                          : true,
+                    })}
+                  />
+                  {errors.password && (
+                    <p className="mt-1 text-xs text-error">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? '저장 중...' : '저장하기'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
