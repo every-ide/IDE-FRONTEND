@@ -54,22 +54,10 @@ const RoomDetailPage = () => {
     } catch (error) {
       const err = error as AxiosError;
       if (err.response!.status === 400) {
-        toast.error('잘못된 비밀번호입니다. 다시 입력해주세요.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error('잘못된 비밀번호입니다. 다시 입력해주세요.');
         isLocked.current = true;
       } else if (err.response!.status === 408 || err.response?.status === 500) {
-        toast.error('커뮤니티 정보를 불러올 수 없습니다. 다시 접속해주세요.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error('커뮤니티 정보를 불러올 수 없습니다. 다시 접속해주세요.');
         navigate('/together');
       }
     }
@@ -98,13 +86,7 @@ const RoomDetailPage = () => {
       try {
         const response = await axiosPrivate.patch(`/community/${roomId}/leave`);
         if (response.status === 200) {
-          toast('커뮤니티에서 탈퇴되었습니다.', {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          });
+          toast('커뮤니티에서 탈퇴되었습니다.');
           navigate('/together');
         }
       } catch (error) {
@@ -115,36 +97,18 @@ const RoomDetailPage = () => {
 
   const handleDeleteRoom = useCallback(async () => {
     if (enteredRoom?.ownerId !== userId) {
-      toast.error('삭제 권한이 없습니다. (권한: 커뮤니티장)', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        theme: 'dark',
-      });
+      toast.error('삭제 권한이 없습니다. (권한: 커뮤니티장)');
     } else {
       if (window.confirm('정말 커뮤니티를 삭제하시겠습니까?')) {
         try {
           const response = await axiosPrivate.delete(`/community/${roomId}`);
 
           if (response.status === 200) {
-            toast('커뮤니티가 삭제되었습니다.', {
-              position: 'top-right',
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              theme: 'dark',
-            });
+            toast('커뮤니티가 삭제되었습니다.');
             navigate('/together');
           }
         } catch (error) {
-          toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          });
+          toast.error('문제가 발생했습니다. 다시 시도해주세요.');
         }
       }
     }
