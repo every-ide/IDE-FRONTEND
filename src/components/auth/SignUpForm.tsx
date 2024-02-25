@@ -5,7 +5,7 @@ import { axiosPublic } from '@/src/api/axios';
 import { toast } from 'react-toastify';
 import Oauth from './Oauth';
 
-const SIGNUP_URL = '/signup';
+const SIGNUP_URL = '/api/signup';
 
 type TSignUpForm = {
   email: string;

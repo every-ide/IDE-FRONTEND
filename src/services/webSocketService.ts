@@ -21,7 +21,7 @@ export class WebSocketService {
     const { token, projectId } = options;
 
     this.client = new Client({
-      //brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
+      // brokerURL: 'ws://43.203.66.34:8000/ws/websocket',
       brokerURL: 'wss://k547f55f71a44a.user-app.krampoline.com/ws/websocket',
       connectHeaders: {
         Authorization: token,

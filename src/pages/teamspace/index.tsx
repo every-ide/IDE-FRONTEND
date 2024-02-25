@@ -51,7 +51,6 @@ const TeamSpacePage = () => {
     }
 
     return () => {
-      // TODO: 창을 닫을때 정상적으로 소켓 Disconnect 되는지 확인
       disconnect();
     };
   }, [containerId, accessToken]);
