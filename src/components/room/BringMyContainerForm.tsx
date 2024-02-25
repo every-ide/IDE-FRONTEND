@@ -33,9 +33,6 @@ const BringMyContainerForm = () => {
 
   const fetchMyContainerList = useCallback(async () => {
     try {
-      // Test용!!!! (추후 삭제)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
       const fetchedContainerList = await getContainersData();
       setContainerList(fetchedContainerList);
       setListSetted(true);
