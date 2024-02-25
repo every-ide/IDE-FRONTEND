@@ -71,8 +71,8 @@ const ChatList = ({ messageList }: ChatProps) => {
               <div className="flex items-end gap-1">
                 {message.userId !== user?.userId && (
                   <Avatar
-                    // name={message.userId}
-                    size={60}
+                    name={message.name}
+                    size={40}
                     variant="beam"
                     colors={[
                       '#92A1C6',
@@ -92,7 +92,7 @@ const ChatList = ({ messageList }: ChatProps) => {
 
                 {message.userId === user?.userId && (
                   <Avatar
-                    // name={message.userId}
+                    name={message.name}
                     size={40}
                     variant="beam"
                     colors={[
