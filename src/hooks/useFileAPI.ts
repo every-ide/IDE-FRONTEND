@@ -25,7 +25,7 @@ const useFileAPI = () => {
     };
 
     try {
-      const response = await axiosPrivate.patch('/api/files', requestData);
+      const response = await axiosPrivate.patch('/files', requestData);
 
       return response;
     } catch (error) {

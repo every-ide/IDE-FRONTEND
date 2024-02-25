@@ -41,7 +41,7 @@ const useContainerAPI = () => {
     }
 
     const response = await axiosPrivate.post(
-      `/api/containers`,
+      `/containers`,
       JSON.stringify(requestBody),
     );
 
@@ -58,7 +58,7 @@ const useContainerAPI = () => {
   };
 
   const getContainersData = async () => {
-    const response = await axiosPrivate.get(`/api/${userId}/containers`);
+    const response = await axiosPrivate.get(`/${userId}/containers`);
 
     if (response.status === 200) {
       setContainerList(response.data);
@@ -76,7 +76,7 @@ const useContainerAPI = () => {
       requestBody.email = roomId;
     }
 
-    const response = await axiosPrivate.delete('/api/containers', {
+    const response = await axiosPrivate.delete('/containers', {
       data: requestBody,
     });
 
@@ -96,7 +96,7 @@ const useContainerAPI = () => {
       data.email = roomId;
     }
 
-    const response = await axiosPrivate.patch('/api/containers', data);
+    const response = await axiosPrivate.patch('/containers', data);
 
     if (response.status === 200) {
       // zustand store update
@@ -112,12 +112,9 @@ const useContainerAPI = () => {
 
   const bringContainerToRoom = async (containerId: string) => {
     if (roomId) {
-      const response = await axiosPrivate.post(
-        `/api/containers/${containerId}`,
-        {
-          roomId,
-        },
-      );
+      const response = await axiosPrivate.post(`/containers/${containerId}`, {
+        roomId,
+      });
 
       if (response.status === 200) {
         addContainerToRoom(response.data);
