@@ -46,7 +46,7 @@ const RoomDetailPage = () => {
 
     try {
       const response = await axiosPrivate.get(
-        `/api/community/${roomId}?password=${password}`,
+        `/community/${roomId}?password=${password}`,
       );
       if (response.status === 200) {
         setEnteredRoom(response.data);
@@ -96,9 +96,7 @@ const RoomDetailPage = () => {
   const handleLeaveRoom = useCallback(async () => {
     if (window.confirm('정말 커뮤니티를 탈퇴하시겠습니까?')) {
       try {
-        const response = await axiosPrivate.patch(
-          `/api/community/${roomId}/leave`,
-        );
+        const response = await axiosPrivate.patch(`/community/${roomId}/leave`);
         if (response.status === 200) {
           toast('커뮤니티에서 탈퇴되었습니다.', {
             position: 'top-right',
@@ -127,9 +125,7 @@ const RoomDetailPage = () => {
     } else {
       if (window.confirm('정말 커뮤니티를 삭제하시겠습니까?')) {
         try {
-          const response = await axiosPrivate.delete(
-            `/api/community/${roomId}`,
-          );
+          const response = await axiosPrivate.delete(`/community/${roomId}`);
 
           if (response.status === 200) {
             toast('커뮤니티가 삭제되었습니다.', {
