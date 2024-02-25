@@ -38,44 +38,20 @@ const SignUpForm = () => {
 
         // Reset Form values
         reset();
-        toast('every-ide의 회원이 되신 것을 환영합니다! 👏👏👏', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast('every-ide의 회원이 되신 것을 환영합니다! 👏👏👏');
       }
     } catch (error: any) {
       // 서버 응답 없음
       if (!error?.response) {
-        toast.error('No Server Response', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error('No Server Response');
       }
       // 중복 이메일인 경우
       else if (error.response.status === 400) {
-        toast.error('이미 가입된 이메일 주소입니다.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error('이미 가입된 이메일 주소입니다.');
       } else {
         console.log('error :>> ', error);
 
-        toast.error('문제가 발생했습니다.다시 시도해주세요.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error('문제가 발생했습니다.다시 시도해주세요.');
       }
     }
   };

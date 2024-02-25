@@ -68,13 +68,7 @@ const CreateContainerForm = ({
         });
 
         if (response.status === 200) {
-          toast('새로운 컨테이너가 생성되었습니다.', {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          });
+          toast('새로운 컨테이너가 생성되었습니다.');
 
           // Modal Close & reset
           setOpenModal(false);
@@ -100,29 +94,11 @@ const CreateContainerForm = ({
         console.error(error);
         const err = error as AxiosError;
         if (err.response?.status === 409) {
-          toast.error(`이미 사용중인 컨테이너 이름입니다.`, {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          });
+          toast.error(`이미 사용중인 컨테이너 이름입니다.`);
         } else if (err.response?.status === 400) {
-          toast.error(`존재하지 않는 경로입니다. 관리자에게 문의해주세요.`, {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          });
+          toast.error(`존재하지 않는 경로입니다. 관리자에게 문의해주세요.`);
         } else {
-          toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          });
+          toast.error('문제가 발생했습니다. 다시 시도해주세요.');
         }
       }
     },

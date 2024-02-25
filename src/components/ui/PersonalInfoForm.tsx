@@ -50,9 +50,9 @@ const PersonalInfoForm = () => {
       });
 
       console.log(response.data);
-      toast.success('Profile updated successfully', { theme: 'dark' });
+      toast.success('Profile updated successfully');
     } catch (error) {
-      toast.error('Failed to update profile', { theme: 'dark' });
+      toast.error('Failed to update profile');
     }
   };
 

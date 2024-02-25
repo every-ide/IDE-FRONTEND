@@ -2,7 +2,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { AiFillGithub } from 'react-icons/ai';
 
 const handleOauthLogin = (provider: string) => {
-  const googleLoginURL = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/${provider}?redirect_uri=${import.meta.env.VITE_OAUTH2_REDIRECT_URI}`;
+  const googleLoginURL = `${import.meta.env.VITE_CLIENT_URI}/oauth2/authorization/${provider}?redirect_uri=${import.meta.env.VITE_OAUTH2_REDIRECT_URI}`;
   window.location.href = googleLoginURL;
 };
 

@@ -97,13 +97,7 @@ const NavigationBar: React.FC = () => {
     } catch (error) {
       console.error(error);
 
-      toast.error('문제가 발생했습니다.다시 시도해주세요.', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        theme: 'dark',
-      });
+      toast.error('문제가 발생했습니다.다시 시도해주세요.');
     }
   };
   ``;
