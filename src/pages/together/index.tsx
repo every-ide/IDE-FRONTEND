@@ -21,7 +21,7 @@ const TogetherPage = () => {
   if (isLoading) {
     return <LoadingEnterRoom />; // Modify this as needed
   }
-
+  console.log('rooms', rooms);
   return (
     <>
       <SEOMetaTag

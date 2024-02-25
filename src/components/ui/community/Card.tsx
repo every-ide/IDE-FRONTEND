@@ -34,7 +34,7 @@ const CardContainer: React.FC<CardProps> = ({
   isJoined,
 }) => {
   const navigate = useNavigate();
-
+  console.log('isJoined', isJoined);
   return (
     <Card variant="container">
       <CardHeader>

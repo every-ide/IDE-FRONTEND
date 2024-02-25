@@ -4,6 +4,7 @@ import { cn } from '@/src/utils/style';
 import { getColorForUserId } from '@/src/utils/helper';
 import { RiTeamLine } from 'react-icons/ri';
 import useUserStore from '@/src/store/useUserStore';
+import Avatar from 'boring-avatars';
 
 const UserList: FC<sidebarProps> = ({ userList }) => {
   const { user: me } = useUserStore();
@@ -16,14 +17,12 @@ const UserList: FC<sidebarProps> = ({ userList }) => {
       <ul className="flex flex-col gap-4 p-4 text-xl">
         {userList?.map((user) => (
           <li key={user.userId} className="flex gap-2">
-            <div
-              className={cn(
-                'flex size-8 -translate-y-1 items-center justify-center rounded-full text-xl font-medium  text-black',
-                getColorForUserId(user.userId),
-              )}
-            >
-              {user.email[0].toUpperCase()}
-            </div>
+            <Avatar
+              name={user.name}
+              size={40}
+              variant="beam"
+              colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
+            />
             <div className="text-base">
               {user.name}
               <span className="ml-2 text-xs text-gray-400">({user.email})</span>
