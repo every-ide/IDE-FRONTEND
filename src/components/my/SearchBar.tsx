@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { RiDeleteBack2Line } from 'react-icons/ri';
-import { FaSearch } from 'react-icons/fa';
+// import { useState } from 'react';
+// import { RiDeleteBack2Line } from 'react-icons/ri';
+// import { FaSearch } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import CreateContainerForm from './CreateContainerForm';
 
 const SearchBar = () => {
-  const [searchkey, setSearchKey] = useState('');
+  // const [searchkey, setSearchKey] = useState('');
   const { pathname } = useLocation();
 
   return (
     <div className="flex h-16 items-center justify-end">
-      <div className="flex w-1/3 items-center justify-end">
+      {/* <div className="flex w-1/3 items-center justify-end">
         <input
           type="text"
           value={searchkey}
@@ -27,7 +27,7 @@ const SearchBar = () => {
         <button className="translate-x-[-55px] text-accent hover:text-accent/65 active:scale-90">
           <FaSearch size={18} />
         </button>
-      </div>
+      </div> */}
       <div>
         {!pathname.includes('/shared') && (
           <CreateContainerForm
