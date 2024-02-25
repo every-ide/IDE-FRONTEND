@@ -15,27 +15,27 @@ const useFileTreeApi = () => {
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get('roomId');
   const hasTeamspace = path.includes('teamspace');
+
   const axiosFileTree = async (containerName: string) => {
     // console.log('containerName: ', containerName);
     try {
+      console.log(
+        '`/${roomId}/filetree/${containerName}`: ',
+        `/${roomId}/filetree/${containerName} : `,
+      );
+
       if (hasTeamspace) {
         const response = axiosPrivate.get(
-          `api/${roomId}/filetree/${containerName}`,
+          `/${roomId}/filetree/${containerName}`,
         );
         const data = (await response).data;
-        console.log(
-          '`api/${roomId}/filetree/${containerName}`: ',
-          `api/${roomId}/filetree/${containerName} : `,
-        );
         console.log('data: ', data);
         return data;
       }
-      const response = axiosPrivate.get(
-        `api/${userId}/filetree/${containerName}`,
-      );
+      const response = axiosPrivate.get(`/${userId}/filetree/${containerName}`);
       console.log(
-        '`api/${userId}/filetree/${containerName}`: ',
-        `api/${userId}/filetree/${containerName}`,
+        '`/${userId}/filetree/${containerName}`: ',
+        `/${userId}/filetree/${containerName}`,
       );
       const data = (await response).data;
       return data;
@@ -47,9 +47,9 @@ const useFileTreeApi = () => {
   const axiosOpenFile = async (path: string) => {
     try {
       const response = axiosPrivate.get(
-        `api/containers/${projectId}/files?path=${path}`,
+        `/containers/${projectId}/files?path=${path}`,
       );
-      console.log(`api/containers/${projectId}/files?path=${path}`);
+      console.log(`/containers/${projectId}/files?path=${path}`);
       const data = await response;
       return data;
     } catch (error) {
@@ -75,7 +75,7 @@ const useFileTreeApi = () => {
     content?: string;
   }) => {
     const basePath = `/${containerName}${path}`;
-    const url = `/api/${type === 'file' ? 'files' : 'directories'}`;
+    const url = `/${type === 'file' ? 'files' : 'directories'}`;
     const authEmail = getAuthEmail();
     let response;
 
@@ -159,7 +159,7 @@ const useFileTreeApi = () => {
     console.log('formData: ', formData.get('path'));
     console.log('formData: ', formData.get('email'));
     try {
-      const response = await axiosPrivate.post(`/api/upload`, formData, {
+      const response = await axiosPrivate.post(`/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
