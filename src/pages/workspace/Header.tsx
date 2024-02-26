@@ -76,13 +76,6 @@ const Header = () => {
       if (command === 'not supported') {
         toast.error(
           '해당 파일은 실행할 수 없습니다. (지원 확장자: java ,js ,py)',
-          {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          },
         );
 
         return;

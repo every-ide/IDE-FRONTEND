@@ -96,25 +96,13 @@ const EditRoomInfoForm = ({
 
       console.log('response: ', response);
       if (response.status === 204) {
-        toast('컨테이너가 성공적으로 수정되었습니다.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast('컨테이너가 성공적으로 수정되었습니다.');
 
         setOpenModal(false);
         updateEnteredRoom({ ...newData, newName: newData.name });
       }
     } catch (error) {
-      toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        theme: 'dark',
-      });
+      toast.error('문제가 발생했습니다. 다시 시도해주세요.');
     }
   };
 
@@ -126,13 +114,6 @@ const EditRoomInfoForm = ({
     } else {
       toast.error(
         '커뮤니티 수정 권한이 없습니다. 커뮤니티장에게 문의해주세요.',
-        {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        },
       );
     }
   };
@@ -167,7 +148,10 @@ const EditRoomInfoForm = ({
           <form onSubmit={handleSubmit(handleUpdateContainer)}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="oldName" className="text-right text-black">
+                <Label
+                  htmlFor="oldName"
+                  className="text-right text-xs text-black"
+                >
                   기존 커뮤니티명
                 </Label>
                 <Input
@@ -181,7 +165,10 @@ const EditRoomInfoForm = ({
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="newName" className="text-right text-black">
+                <Label
+                  htmlFor="newName"
+                  className="text-right text-xs text-black"
+                >
                   새 커뮤니티 이름
                 </Label>
                 <Input
@@ -192,14 +179,12 @@ const EditRoomInfoForm = ({
                     required: '새 커뮤니티 이름은 필수 입력 사항입니다.',
                   })}
                 />
-                {errors.newName && (
-                  <p className="mt-1 text-xs text-error">
-                    {errors.newName.message}
-                  </p>
-                )}
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right text-black">
+                <Label
+                  htmlFor="description"
+                  className="text-right text-xs text-black"
+                >
                   설명
                 </Label>
                 <Input
@@ -211,14 +196,12 @@ const EditRoomInfoForm = ({
                     required: '커뮤니티 설명은 필수 입력 사항입니다.',
                   })}
                 />
-                {errors.newName && (
-                  <p className="mt-1 text-xs text-error">
-                    {errors.newName.message}
-                  </p>
-                )}
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="active" className="text-right text-black">
+                <Label
+                  htmlFor="active"
+                  className="text-right text-xs text-black"
+                >
                   커뮤니티 잠금
                 </Label>
                 <Controller
@@ -243,7 +226,10 @@ const EditRoomInfoForm = ({
               </div>
               {value && (
                 <div className={`grid grid-cols-4 items-center gap-4`}>
-                  <Label htmlFor="password" className="text-right text-black">
+                  <Label
+                    htmlFor="password"
+                    className="text-right text-xs text-black"
+                  >
                     비밀번호
                   </Label>
                   <Input
@@ -260,15 +246,28 @@ const EditRoomInfoForm = ({
                           : true,
                     })}
                   />
-                  {errors.password && (
-                    <p className="mt-1 text-xs text-error">
-                      {errors.password.message}
-                    </p>
-                  )}
                 </div>
               )}
             </div>
             <DialogFooter>
+              <div className="flex flex-col items-end justify-center">
+                {errors.newName && (
+                  <p className="mt-1 text-xs text-error">
+                    {errors.newName.message}
+                  </p>
+                )}
+                {errors.description && (
+                  <p className="mt-1 text-xs text-error">
+                    {errors.description.message}
+                  </p>
+                )}
+                {errors.password && (
+                  <p className="mt-1 text-xs text-error">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? '저장 중...' : '저장하기'}
               </Button>

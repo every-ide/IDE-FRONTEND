@@ -48,41 +48,17 @@ const SignInForm = () => {
 
       // Reset Form values
       reset();
-      toast('로그인 성공! 👏👏👏', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        theme: 'dark',
-      });
+      toast('로그인 성공! 👏👏👏');
     } catch (error) {
       const err = error as AxiosError;
       // 로그인 에러
       console.log('error :>> ', error);
       if (!err?.response) {
-        toast.error('No Server Response', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error('No Server Response');
       } else if (err.response?.status === 401) {
-        toast.error('일치하는 유저 정보가 없습니다.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error('일치하는 유저 정보가 없습니다.');
       } else {
-        toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error('문제가 발생했습니다. 다시 시도해주세요.');
       }
     }
   };

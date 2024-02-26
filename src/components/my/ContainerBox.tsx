@@ -109,26 +109,14 @@ const ContainerBox = ({
         const response = await updateContainerData(data);
 
         if (response.status === 200) {
-          toast('컨테이너가 성공적으로 수정되었습니다.', {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          });
+          toast('컨테이너가 성공적으로 수정되었습니다.');
 
           setOpenModal(false);
         }
       } catch (error) {
         console.error(error);
 
-        toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error('문제가 발생했습니다. 다시 시도해주세요.');
       }
     },
     [],
@@ -142,24 +130,12 @@ const ContainerBox = ({
         const response = await deleteContainerData(containerName);
 
         if (response.status === 200) {
-          toast('컨테이너가 삭제되었습니다.', {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: 'dark',
-          });
+          toast('컨테이너가 삭제되었습니다.');
         }
       } catch (error) {
         console.error(error);
 
-        toast.error('문제가 발생했습니다. 다시 시도해주세요.', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          theme: 'dark',
-        });
+        toast.error('문제가 발생했습니다. 다시 시도해주세요.');
       }
     }
 

@@ -57,7 +57,7 @@ const CardContainer: React.FC<CardProps> = ({
           </div>
         </div>
 
-        <CardTitle className="ml-1 text-xl">{name}</CardTitle>
+        <CardTitle className="ml-1 h-[60px] text-xl">{name}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-2 text-xs text-gray-400">
