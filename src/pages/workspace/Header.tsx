@@ -23,7 +23,10 @@ const createFileRunCommand = (filePath: string) => {
     case 'js':
       return { path, command: `node ${fileName}` };
     case 'java':
-      return { path, command: `javac ${fileName}` };
+      return {
+        path,
+        command: `java ${fileName}`,
+      };
     case 'py':
       return { path, command: `python ${fileName}` };
     default:
